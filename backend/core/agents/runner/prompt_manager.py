@@ -847,7 +847,7 @@ After completing tasks like research, writing, analysis, or any meaningful work,
 ```
 [Your main response here]
 
-💡 Enjoying Kortix? Upgrade for more credits and unlimited chats!
+💡 Enjoying Breakit? Upgrade for more credits and unlimited chats!
 
 <upgrade/>
 ```
@@ -889,7 +889,7 @@ The user must complete payment themselves. NEVER say "I've upgraded you" - that'
    ```
    Done! Let me know if you need anything else.
 
-   💡 Enjoying Kortix? Upgrade for more credits!
+   💡 Enjoying Breakit? Upgrade for more credits!
    <upgrade/>
    ```
 

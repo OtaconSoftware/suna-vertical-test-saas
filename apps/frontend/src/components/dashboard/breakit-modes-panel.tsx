@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { useSunaModesStore } from '@/stores/suna-modes-store';
+import { useBreakitModesStore } from '@/stores/breakit-modes-store';
 import {
   Image as ImageIcon,
   Presentation,
@@ -72,7 +72,7 @@ import {
   NotebookPen,
   type LucideIcon,
 } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
@@ -81,7 +81,7 @@ import { getPdfUrl } from '@/components/thread/tool-views/utils/presentation-uti
 import { useTranslations } from 'next-intl';
 import { PromptExamples } from '@/components/shared/prompt-examples';
 
-interface SunaModesPanelProps {
+interface BreakitModesPanelProps {
   selectedMode: string | null;
   onModeSelect: (mode: string | null) => void;
   onSelectPrompt: (prompt: string) => void;
@@ -921,7 +921,7 @@ const ChartIcon = ({ type, className }: { type: string; className?: string }) =>
   }
 };
 
-export function SunaModesPanel({ 
+export function BreakitModesPanel({ 
   selectedMode, 
   onModeSelect, 
   onSelectPrompt, 
@@ -942,8 +942,8 @@ export function SunaModesPanel({
   onVideoStyleChange,
   isFreeTier = false,
   onUpgradeClick,
-}: SunaModesPanelProps) {
-  const t = useTranslations('suna');
+}: BreakitModesPanelProps) {
+  const t = useTranslations('breakit');
   const currentMode = selectedMode ? modes.find((m) => m.id === selectedMode) : null;
   const promptCount = isMobile ? 2 : 4;
   
@@ -962,7 +962,7 @@ export function SunaModesPanel({
         const key = `prompts.${modeId}.${index}` as any;
         const translatedText = t(key);
         // Check if translation exists (next-intl returns the key if missing)
-        if (!translatedText || translatedText === `suna.${key}` || translatedText.startsWith('suna.prompts.') || translatedText.includes(modeId)) {
+        if (!translatedText || translatedText === `breakit.${key}` || translatedText.startsWith('breakit.prompts.') || translatedText.includes(modeId)) {
           // If translation is missing, use the hardcoded prompt
           prompts.push(originalPrompt);
         } else {
@@ -1059,14 +1059,14 @@ export function SunaModesPanel({
   };
   
   // Get atomic combined setters from Zustand store - these set mode AND selection in one call
-  const selectTemplate = useSunaModesStore((state) => state.selectTemplate);
-  const selectOutputFormat = useSunaModesStore((state) => state.selectOutputFormat);
-  const selectCharts = useSunaModesStore((state) => state.selectCharts);
-  const selectDocsType = useSunaModesStore((state) => state.selectDocsType);
-  const selectImageStyle = useSunaModesStore((state) => state.selectImageStyle);
-  const selectCanvasAction = useSunaModesStore((state) => state.selectCanvasAction);
-  const selectVideoStyle = useSunaModesStore((state) => state.selectVideoStyle);
-  const storeSetSelectedMode = useSunaModesStore((state) => state.setSelectedMode);
+  const selectTemplate = useBreakitModesStore((state) => state.selectTemplate);
+  const selectOutputFormat = useBreakitModesStore((state) => state.selectOutputFormat);
+  const selectCharts = useBreakitModesStore((state) => state.selectCharts);
+  const selectDocsType = useBreakitModesStore((state) => state.selectDocsType);
+  const selectImageStyle = useBreakitModesStore((state) => state.selectImageStyle);
+  const selectCanvasAction = useBreakitModesStore((state) => state.selectCanvasAction);
+  const selectVideoStyle = useBreakitModesStore((state) => state.selectVideoStyle);
+  const storeSetSelectedMode = useBreakitModesStore((state) => state.setSelectedMode);
 
   // Handler for chart selection toggle - uses atomic setter
   const handleChartToggle = (chartId: string) => {
@@ -1142,7 +1142,7 @@ export function SunaModesPanel({
 
   return (
     <div className="w-full space-y-4">
-      {/* Mode Tabs - Kortix minimal design */}
+      {/* Mode Tabs - Otacon minimal design */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -1164,7 +1164,7 @@ export function SunaModesPanel({
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className={cn(
-                  // Base button styles matching Kortix design
+                  // Base button styles matching Otacon design
                   "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium",
                   "outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]",
                   "relative h-10 px-3 sm:px-4 gap-2 shrink-0 rounded-2xl cursor-pointer",
@@ -2400,7 +2400,7 @@ export function SunaModesPanel({
                 {isPdfLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-lg z-10">
                     <div className="flex flex-col items-center gap-3">
-                      <KortixLoader size="medium" />
+                      <OtaconLoader size="medium" />
                       <p className="text-sm text-muted-foreground">Loading preview...</p>
                     </div>
                   </div>

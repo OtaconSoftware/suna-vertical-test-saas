@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, Clock, PlugZap, Lock, Zap } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { SimplifiedScheduleConfig } from './providers/simplified-schedule-config';
 import { TriggerProvider, ScheduleTriggerConfig } from './types';
 
@@ -229,7 +229,7 @@ export const OneClickIntegrations: React.FC<OneClickIntegrationsProps> = ({
                 className="flex items-center"
               >
                 {isLoading ? (
-                  <KortixLoader customSize={16} className="mr-2" />
+                  <OtaconLoader customSize={16} className="mr-2" />
                 ) : (
                   config.icon
                 )}

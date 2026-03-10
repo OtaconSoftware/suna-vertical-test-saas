@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Save } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import {
@@ -144,7 +144,7 @@ export function CreateVersionButton({
             >
               {createVersionMutation.isPending ? (
                 <>
-                  <KortixLoader customSize={16} className="mr-2" />
+                  <OtaconLoader customSize={16} className="mr-2" />
                   Creating...
                 </>
               ) : (

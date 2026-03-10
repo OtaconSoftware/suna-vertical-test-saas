@@ -802,22 +802,22 @@
   animation: stream-word-pop 200ms ease-out forwards;
 }
 
-.kortix-markdown [data-streamdown-animating="true"] > * {
+.otacon-markdown [data-streamdown-animating="true"] > * {
   animation: stream-fade-in 200ms ease-out forwards;
 }
 
-.kortix-markdown [data-streamdown-animating="true"] p,
-.kortix-markdown [data-streamdown-animating="true"] li,
-.kortix-markdown [data-streamdown-animating="true"] h1,
-.kortix-markdown [data-streamdown-animating="true"] h2,
-.kortix-markdown [data-streamdown-animating="true"] h3,
-.kortix-markdown [data-streamdown-animating="true"] h4,
-.kortix-markdown [data-streamdown-animating="true"] h5,
-.kortix-markdown [data-streamdown-animating="true"] h6 {
+.otacon-markdown [data-streamdown-animating="true"] p,
+.otacon-markdown [data-streamdown-animating="true"] li,
+.otacon-markdown [data-streamdown-animating="true"] h1,
+.otacon-markdown [data-streamdown-animating="true"] h2,
+.otacon-markdown [data-streamdown-animating="true"] h3,
+.otacon-markdown [data-streamdown-animating="true"] h4,
+.otacon-markdown [data-streamdown-animating="true"] h5,
+.otacon-markdown [data-streamdown-animating="true"] h6 {
   animation: stream-word-pop 180ms ease-out forwards;
 }
 
-.kortix-markdown [data-streamdown-animating="true"] code {
+.otacon-markdown [data-streamdown-animating="true"] code {
   animation: stream-char-reveal 150ms ease-out forwards;
 }
 
@@ -840,17 +840,17 @@
 }
 
 
-.kortix-markdown.streaming-active {
+.otacon-markdown.streaming-active {
   position: relative;
 }
 
-.kortix-markdown.streaming-active p:last-child,
-.kortix-markdown.streaming-active li:last-child,
-.kortix-markdown.streaming-active div:last-child {
+.otacon-markdown.streaming-active p:last-child,
+.otacon-markdown.streaming-active li:last-child,
+.otacon-markdown.streaming-active div:last-child {
   display: inline;
 }
 
-.kortix-markdown[data-streaming="true"] > *:last-child {
+.otacon-markdown[data-streaming="true"] > *:last-child {
   animation: stream-fade-in 180ms ease-out;
 }
 
@@ -880,7 +880,7 @@
   }
 }
 
-.kortix-markdown[data-streaming="true"] > *:last-child {
+.otacon-markdown[data-streaming="true"] > *:last-child {
   animation: blur-fade-in 0.3s ease-out forwards;
 }
 
@@ -921,7 +921,7 @@
   display: inline;
 }
 
-/* Pulse heartbeat animation for reasoning section Kortix icon */
+/* Pulse heartbeat animation for reasoning section Otacon icon */
 @keyframes pulse-heartbeat {
   0%, 100% {
     transform: scale(1);

@@ -18,7 +18,7 @@ import {
   Download,
   ExternalLink,
 } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { ToolViewProps } from '../types';
 import { formatTimestamp } from '../utils';
 import { cn } from '@/lib/utils';
@@ -239,7 +239,7 @@ export function ApifyToolView({
                 `bg-gradient-to-br ${config.color}`,
                 "border-white/20"
               )}>
-                <KortixLoader size="medium" variant="white" />
+                <OtaconLoader size="medium" variant="white" />
               </div>
               
               {viewType === 'run' ? (

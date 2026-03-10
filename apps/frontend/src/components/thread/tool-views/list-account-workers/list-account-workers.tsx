@@ -35,7 +35,7 @@ export function ListAccountWorkersToolView({
 
   const {
     search,
-    include_kortix,
+    include_otacon,
     message,
     workers,
     total,
@@ -61,10 +61,10 @@ export function ListAccountWorkersToolView({
               <CardTitle className="text-base font-medium text-zinc-900 dark:text-zinc-100">
                 {toolTitle}
               </CardTitle>
-              {(search || include_kortix) && (
+              {(search || include_otacon) && (
                 <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                   {search ? `Filter: "${search}"` : 'Showing all workers'}
-                  {include_kortix ? ' (including Kortix)' : ''}
+                  {include_otacon ? ' (including Otacon)' : ''}
                 </p>
               )}
             </div>
@@ -130,9 +130,9 @@ export function ListAccountWorkersToolView({
                             Default
                           </Badge>
                         )}
-                        {worker.is_kortix && (
+                        {worker.is_otacon && (
                           <Badge variant="outline" className="text-xs">
-                            Kortix
+                            Otacon
                           </Badge>
                         )}
                       </div>

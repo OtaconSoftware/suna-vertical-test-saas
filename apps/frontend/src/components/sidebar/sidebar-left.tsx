@@ -2,14 +2,14 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Library, Menu, Plus, Zap, MessageCircle, PanelLeftOpen, PanelLeftClose, Search, Users, FolderOpen } from 'lucide-react';
+import { Library, Menu, Plus, Zap, MessageCircle, PanelLeftOpen, PanelLeftClose, Search, Users, FolderOpen, ClipboardCheck } from 'lucide-react';
 
 import { NavAgents } from '@/components/sidebar/nav-agents';
 import { NavWorkers } from '@/components/sidebar/nav-workers';
 import { NavGlobalConfig } from '@/components/sidebar/nav-global-config';
 import { NavTriggerRuns } from '@/components/sidebar/nav-trigger-runs';
 import { NavUserWithTeams } from '@/components/sidebar/nav-user-with-teams';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 import { siteConfig } from '@/lib/site-config';
 import {
   Sidebar,
@@ -256,7 +256,7 @@ export function SidebarLeft({
           )}>
 
             <Link href="/dashboard" onClick={() => isMobile && setOpenMobile(false)} className="flex items-center justify-center">
-              <KortixLogo 
+              <OtaconLogo 
                 size={20} 
                 className={cn(
                   "flex-shrink-0 transition-[transform,opacity] duration-300 ease-out hover:rotate-180 hover:duration-700 transform-gpu",
@@ -455,6 +455,31 @@ export function SidebarLeft({
               </Button>
             </div>
 
+            {/* Test History link */}
+            <div className="w-full">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "w-full shadow-none justify-start h-10 px-3 hover:text-foreground",
+                  "text-muted-foreground"
+                )}
+                asChild
+              >
+                <Link
+                  href="/test-history"
+                  onClick={() => {
+                    if (isMobile) setOpenMobile(false);
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <ClipboardCheck className="h-4 w-4" />
+                    Test History
+                  </div>
+                </Link>
+              </Button>
+            </div>
+
             {/* State buttons horizontally */}
             <div className="flex justify-between items-center gap-2">
               {[
@@ -516,11 +541,11 @@ export function SidebarLeft({
               <p className="text-xs text-muted-foreground mb-4">
                 Request custom AI Workers implementation
               </p>
-              <KortixProcessModal>
+              <OtaconProcessModal>
                 <Button size="sm" className="w-full text-xs h-8">
                   Learn More
                 </Button>
-              </KortixProcessModal>
+              </OtaconProcessModal>
             </div>
           </div>
         )

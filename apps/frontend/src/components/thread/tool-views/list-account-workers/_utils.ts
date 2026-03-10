@@ -4,7 +4,7 @@ export interface AccountWorkerItem {
   agent_id: string;
   name: string;
   is_default: boolean;
-  is_kortix: boolean;
+  is_otacon: boolean;
   is_current: boolean;
   created_at?: string;
   updated_at?: string;
@@ -12,7 +12,7 @@ export interface AccountWorkerItem {
 
 export interface ListAccountWorkersData {
   search: string | null;
-  include_kortix: boolean;
+  include_otacon: boolean;
   message: string | null;
   workers: AccountWorkerItem[];
   total: number;
@@ -76,7 +76,7 @@ export function extractListAccountWorkersData(
 
   return {
     search: typeof args.search === 'string' ? args.search : null,
-    include_kortix: Boolean(args.include_kortix),
+    include_otacon: Boolean(args.include_otacon),
     message,
     workers,
     total,

@@ -5,7 +5,7 @@ import { Globe, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimatedBg } from '@/components/ui/animated-bg';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 
 export default function CountryError() {
   return (
@@ -16,7 +16,7 @@ export default function CountryError() {
 
         <div className="relative z-10 w-full max-w-[456px] flex flex-col items-center gap-5 sm:gap-8">
           {/* Logo */}
-          <KortixLogo size={28} className="sm:w-8 sm:h-8" />
+          <OtaconLogo size={28} className="sm:w-8 sm:h-8" />
 
           {/* Title */}
           <h1 className="text-2xl sm:text-3xl md:text-[43px] font-normal tracking-tight text-foreground leading-tight text-center">
@@ -25,7 +25,7 @@ export default function CountryError() {
 
           {/* Description */}
           <p className="text-sm sm:text-[16px] text-foreground/60 text-center leading-relaxed px-2">
-            We're sorry, Kortix is currently unavailable in your country. We're
+            We're sorry, Otacon is currently unavailable in your country. We're
             working to expand our availability and hope to serve you soon.
           </p>
 
@@ -57,7 +57,7 @@ export default function CountryError() {
               className="w-full h-12 rounded-lg font-medium"
             >
               <Link
-                href="mailto:support@kortix.ai"
+                href="mailto:support@otacon.ai"
                 className="flex items-center justify-center gap-2"
               >
                 <Mail className="h-4 w-4" />

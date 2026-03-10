@@ -8,7 +8,7 @@ import { AgentAvatar } from '@/components/thread/content/agent-avatar';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { NewAgentDialog } from '@/components/agents/new-agent-dialog';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useIsMobile } from '@/hooks/utils';
 import { usePricingModalStore } from '@/stores/pricing-modal-store';
@@ -44,12 +44,12 @@ export function NavWorkers() {
     );
   }, [agents, searchQuery]);
 
-  const sunaAgent = useMemo(() => {
-    return agents.find(a => a.metadata?.is_suna_default === true);
+  const breakitAgent = useMemo(() => {
+    return agents.find(a => a.metadata?.is_breakit_default === true);
   }, [agents]);
 
   const customAgents = useMemo(() => {
-    return filteredAgents.filter(a => !a.metadata?.is_suna_default);
+    return filteredAgents.filter(a => !a.metadata?.is_breakit_default);
   }, [filteredAgents]);
 
   const handleAgentClick = useCallback((agentId: string) => {
@@ -83,7 +83,7 @@ export function NavWorkers() {
       <div className="flex-1 overflow-y-auto space-y-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
-            <KortixLoader size="small" />
+            <OtaconLoader size="small" />
           </div>
         ) : filteredAgents.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
@@ -96,22 +96,22 @@ export function NavWorkers() {
           </div>
         ) : (
           <>
-            {sunaAgent && !searchQuery && (
+            {breakitAgent && !searchQuery && (
               <div
                 className={cn(
                   "flex items-center gap-3 p-2.5 rounded-xl cursor-pointer transition-colors",
                   "hover:bg-muted/50"
                 )}
-                onClick={() => handleAgentClick(sunaAgent.agent_id)}
+                onClick={() => handleAgentClick(breakitAgent.agent_id)}
               >
                 <AgentAvatar 
-                  agent={sunaAgent} 
-                  agentId={sunaAgent.agent_id} 
+                  agent={breakitAgent} 
+                  agentId={breakitAgent.agent_id} 
                   size={32} 
                   className="flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium truncate">{sunaAgent.name}</div>
+                  <div className="text-sm font-medium truncate">{breakitAgent.name}</div>
                   <div className="text-xs text-muted-foreground truncate">Default agent</div>
                 </div>
                 <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />

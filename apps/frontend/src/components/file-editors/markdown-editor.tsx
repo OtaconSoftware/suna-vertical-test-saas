@@ -551,7 +551,7 @@ export function MarkdownEditor({
           )}
           <style dangerouslySetInnerHTML={{ __html: `
             /* ═══════════════════════════════════════════════════════════════
-               KORTIX TIPTAP EDITOR STYLES
+               OTACON TIPTAP EDITOR STYLES
                Matches UnifiedMarkdown for consistent rendering
                ═══════════════════════════════════════════════════════════════ */
             

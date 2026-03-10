@@ -53,7 +53,7 @@ export interface AgentTemplate {
   icon_name?: string;
   icon_color?: string;
   icon_background?: string;
-  is_kortix_team?: boolean;
+  is_otacon_team?: boolean;
   usage_examples?: UsageExampleMessage[];
   metadata?: {
     source_agent_id?: string;
@@ -236,7 +236,7 @@ export function useMarketplaceTemplates(params?: {
   limit?: number;
   search?: string;
   tags?: string;
-  is_kortix_team?: boolean;
+  is_otacon_team?: boolean;
   mine?: boolean;
   sort_by?: string;
   sort_order?: string;
@@ -256,7 +256,7 @@ export function useMarketplaceTemplates(params?: {
       if (params?.limit) searchParams.set('limit', params.limit.toString());
       if (params?.search) searchParams.set('search', params.search);
       if (params?.tags) searchParams.set('tags', params.tags);
-      if (params?.is_kortix_team !== undefined) searchParams.set('is_kortix_team', params.is_kortix_team.toString());
+      if (params?.is_otacon_team !== undefined) searchParams.set('is_otacon_team', params.is_otacon_team.toString());
       if (params?.mine !== undefined) searchParams.set('mine', params.mine.toString());
       if (params?.sort_by) searchParams.set('sort_by', params.sort_by);
       if (params?.sort_order) searchParams.set('sort_order', params.sort_order);
@@ -490,18 +490,18 @@ export function useDeleteTemplate() {
   });
 }
 
-export function useKortixTeamTemplates(options?: { enabled?: boolean }) {
+export function useOtaconTeamTemplates(options?: { enabled?: boolean }) {
   return useQuery({
-    queryKey: ['secure-mcp', 'kortix-templates-all'],
+    queryKey: ['secure-mcp', 'otacon-templates-all'],
     queryFn: async (): Promise<MarketplaceTemplatesResponse> => {
       const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session) {
-        throw new Error('You must be logged in to view Kortix templates');
+        throw new Error('You must be logged in to view Otacon templates');
       }
 
-      const response = await fetch(`${API_URL}/templates/kortix-all`, {
+      const response = await fetch(`${API_URL}/templates/otacon-all`, {
         headers: {
           'Authorization': `Bearer ${session.access_token}`,
         },

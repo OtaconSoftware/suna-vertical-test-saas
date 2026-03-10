@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 
 interface AuthMessage {
   type: 'github-auth-success' | 'github-auth-error';
@@ -185,7 +185,7 @@ export default function GitHubOAuthPopup() {
     <main className="flex flex-col items-center justify-center h-screen bg-background p-8">
       <div className="flex flex-col items-center gap-4 text-center max-w-sm">
         {status !== 'error' && (
-          <KortixLoader size="large" />
+          <OtaconLoader size="large" />
         )}
 
         <div className="space-y-2">

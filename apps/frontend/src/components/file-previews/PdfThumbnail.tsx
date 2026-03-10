@@ -10,7 +10,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { cn } from '@/lib/utils';
 import { getFilename, getFileIcon } from '@/lib/utils/file-utils';
 import { useFileContentQuery } from '@/hooks/files/use-file-queries';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 
 // Configure PDF.js worker (idempotent — same as pdf-renderer.tsx)
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -112,7 +112,7 @@ export function PdfThumbnail({
                 )}
                 title="Loading PDF..."
             >
-                <KortixLoader size="medium" />
+                <OtaconLoader size="medium" />
             </button>
         );
     }
@@ -159,7 +159,7 @@ export function PdfThumbnail({
             {/* Upload progress overlay */}
             {(uploadStatus === 'uploading' || (uploadStatus === 'pending' && sandboxId)) && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-20">
-                    <KortixLoader size="small" variant="white" />
+                    <OtaconLoader size="small" variant="white" />
                 </div>
             )}
 
@@ -173,7 +173,7 @@ export function PdfThumbnail({
             {/* Loading spinner before page renders */}
             {!pageLoaded && isVisible && pdfUrl && (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <KortixLoader size="small" />
+                    <OtaconLoader size="small" />
                 </div>
             )}
 

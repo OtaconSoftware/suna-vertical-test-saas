@@ -16,7 +16,7 @@ import {
   Home,
   Download
 } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { cn } from '@/lib/utils';
 import { useDirectoryQuery } from '@/hooks/files/use-file-queries';
 import { backendApi } from '@/lib/api-client';
@@ -40,7 +40,7 @@ import '../../../../../node_modules/@syncfusion/ej2-popups/styles/material.css';
 import '../../../../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
 import '../../../../../node_modules/@syncfusion/ej2-grids/styles/material.css';
 import '../../../../../node_modules/@syncfusion/ej2-react-spreadsheet/styles/material.css';
-import '../../tool-views/spreadsheet/kortix-spreadsheet-styles.css';
+import '../../tool-views/spreadsheet/otacon-spreadsheet-styles.css';
 
 const SYNCFUSION_LICENSE = "Ngo9BigBOggjHTQxAR8/V1JGaF1cXmhKYVFxWmFZfVhgdVdMZFtbR3JPIiBoS35RcEVhW3pfcnBdRWFeU0J0VEFf";
 const SYNCFUSION_BASE_URL = 'https://ej2services.syncfusion.com/production/web-services/api/spreadsheet';
@@ -485,7 +485,7 @@ export const SpreadsheetApp = memo(function SpreadsheetApp({
             className="flex items-center justify-center w-10 h-10 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors disabled:opacity-50 shrink-0"
             title="Refresh spreadsheet"
           >
-            {activeEditorHandle?.isSyncing ? <KortixLoader size="small" /> : <RefreshCw className="w-4 h-4" />}
+            {activeEditorHandle?.isSyncing ? <OtaconLoader size="small" /> : <RefreshCw className="w-4 h-4" />}
           </button>
         )}
         <button
@@ -522,7 +522,7 @@ export const SpreadsheetApp = memo(function SpreadsheetApp({
           size="lg"
         >
           {isCreating ? (
-            <KortixLoader size="small" />
+            <OtaconLoader size="small" />
           ) : (
             <Plus className="w-4 h-4" />
           )}
@@ -593,7 +593,7 @@ export const SpreadsheetApp = memo(function SpreadsheetApp({
                   disabled={isCreating}
                   className="mt-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 text-sm font-medium disabled:opacity-50 flex items-center gap-2"
                 >
-                  {isCreating && <KortixLoader size="small" />}
+                  {isCreating && <OtaconLoader size="small" />}
                   {isCreating ? 'Creating...' : 'Create New'}
                 </button>
               </div>

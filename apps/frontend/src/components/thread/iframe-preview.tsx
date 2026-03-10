@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { cn } from '@/lib/utils';
 
 interface IframePreviewProps {
@@ -23,7 +23,7 @@ export function IframePreview({
       {/* Loading overlay */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-background/50 z-10">
-          <KortixLoader size="medium" />
+          <OtaconLoader size="medium" />
         </div>
       )}
 

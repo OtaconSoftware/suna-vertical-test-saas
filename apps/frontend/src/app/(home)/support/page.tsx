@@ -110,7 +110,7 @@ function SupportPageContent() {
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
                   <Button asChild size="lg" className="text-base h-14 w-48 rounded-full px-8">
-                    <a href="mailto:support@kortix.com">
+                    <a href="mailto:support@otacon.com">
                       <Mail className="w-5 h-5"/>
                       Email Support
                     </a>
@@ -123,7 +123,7 @@ function SupportPageContent() {
                 </div>
 
                 <p className="text-sm text-muted-foreground">
-                  Or email us directly at <a href="mailto:support@kortix.com" className="text-primary hover:underline font-medium">support@kortix.com</a>
+                  Or email us directly at <a href="mailto:support@otacon.com" className="text-primary hover:underline font-medium">support@otacon.com</a>
                 </p>
               </div>
             </div>
@@ -153,10 +153,10 @@ function SupportPageContent() {
                       Send us a detailed message and we'll get back to you as soon as possible.
                     </p>
                     <a 
-                      href="mailto:support@kortix.com" 
+                      href="mailto:support@otacon.com" 
                       className="text-primary hover:underline font-medium inline-flex items-center gap-2"
                     >
-                      support@kortix.com
+                      support@otacon.com
                     </a>
                   </div>
                 </div>
@@ -185,7 +185,7 @@ function SupportPageContent() {
                     <p className="text-muted-foreground text-sm mb-4">
                       Pro and Team customers receive priority support with dedicated assistance.
                     </p>
-                    <a href="mailto:support@kortix.com" className="text-primary hover:underline font-medium">
+                    <a href="mailto:support@otacon.com" className="text-primary hover:underline font-medium">
                       Contact us
                     </a>
                   </div>
@@ -209,26 +209,26 @@ function SupportPageContent() {
 
               <div className="border-t border-border">
                 <FAQItem
-                  question="What is Kortix?"
-                  answer="Kortix is a generalist AI worker that can perform real-world tasks on your behalf. Unlike traditional AI assistants, Kortix can actually take action across your apps, automate workflows, and handle complex multi-step tasks autonomously."
+                  question="What is Otacon?"
+                  answer="Otacon is a generalist AI worker that can perform real-world tasks on your behalf. Unlike traditional AI assistants, Otacon can actually take action across your apps, automate workflows, and handle complex multi-step tasks autonomously."
                 />
                 <FAQItem
-                  question="How can Kortix help me?"
-                  answer="Kortix can automate repetitive tasks, manage your workflows, interact with web services, process data, create content, and coordinate complex operations across multiple platforms. Simply tell Kortix what you need done, and it handles the execution from start to finish."
+                  question="How can Otacon help me?"
+                  answer="Otacon can automate repetitive tasks, manage your workflows, interact with web services, process data, create content, and coordinate complex operations across multiple platforms. Simply tell Otacon what you need done, and it handles the execution from start to finish."
                 />
                 <FAQItem
-                  question="How is Kortix different from other AI platforms?"
-                  answer="While most AI platforms only provide information or suggestions, Kortix actually performs real-world tasks. It can browse the web, interact with APIs, manage files, execute commands, and integrate with your existing tools to complete tasks autonomously—not just tell you how to do them."
+                  question="How is Otacon different from other AI platforms?"
+                  answer="While most AI platforms only provide information or suggestions, Otacon actually performs real-world tasks. It can browse the web, interact with APIs, manage files, execute commands, and integrate with your existing tools to complete tasks autonomously—not just tell you how to do them."
                 />
                 <FAQItem
-                  question="Can Kortix connect to my apps?"
-                  answer="Yes! Kortix can connect to thousands of apps and services through integrations. It can interact with your tools, APIs, databases, and workflows to automate tasks across your entire tech stack. You control which apps and services Kortix can access."
+                  question="Can Otacon connect to my apps?"
+                  answer="Yes! Otacon can connect to thousands of apps and services through integrations. It can interact with your tools, APIs, databases, and workflows to automate tasks across your entire tech stack. You control which apps and services Otacon can access."
                 />
                 <FAQItem
                   question="How do I request a new feature?"
                   answer={
                     <>
-                      We love feature requests! Email us at <a href="mailto:support@kortix.com" className="text-primary hover:underline font-medium">support@kortix.com</a> with details about what you'd like to see and how it would help you. We carefully review all suggestions and prioritize features based on user feedback for our product roadmap.
+                      We love feature requests! Email us at <a href="mailto:support@otacon.com" className="text-primary hover:underline font-medium">support@otacon.com</a> with details about what you'd like to see and how it would help you. We carefully review all suggestions and prioritize features based on user feedback for our product roadmap.
                     </>
                   }
                 />
@@ -236,7 +236,7 @@ function SupportPageContent() {
                   question="How do I report a bug?"
                   answer={
                     <>
-                      If you encounter a bug, please email <a href="mailto:support@kortix.com" className="text-primary hover:underline font-medium">support@kortix.com</a> with a detailed description of the issue, steps to reproduce it, and any error messages you're seeing. Screenshots or screen recordings are extremely helpful. We'll investigate and work on a fix promptly.
+                      If you encounter a bug, please email <a href="mailto:support@otacon.com" className="text-primary hover:underline font-medium">support@otacon.com</a> with a detailed description of the issue, steps to reproduce it, and any error messages you're seeing. Screenshots or screen recordings are extremely helpful. We'll investigate and work on a fix promptly.
                     </>
                   }
                 />
@@ -244,7 +244,7 @@ function SupportPageContent() {
                   question="What if I don't get credits after paying?"
                   answer={
                     <>
-                      If your credits don't appear after payment, contact <a href="mailto:support@kortix.com" className="text-primary hover:underline font-medium">support@kortix.com</a> immediately. We prioritize billing and credit issues for all users regardless of tier and will resolve this as quickly as possible, typically within a few hours during business days.
+                      If your credits don't appear after payment, contact <a href="mailto:support@otacon.com" className="text-primary hover:underline font-medium">support@otacon.com</a> immediately. We prioritize billing and credit issues for all users regardless of tier and will resolve this as quickly as possible, typically within a few hours during business days.
                     </>
                   }
                 />
@@ -284,8 +284,8 @@ function SupportPageContent() {
                           <h4 className="font-medium mb-2 text-sm">Option 1: Contact Support</h4>
                           <p className="text-muted-foreground text-sm mb-3">
                             You can request account deletion by contacting our support team. Simply email us at{' '}
-                            <a href="mailto:support@kortix.com" className="text-primary hover:underline font-medium">
-                              support@kortix.com
+                            <a href="mailto:support@otacon.com" className="text-primary hover:underline font-medium">
+                              support@otacon.com
                             </a>
                             {' '}with your account deletion request, and we'll process it for you.
                           </p>
@@ -343,7 +343,7 @@ function SupportPageContent() {
                   <div>
                     <h3 className="text-lg font-semibold mb-2">Terms of Service</h3>
                     <p className="text-muted-foreground text-sm mb-4">
-                      Our terms and conditions for using Kortix services, including user responsibilities and service limitations.
+                      Our terms and conditions for using Otacon services, including user responsibilities and service limitations.
                     </p>
                     <Link href="/legal?tab=terms" className="text-primary hover:underline font-medium text-sm">
                       Read Terms →
@@ -373,7 +373,7 @@ function SupportPageContent() {
                   <div>
                     <h3 className="text-lg font-semibold mb-2">Imprint</h3>
                     <p className="text-muted-foreground text-sm mb-4">
-                      Company information and legal details about Kortix AI Corp, including contact information and registration.
+                      Company information and legal details about Otacon AI Corp, including contact information and registration.
                     </p>
                     <Link href="/legal?tab=imprint" className="text-primary hover:underline font-medium text-sm">
                       View Imprint →
@@ -396,7 +396,7 @@ function SupportPageContent() {
               </p>
               <div className="pt-4">
                 <Button asChild size="lg" className="text-base h-14 w-48 rounded-full px-8">
-                  <a href="mailto:support@kortix.com">
+                  <a href="mailto:support@otacon.com">
                     <Mail className="w-5 h-5" />
                     Contact Support
                   </a>
@@ -404,10 +404,10 @@ function SupportPageContent() {
               </div>
               <div className="pt-6 space-y-2">
                 <p className="text-sm text-muted-foreground">
-                  General Inquiries: <a href="mailto:info@kortix.com" className="text-primary hover:underline">info@kortix.com</a>
+                  General Inquiries: <a href="mailto:info@otacon.com" className="text-primary hover:underline">info@otacon.com</a>
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Security Issues: <a href="mailto:security@kortix.com" className="text-primary hover:underline">security@kortix.com</a>
+                  Security Issues: <a href="mailto:security@otacon.com" className="text-primary hover:underline">security@otacon.com</a>
                 </p>
               </div>
             </div>

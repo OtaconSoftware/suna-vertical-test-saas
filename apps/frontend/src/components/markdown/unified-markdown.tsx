@@ -120,7 +120,7 @@ export interface UnifiedMarkdownProps {
  * UNIFIED MARKDOWN RENDERER
  * 
  * Single source of truth for all markdown rendering across the application.
- * Optimized for Kortix brand with Vercel-level UX/UI polish.
+ * Optimized for Otacon brand with Vercel-level UX/UI polish.
  * 
  * Design principles:
  * - Clean, minimal aesthetic
@@ -148,7 +148,7 @@ export const UnifiedMarkdown = React.memo<UnifiedMarkdownProps>(({
 
   return (
     <div 
-      className={cn('kortix-markdown', isStreaming && 'streaming-active', className)}
+      className={cn('otacon-markdown', isStreaming && 'streaming-active', className)}
       data-streaming={isStreaming ? 'true' : 'false'}
     >
       <Streamdown

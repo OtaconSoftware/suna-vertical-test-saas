@@ -248,7 +248,7 @@ export function RetentionTab({ onUserClick }: RetentionTabProps) {
               <div>
                 <h2 className="text-sm font-medium">Weekly Cohort Retention</h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Users grouped by the week they first used Suna, then tracked by weekly return rate.
+                  Users grouped by the week they first used Breakit, then tracked by weekly return rate.
                 </p>
               </div>
 

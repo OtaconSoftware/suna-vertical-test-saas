@@ -8,7 +8,7 @@ export interface BreadcrumbSegment {
   isLast: boolean;
 }
 
-interface KortixComputerHeaderProps {
+interface OtaconComputerHeaderProps {
   /** Icon to display in the header */
   icon: LucideIcon;
   /** Click handler for the icon button */
@@ -32,12 +32,12 @@ interface KortixComputerHeaderProps {
 }
 
 /**
- * Shared header component for all Kortix Computer views (Files, File Viewer, Browser).
+ * Shared header component for all Otacon Computer views (Files, File Viewer, Browser).
  * Ensures consistent styling and prevents layout jumps when switching tabs.
  * 
  * ALL styling is controlled here - consumers only pass data props.
  */
-export function KortixComputerHeader({
+export function OtaconComputerHeader({
   icon: Icon,
   onIconClick,
   iconTitle,
@@ -46,7 +46,7 @@ export function KortixComputerHeader({
   breadcrumbs,
   onBreadcrumbClick,
   actions,
-}: KortixComputerHeaderProps) {
+}: OtaconComputerHeaderProps) {
   return (
     <div className="h-12 sm:h-14 bg-zinc-50/80 dark:bg-zinc-900/80 backdrop-blur-sm border-b p-1.5 sm:p-2 px-3 sm:px-4 flex items-center justify-between flex-shrink-0 max-w-full min-w-0">
       {/* Left section: Icon + Title/Breadcrumbs/FileName */}

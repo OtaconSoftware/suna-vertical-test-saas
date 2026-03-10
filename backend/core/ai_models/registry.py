@@ -89,9 +89,9 @@ class PricingPresets:
     )
 
 
-FREE_MODEL_ID = "kortix/minimax"
-PREMIUM_MODEL_ID = "kortix/power"
-IMAGE_MODEL_ID = "kortix/haiku"
+FREE_MODEL_ID = "otacon/minimax"
+PREMIUM_MODEL_ID = "otacon/power"
+IMAGE_MODEL_ID = "otacon/haiku"
 
 
 def _create_anthropic_model_config() -> ModelConfig:
@@ -101,7 +101,7 @@ def _create_anthropic_model_config() -> ModelConfig:
 def _create_minimax_model_config() -> ModelConfig:
     return ModelConfig(
         reasoning=ReasoningSettings(enabled=True, split_output=True),
-        extra_body={"app": "Kortix.com"},
+        extra_body={"app": "Otacon.com"},
     )
 
 def _create_kimi_model_config() -> ModelConfig:
@@ -139,7 +139,7 @@ class ModelFactory:
             provider = ModelProvider.ANTHROPIC
         
         return Model(
-            id="kortix/haiku",
+            id="otacon/haiku",
             name="Claude Haiku 4.5",
             litellm_model_id=litellm_id,
             provider=provider,
@@ -169,7 +169,7 @@ class ModelFactory:
             provider = ModelProvider.MINIMAX
         
         return Model(
-            id="kortix/minimax",
+            id="otacon/minimax",
             name="MiniMax M2.1",
             litellm_model_id=litellm_id,
             provider=provider,
@@ -203,11 +203,11 @@ class ModelFactory:
 
         if main_llm == "kimi":
             return Model(
-                id="kortix/basic",
-                name="Kortix Basic",
+                id="otacon/basic",
+                name="Breakit Basic",
                 litellm_model_id=custom_model or default_models["kimi"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-basic", "Kortix Basic"],
+                aliases=["breakit-basic", "Breakit Basic"],
                 context_window=262_144,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -225,11 +225,11 @@ class ModelFactory:
             )
         elif main_llm == "bedrock":
             return Model(
-                id="kortix/basic",
-                name="Kortix Basic",
+                id="otacon/basic",
+                name="Breakit Basic",
                 litellm_model_id=custom_model or default_models["bedrock"],
                 provider=ModelProvider.BEDROCK,
-                aliases=["kortix-basic", "Kortix Basic"],
+                aliases=["breakit-basic", "Breakit Basic"],
                 context_window=200_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -246,11 +246,11 @@ class ModelFactory:
             )
         elif main_llm == "anthropic":
             return Model(
-                id="kortix/basic",
-                name="Kortix Basic",
+                id="otacon/basic",
+                name="Breakit Basic",
                 litellm_model_id=custom_model or default_models["anthropic"],
                 provider=ModelProvider.ANTHROPIC,
-                aliases=["kortix-basic", "Kortix Basic"],
+                aliases=["breakit-basic", "Breakit Basic"],
                 context_window=200_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -267,11 +267,11 @@ class ModelFactory:
             )
         elif main_llm == "grok":
             return Model(
-                id="kortix/basic",
-                name="Kortix Basic",
+                id="otacon/basic",
+                name="Breakit Basic",
                 litellm_model_id=custom_model or default_models["grok"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-basic", "Kortix Basic"],
+                aliases=["breakit-basic", "Breakit Basic"],
                 context_window=2_000_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -287,11 +287,11 @@ class ModelFactory:
             )
         elif main_llm == "openai":
             return Model(
-                id="kortix/basic",
-                name="Kortix Basic",
+                id="otacon/basic",
+                name="Breakit Basic",
                 litellm_model_id=custom_model or default_models["openai"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-basic", "Kortix Basic"],
+                aliases=["breakit-basic", "Breakit Basic"],
                 context_window=128_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -307,11 +307,11 @@ class ModelFactory:
         elif main_llm == "openrouter":
             # Generic OpenRouter - use custom model or fallback to minimax
             return Model(
-                id="kortix/basic",
-                name="Kortix Basic",
+                id="otacon/basic",
+                name="Breakit Basic",
                 litellm_model_id=custom_model or default_models["minimax"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-basic", "Kortix Basic"],
+                aliases=["breakit-basic", "Breakit Basic"],
                 context_window=200_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -325,11 +325,11 @@ class ModelFactory:
             )
         else:  # minimax or unknown
             return Model(
-                id="kortix/basic",
-                name="Kortix Basic",
+                id="otacon/basic",
+                name="Breakit Basic",
                 litellm_model_id=custom_model or default_models["minimax"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-basic", "Kortix Basic"],
+                aliases=["breakit-basic", "Breakit Basic"],
                 context_window=200_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -359,11 +359,11 @@ class ModelFactory:
 
         if main_llm == "kimi":
             return Model(
-                id="kortix/power",
-                name="Kortix Advanced Mode",
+                id="otacon/power",
+                name="Breakit Advanced",
                 litellm_model_id=custom_model or default_models["kimi"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-power", "Kortix POWER Mode", "Kortix Power", "Kortix Advanced Mode"],
+                aliases=["breakit-advanced", "Breakit Advanced", "Breakit Advanced", "Breakit Advanced"],
                 context_window=262_144,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -381,11 +381,11 @@ class ModelFactory:
             )
         elif main_llm == "bedrock":
             return Model(
-                id="kortix/power",
-                name="Kortix Advanced Mode",
+                id="otacon/power",
+                name="Breakit Advanced",
                 litellm_model_id=custom_model or default_models["bedrock"],
                 provider=ModelProvider.BEDROCK,
-                aliases=["kortix-power", "Kortix POWER Mode", "Kortix Power", "Kortix Advanced Mode"],
+                aliases=["breakit-advanced", "Breakit Advanced", "Breakit Advanced", "Breakit Advanced"],
                 context_window=200_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -403,11 +403,11 @@ class ModelFactory:
             )
         elif main_llm == "anthropic":
             return Model(
-                id="kortix/power",
-                name="Kortix Advanced Mode",
+                id="otacon/power",
+                name="Breakit Advanced",
                 litellm_model_id=custom_model or default_models["anthropic"],
                 provider=ModelProvider.ANTHROPIC,
-                aliases=["kortix-power", "Kortix POWER Mode", "Kortix Power", "Kortix Advanced Mode"],
+                aliases=["breakit-advanced", "Breakit Advanced", "Breakit Advanced", "Breakit Advanced"],
                 context_window=200_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -425,11 +425,11 @@ class ModelFactory:
             )
         elif main_llm == "grok":
             return Model(
-                id="kortix/power",
-                name="Kortix Advanced Mode",
+                id="otacon/power",
+                name="Breakit Advanced",
                 litellm_model_id=custom_model or default_models["grok"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-power", "Kortix POWER Mode", "Kortix Power", "Kortix Advanced Mode"],
+                aliases=["breakit-advanced", "Breakit Advanced", "Breakit Advanced", "Breakit Advanced"],
                 context_window=2_000_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -446,11 +446,11 @@ class ModelFactory:
             )
         elif main_llm == "openai":
             return Model(
-                id="kortix/power",
-                name="Kortix Advanced Mode",
+                id="otacon/power",
+                name="Breakit Advanced",
                 litellm_model_id=custom_model or default_models["openai"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-power", "Kortix POWER Mode", "Kortix Power", "Kortix Advanced Mode"],
+                aliases=["breakit-advanced", "Breakit Advanced", "Breakit Advanced", "Breakit Advanced"],
                 context_window=128_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -466,11 +466,11 @@ class ModelFactory:
         elif main_llm == "openrouter":
             # Generic OpenRouter - use custom model or fallback to minimax
             return Model(
-                id="kortix/power",
-                name="Kortix Advanced Mode",
+                id="otacon/power",
+                name="Breakit Advanced",
                 litellm_model_id=custom_model or default_models["minimax"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-power", "Kortix POWER Mode", "Kortix Power", "Kortix Advanced Mode"],
+                aliases=["breakit-advanced", "Breakit Advanced", "Breakit Advanced", "Breakit Advanced"],
                 context_window=200_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -484,11 +484,11 @@ class ModelFactory:
             )
         else:  # minimax or unknown
             return Model(
-                id="kortix/power",
-                name="Kortix Advanced Mode",
+                id="otacon/power",
+                name="Breakit Advanced",
                 litellm_model_id=custom_model or default_models["minimax"],
                 provider=ModelProvider.OPENROUTER,
-                aliases=["kortix-power", "Kortix POWER Mode", "Kortix Power", "Kortix Advanced Mode"],
+                aliases=["breakit-advanced", "Breakit Advanced", "Breakit Advanced", "Breakit Advanced"],
                 context_window=200_000,
                 capabilities=[
                     ModelCapability.CHAT,
@@ -507,11 +507,11 @@ class ModelFactory:
     @staticmethod
     def create_test_model() -> Model:
         return Model(
-            id="kortix/test",
-            name="Kortix Test",
+            id="otacon/test",
+            name="Otacon Test",
             litellm_model_id="openrouter/minimax/minimax-m2.1",
             provider=ModelProvider.OPENROUTER,
-            aliases=["kortix-test", "Kortix Test"],
+            aliases=["otacon-test", "Otacon Test"],
             context_window=200_000,
             capabilities=[
                 ModelCapability.CHAT,
@@ -530,7 +530,7 @@ class ModelFactory:
     @staticmethod
     def create_grok_4_1_fast() -> Model:
         return Model(
-            id="kortix/grok-4-1-fast",
+            id="otacon/grok-4-1-fast",
             name="Grok 4.1 Fast",
             litellm_model_id="openrouter/x-ai/grok-4.1-fast",
             provider=ModelProvider.OPENROUTER,
@@ -552,7 +552,7 @@ class ModelFactory:
     @staticmethod
     def create_gpt4o_mini() -> Model:
         return Model(
-            id="kortix/gpt4o-mini",
+            id="otacon/gpt4o-mini",
             name="GPT-4o Mini",
             litellm_model_id="openrouter/openai/gpt-4o-mini",
             provider=ModelProvider.OPENROUTER,
@@ -573,7 +573,7 @@ class ModelFactory:
     @staticmethod
     def create_gpt5_mini() -> Model:
         return Model(
-            id="kortix/gpt-5-mini",
+            id="otacon/gpt-5-mini",
             name="GPT-5 Mini",
             litellm_model_id="openrouter/openai/gpt-4o-mini",
             provider=ModelProvider.OPENROUTER,
@@ -594,7 +594,7 @@ class ModelFactory:
     @staticmethod
     def create_mimo_v2_flash() -> Model:
         return Model(
-            id="kortix/mimo-v2-flash",
+            id="otacon/mimo-v2-flash",
             name="MiMo Flash",
             litellm_model_id="openrouter/xiaomi/mimo-v2-flash",
             provider=ModelProvider.OPENROUTER,
@@ -615,7 +615,7 @@ class ModelFactory:
     @staticmethod
     def create_deepseek_v3() -> Model:
         return Model(
-            id="kortix/deepseek-v3",
+            id="otacon/deepseek-v3",
             name="DeepSeek V3",
             litellm_model_id="openrouter/deepseek/deepseek-chat-v3-0324",
             provider=ModelProvider.OPENROUTER,
@@ -636,7 +636,7 @@ class ModelFactory:
     @staticmethod
     def create_haiku_3_5() -> Model:
         return Model(
-            id="kortix/haiku-3.5",
+            id="otacon/haiku-3.5",
             name="Claude Haiku 3.5",
             litellm_model_id="bedrock/anthropic.claude-3-5-haiku-20241022-v1:0",
             provider=ModelProvider.BEDROCK,
@@ -659,7 +659,7 @@ class ModelFactory:
     @staticmethod
     def create_kimi_k2() -> Model:
         return Model(
-            id="kortix/kimi-k2",
+            id="otacon/kimi-k2",
             name="Kimi K2",
             litellm_model_id="openrouter/moonshotai/kimi-k2",
             provider=ModelProvider.OPENROUTER,
@@ -681,7 +681,7 @@ class ModelFactory:
     @staticmethod
     def create_kimi_k2_5() -> Model:
         return Model(
-            id="kortix/kimi-k2.5",
+            id="otacon/kimi-k2.5",
             name="Kimi K2.5",
             litellm_model_id="openrouter/moonshotai/kimi-k2.5",
             provider=ModelProvider.OPENROUTER,

@@ -28,7 +28,7 @@ import { ScheduledDowngradeCard } from '@/components/billing/scheduled-downgrade
 import posthog from 'posthog-js';
 import { AnimatedBg } from '@/components/ui/animated-bg';
 import { TierBadge } from '@/components/billing/tier-badge';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 import { CreditPurchaseModal } from '@/components/billing/credit-purchase';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { useTranslations } from 'next-intl';
@@ -190,7 +190,7 @@ function PricingCard({
     const itemData: PlanItemData = {
       item_id: `${tier.tierKey}_${effectiveBillingPeriod}`,
       item_name: `${tier.name} ${billingLabel}`,
-      item_brand: 'Kortix AI',
+      item_brand: 'Otacon AI',
       item_category: 'Plans',
       item_list_id: 'plans_listing',
       item_list_name: 'Plans Listing',
@@ -648,7 +648,7 @@ function PricingCard({
                       <div className="flex-1">
                         <div className="flex items-center gap-1 sm:gap-1.5">
                           <span className="text-xs sm:text-sm font-medium">{match[1]} custom</span>
-                          <KortixLogo size={12} variant="symbol" className="hidden sm:block" />
+                          <OtaconLogo size={12} variant="symbol" className="hidden sm:block" />
                           <span className="text-xs sm:text-sm font-medium">AI Workers</span>
                         </div>
                         {description && (
@@ -660,7 +660,7 @@ function PricingCard({
                 }
               }
 
-              // Handle Kortix Advanced mode
+              // Handle Otacon Advanced mode
               if (feature.includes('Advanced mode') || feature.includes('ADVANCED Mode')) {
                 const description = feature.split(' - ')[1];
                 return (
@@ -673,8 +673,8 @@ function PricingCard({
                         <span className="text-[10px] sm:text-xs text-muted-foreground/60 line-through">Basic</span>
                         <span className="text-muted-foreground/40 text-xs">→</span>
                         <span className="inline-flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 bg-primary/10 dark:bg-primary/15 rounded-md">
-                          <KortixLogo size={10} variant="symbol" className="sm:hidden" />
-                          <KortixLogo size={12} variant="symbol" className="hidden sm:block" />
+                          <OtaconLogo size={10} variant="symbol" className="sm:hidden" />
+                          <OtaconLogo size={12} variant="symbol" className="hidden sm:block" />
                           <span className="text-[10px] sm:text-xs font-semibold text-primary">Advanced</span>
                         </span>
                       </div>
@@ -1078,7 +1078,7 @@ export function PricingSection({
     return {
       item_id: `${tier.tierKey}_${period}`,
       item_name: `${tier.name} ${billingLabel}`,
-      item_brand: 'Kortix AI',
+      item_brand: 'Otacon AI',
       item_category: 'Plans',
       item_list_id: 'plans_listing',
       item_list_name: 'Plans Listing',
@@ -1319,7 +1319,7 @@ export function PricingSection({
                       </span>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {promo.promoCode === 'KORTIX26'
+                      {promo.promoCode === 'OTACON26'
                         ? `Use code ${promo.promoCode} to get 30% off for the first three months + 2X credits as welcome bonus`
                         : promo.description}
                     </p>

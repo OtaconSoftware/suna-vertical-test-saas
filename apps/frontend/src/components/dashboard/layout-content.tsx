@@ -45,8 +45,8 @@ const PresenceDebug = lazy(() =>
   import('@/components/debug/presence-debug').then(mod => ({ default: mod.PresenceDebug }))
 );
 
-const KortixAppBanners = lazy(() => 
-  import('@/components/announcements/kortix-app-banners').then(mod => ({ default: mod.KortixAppBanners }))
+const OtaconAppBanners = lazy(() => 
+  import('@/components/announcements/otacon-app-banners').then(mod => ({ default: mod.OtaconAppBanners }))
 );
 
 const TutorialsBanner = lazy(() => 
@@ -255,9 +255,9 @@ export default function DashboardLayoutContent({
         <Suspense fallback={null}>
           <PresentationViewerWrapper />
         </Suspense>
-        {/* Kortix App announcement banners */}
+        {/* Otacon App announcement banners */}
         <Suspense fallback={null}>
-          <KortixAppBanners disableMobileAdvertising={featureFlags.disableMobileAdvertising} />
+          <OtaconAppBanners disableMobileAdvertising={featureFlags.disableMobileAdvertising} />
         </Suspense>
         {/* Tutorials banner for new users */}
         <Suspense fallback={null}>

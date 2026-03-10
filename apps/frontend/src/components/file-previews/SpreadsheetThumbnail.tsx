@@ -10,7 +10,7 @@ import * as XLSX from 'xlsx';
 import { cn } from '@/lib/utils';
 import { getFilename, getFileIcon } from '@/lib/utils/file-utils';
 import { useFileContentQuery } from '@/hooks/files/use-file-queries';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 
 // Constants for thumbnail preview
 const MAX_ROWS = 5;
@@ -167,7 +167,7 @@ export function SpreadsheetThumbnail({
                 )}
                 title="Loading spreadsheet..."
             >
-                <KortixLoader size="medium" />
+                <OtaconLoader size="medium" />
             </button>
         );
     }
@@ -214,7 +214,7 @@ export function SpreadsheetThumbnail({
             {/* Upload progress overlay */}
             {(uploadStatus === 'uploading' || (uploadStatus === 'pending' && sandboxId)) && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-20">
-                    <KortixLoader size="small" variant="white" />
+                    <OtaconLoader size="small" variant="white" />
                 </div>
             )}
 
@@ -228,7 +228,7 @@ export function SpreadsheetThumbnail({
             {/* Loading spinner before data parses */}
             {!hasData && isVisible && (localPreviewUrl || blobData) && !hasError && (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <KortixLoader size="small" />
+                    <OtaconLoader size="small" />
                 </div>
             )}
 

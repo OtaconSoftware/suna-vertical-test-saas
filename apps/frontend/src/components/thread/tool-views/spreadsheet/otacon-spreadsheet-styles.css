@@ -1,5 +1,5 @@
 /* 
- * Kortix Brand Styles for Syncfusion Spreadsheet
+ * Otacon Brand Styles for Syncfusion Spreadsheet
  * Black accent theme overrides
  */
 
@@ -8,13 +8,13 @@
    ============================================ */
 
 .e-spreadsheet {
-  --kortix-accent: #000000;
-  --kortix-accent-hover: #1a1a1a;
-  --kortix-bg-hover: rgba(0, 0, 0, 0.05);
-  --kortix-bg-active: rgba(0, 0, 0, 0.08);
-  --kortix-bg-pressed: rgba(0, 0, 0, 0.12);
-  --kortix-text: #374151;
-  --kortix-text-muted: #6b7280;
+  --otacon-accent: #000000;
+  --otacon-accent-hover: #1a1a1a;
+  --otacon-bg-hover: rgba(0, 0, 0, 0.05);
+  --otacon-bg-active: rgba(0, 0, 0, 0.08);
+  --otacon-bg-pressed: rgba(0, 0, 0, 0.12);
+  --otacon-text: #374151;
+  --otacon-text-muted: #6b7280;
 }
 
 /* Ensure toolbar has proper background for contrast */
@@ -27,14 +27,14 @@
 /* Override Syncfusion variables */
 .e-spreadsheet,
 .e-spreadsheet .e-ribbon {
-  --primary-color: var(--kortix-accent) !important;
-  --accent-color: var(--kortix-accent) !important;
-  --ejs-primary: var(--kortix-accent) !important;
-  --ejs-accent: var(--kortix-accent) !important;
-  --e-primary-color: var(--kortix-accent) !important;
-  --e-accent-color: var(--kortix-accent) !important;
-  --error-color: var(--kortix-accent) !important;
-  --danger-color: var(--kortix-accent) !important;
+  --primary-color: var(--otacon-accent) !important;
+  --accent-color: var(--otacon-accent) !important;
+  --ejs-primary: var(--otacon-accent) !important;
+  --ejs-accent: var(--otacon-accent) !important;
+  --e-primary-color: var(--otacon-accent) !important;
+  --e-accent-color: var(--otacon-accent) !important;
+  --error-color: var(--otacon-accent) !important;
+  --danger-color: var(--otacon-accent) !important;
 }
 
 /* ============================================
@@ -42,7 +42,7 @@
    ============================================ */
 
 .e-spreadsheet :is(.e-active-cell, .e-selection, .e-highlight, .e-selected-color, .e-split-preview) {
-  border-color: var(--kortix-accent) !important;
+  border-color: var(--otacon-accent) !important;
 }
 
 /* ============================================
@@ -50,9 +50,9 @@
    ============================================ */
 
 .e-spreadsheet :is(.e-indicator, .e-tab-header .e-indicator) {
-  background-color: var(--kortix-accent) !important;
-  border-color: var(--kortix-accent) !important;
-  border-top-color: var(--kortix-accent) !important;
+  background-color: var(--otacon-accent) !important;
+  border-color: var(--otacon-accent) !important;
+  border-top-color: var(--otacon-accent) !important;
 }
 
 /* All tabs - base text styling (fix white-on-white) */
@@ -84,7 +84,7 @@
 /* Active tabs - text styling */
 .e-spreadsheet .e-toolbar-item.e-active :is(.e-tab-text, .e-tab-wrap, .e-text-wrap),
 .e-spreadsheet .e-sheet-tab-panel .e-toolbar-item.e-active .e-tab-text {
-  color: var(--kortix-accent) !important;
+  color: var(--otacon-accent) !important;
   font-weight: 600 !important;
 }
 
@@ -107,13 +107,13 @@
 .e-spreadsheet .e-tab-header .e-toolbar-item .e-tab-wrap[aria-selected="true"] {
   background-color: transparent !important;
   background: transparent !important;
-  color: var(--kortix-accent) !important;
+  color: var(--otacon-accent) !important;
 }
 
 /* Tab wrap pressed state */
 .e-spreadsheet .e-tab-header .e-tab-wrap:active {
-  background-color: var(--kortix-bg-pressed) !important;
-  color: var(--kortix-accent) !important;
+  background-color: var(--otacon-bg-pressed) !important;
+  color: var(--otacon-accent) !important;
 }
 
 /* Remove any ripple/pseudo-element backgrounds on tabs */
@@ -127,13 +127,13 @@
 
 /* Sheet tab active border */
 .e-spreadsheet .e-sheet-tab-panel .e-toolbar-item.e-active {
-  border-bottom-color: var(--kortix-accent) !important;
+  border-bottom-color: var(--otacon-accent) !important;
 }
 
 /* Active toolbar icons */
 .e-spreadsheet .e-toolbar-item.e-active :is(.e-icons, .e-close-icon) {
-  color: var(--kortix-accent) !important;
-  fill: var(--kortix-accent) !important;
+  color: var(--otacon-accent) !important;
+  fill: var(--otacon-accent) !important;
 }
 
 /* ============================================
@@ -142,19 +142,19 @@
 
 /* Primary buttons */
 .e-spreadsheet .e-btn.e-primary {
-  background-color: var(--kortix-accent) !important;
-  border-color: var(--kortix-accent) !important;
+  background-color: var(--otacon-accent) !important;
+  border-color: var(--otacon-accent) !important;
   color: #fff !important;
 }
 
 .e-spreadsheet .e-btn.e-primary:is(:hover, :focus) {
-  background-color: var(--kortix-accent-hover) !important;
+  background-color: var(--otacon-accent-hover) !important;
 }
 
 /* Icon buttons active */
 .e-spreadsheet .e-icon-btn.e-active {
-  color: var(--kortix-accent) !important;
-  background-color: var(--kortix-bg-active) !important;
+  color: var(--otacon-accent) !important;
+  background-color: var(--otacon-bg-active) !important;
 }
 
 /* ============================================
@@ -162,21 +162,21 @@
    ============================================ */
 
 .e-spreadsheet :is(.e-toolbar-item, .e-tbar-btn, .e-btn, .e-icon-btn, .e-dropdown-btn):hover {
-  color: var(--kortix-accent) !important;
-  background-color: var(--kortix-bg-hover) !important;
+  color: var(--otacon-accent) !important;
+  background-color: var(--otacon-bg-hover) !important;
 }
 
 .e-spreadsheet :is(.e-tbar-btn, .e-dropdown-btn):hover .e-icons {
-  color: var(--kortix-accent) !important;
+  color: var(--otacon-accent) !important;
 }
 
 .e-spreadsheet :is(.e-toolbar-item, .e-sheet-tab-panel .e-toolbar-item):hover .e-tab-text {
-  color: var(--kortix-accent) !important;
+  color: var(--otacon-accent) !important;
 }
 
 .e-spreadsheet .e-menu-item:hover:not(.e-selected) {
-  background-color: var(--kortix-bg-hover) !important;
-  color: var(--kortix-accent) !important;
+  background-color: var(--otacon-bg-hover) !important;
+  color: var(--otacon-accent) !important;
 }
 
 /* ============================================
@@ -184,12 +184,12 @@
    ============================================ */
 
 .e-spreadsheet :is(.e-tbar-btn, .e-btn, .e-icon-btn, .e-dropdown-btn, .e-split-btn):is(:focus, .e-active) {
-  color: var(--kortix-accent) !important;
-  border-color: var(--kortix-accent) !important;
+  color: var(--otacon-accent) !important;
+  border-color: var(--otacon-accent) !important;
 }
 
 .e-spreadsheet :is(.e-tbar-btn, .e-split-btn):is(:focus, .e-active) .e-icons {
-  color: var(--kortix-accent) !important;
+  color: var(--otacon-accent) !important;
 }
 
 /* Pressed/click states - disable transitions for instant feedback */
@@ -198,8 +198,8 @@
 }
 
 .e-spreadsheet :is(.e-menu-item, .e-tbar-btn, .e-btn, .e-icon-btn, .e-dropdown-btn, .e-split-btn):active {
-  background-color: var(--kortix-bg-pressed) !important;
-  color: var(--kortix-accent) !important;
+  background-color: var(--otacon-bg-pressed) !important;
+  color: var(--otacon-accent) !important;
   transition: none !important;
   animation: none !important;
 }
@@ -209,13 +209,13 @@
    ============================================ */
 
 .e-spreadsheet :is(.e-contextmenu-wrapper, .e-menu-wrapper, .e-file-menu, .e-menu-parent) .e-menu-item:is(.e-active, .e-selected, :hover) {
-  background-color: var(--kortix-bg-active) !important;
-  color: var(--kortix-accent) !important;
+  background-color: var(--otacon-bg-active) !important;
+  color: var(--otacon-accent) !important;
 }
 
 .e-spreadsheet :is(.e-contextmenu-wrapper, .e-menu-wrapper, .e-file-menu, .e-menu-parent) .e-menu-item:active {
-  background-color: var(--kortix-bg-pressed) !important;
-  color: var(--kortix-accent) !important;
+  background-color: var(--otacon-bg-pressed) !important;
+  color: var(--otacon-accent) !important;
   border-color: transparent !important;
   box-shadow: none !important;
 }
@@ -226,7 +226,7 @@
 
 .e-spreadsheet .e-formula-bar-panel .e-input-group:is(:focus-within, .e-focus),
 .e-spreadsheet .e-formula-bar:focus {
-  border-color: var(--kortix-accent) !important;
+  border-color: var(--otacon-accent) !important;
 }
 
 /* ============================================
@@ -234,17 +234,17 @@
    ============================================ */
 
 .e-spreadsheet .e-sort-filter-icon:is(.e-active, :hover)::before {
-  color: var(--kortix-accent) !important;
+  color: var(--otacon-accent) !important;
 }
 
 .e-spreadsheet .e-filter-popup .e-btn.e-primary {
-  background-color: var(--kortix-accent) !important;
-  border-color: var(--kortix-accent) !important;
+  background-color: var(--otacon-accent) !important;
+  border-color: var(--otacon-accent) !important;
   color: #fff !important;
 }
 
 .e-spreadsheet .e-filter-popup .e-btn.e-primary:hover {
-  background-color: var(--kortix-accent-hover) !important;
+  background-color: var(--otacon-accent-hover) !important;
 }
 
 /* ============================================
@@ -252,7 +252,7 @@
    ============================================ */
 
 .e-spreadsheet .e-scrollbar .e-scroll-nav:hover {
-  background-color: var(--kortix-bg-active) !important;
+  background-color: var(--otacon-bg-active) !important;
 }
 
 /* ============================================
@@ -260,12 +260,12 @@
    ============================================ */
 
 .e-spreadsheet *:focus-visible {
-  outline-color: var(--kortix-accent) !important;
+  outline-color: var(--otacon-accent) !important;
   outline-offset: 2px;
 }
 
 .e-spreadsheet .e-input-group:focus-within {
-  box-shadow: 0 0 0 2px var(--kortix-bg-active) !important;
+  box-shadow: 0 0 0 2px var(--otacon-bg-active) !important;
 }
 
 /* ============================================
@@ -274,7 +274,7 @@
 
 .e-spreadsheet .e-ripple,
 .e-spreadsheet :is(.e-menu-item, .e-tbar-btn, .e-btn, .e-tab-wrap, .e-toolbar-item) .e-ripple {
-  background-color: var(--kortix-bg-active) !important;
+  background-color: var(--otacon-bg-active) !important;
 }
 
 /* Remove pseudo-element backgrounds on active */

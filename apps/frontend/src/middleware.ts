@@ -7,7 +7,7 @@ import { detectBestLocaleFromHeaders } from '@/lib/utils/geo-detection-server';
 // Marketing pages that support locale routing for SEO (/de, /it, etc.)
 const MARKETING_ROUTES = [
   '/',
-  '/suna',
+  '/breakit',
   '/legal',
   '/support',
   '/templates',
@@ -28,7 +28,7 @@ const PUBLIC_ROUTES = [
   '/master-login', // Master password admin login
   '/checkout', // Public checkout wrapper for Apple compliance
   '/support', // Support page should be public
-  '/suna', // Kortix rebrand page should be public for SEO
+  '/breakit', // Otacon rebrand page should be public for SEO
   '/help', // Help center and documentation should be public
   '/credits-explained', // Credits explained page should be public
   '/agents-101',
@@ -60,8 +60,8 @@ const PROTECTED_ROUTES = [
 
 // App store links for mobile redirect
 const APP_STORE_LINKS = {
-  ios: 'https://apps.apple.com/ie/app/kortix/id6754448524',
-  android: 'https://play.google.com/store/apps/details?id=com.kortix.app',
+  ios: 'https://apps.apple.com/ie/app/otacon/id6754448524',
+  android: 'https://play.google.com/store/apps/details?id=com.otacon.app',
 };
 
 // Detect mobile platform from User-Agent header (edge-optimized)
@@ -133,7 +133,7 @@ export async function middleware(request: NextRequest) {
   const pathSegments = pathname.split('/').filter(Boolean);
   const firstSegment = pathSegments[0];
   
-  // Check if first segment is a locale (e.g., /de, /it, /de/suna)
+  // Check if first segment is a locale (e.g., /de, /it, /de/breakit)
   if (firstSegment && locales.includes(firstSegment as Locale)) {
     const locale = firstSegment as Locale;
     const remainingPath = '/' + pathSegments.slice(1).join('/') || '/';
@@ -147,7 +147,7 @@ export async function middleware(request: NextRequest) {
     });
     
     if (isRemainingPathMarketing) {
-      // Rewrite /de to /, /de/suna to /suna, etc.
+      // Rewrite /de to /, /de/breakit to /breakit, etc.
       const response = NextResponse.rewrite(new URL(remainingPath, request.url));
       response.cookies.set('locale', locale, {
         path: '/',

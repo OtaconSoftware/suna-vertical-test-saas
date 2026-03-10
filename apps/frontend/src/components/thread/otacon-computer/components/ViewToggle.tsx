@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ViewType } from '@/stores/kortix-computer-store';
+import { ViewType } from '@/stores/otacon-computer-store';
 import { HIDE_BROWSER_TAB } from '@/components/thread/utils';
 
 interface ViewToggleProps {

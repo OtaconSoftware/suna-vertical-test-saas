@@ -4,7 +4,7 @@ import { memo, useState, useEffect } from 'react';
 import { Minimize2, Wifi, BatteryLow, BatteryMedium, BatteryFull, BatteryCharging, FolderOpen, Activity, Loader2, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DrawerTitle } from '@/components/ui/drawer';
-import { ViewType } from '@/stores/kortix-computer-store';
+import { ViewType } from '@/stores/otacon-computer-store';
 import { cn } from '@/lib/utils';
 import { ViewToggle } from './ViewToggle';
 import { ToolbarButtons } from './ToolbarButtons';
@@ -243,22 +243,22 @@ export const PanelHeader = memo(function PanelHeader({
         {/* Left: Logo - compact for mobile */}
         <div className="flex items-center min-w-0">
           <Image
-            src="/kortix-computer-white.svg"
-            alt="Kortix Computer"
+            src="/otacon-computer-white.svg"
+            alt="Otacon Computer"
             width={120}
             height={14}
             className="hidden dark:block"
             priority
           />
           <Image
-            src="/kortix-computer-black.svg"
-            alt="Kortix Computer"
+            src="/otacon-computer-black.svg"
+            alt="Otacon Computer"
             width={120}
             height={14}
             className="block dark:hidden"
             priority
           />
-          <DrawerTitle className="sr-only">Kortix Computer</DrawerTitle>
+          <DrawerTitle className="sr-only">Otacon Computer</DrawerTitle>
         </div>
         
         {/* Right: Switcher + Close - tighter spacing */}
@@ -300,16 +300,16 @@ export const PanelHeader = memo(function PanelHeader({
         className="flex items-center justify-center cursor-pointer select-none hover:opacity-80 transition-opacity"
       >
         <Image
-          src="/kortix-computer-white.svg"
-          alt="Kortix Computer"
+          src="/otacon-computer-white.svg"
+          alt="Otacon Computer"
           width={140}
           height={16}
           className="hidden dark:block"
           priority
         />
         <Image
-          src="/kortix-computer-black.svg"
-          alt="Kortix Computer"
+          src="/otacon-computer-black.svg"
+          alt="Otacon Computer"
           width={140}
           height={16}
           className="block dark:hidden"

@@ -14,8 +14,7 @@ import { isProductionMode } from '@/lib/config';
 import { ModelProviderIcon } from '@/lib/model-provider-icons';
 import { Separator } from '@/components/ui/separator';
 
-// Logo component for mode display with theme support
-// Uses CSS to switch between light/dark variants without JS
+// Logo component for mode display - text-based for easy branding
 const ModeLogo = memo(function ModeLogo({ 
   mode, 
   height = 12
@@ -23,27 +22,14 @@ const ModeLogo = memo(function ModeLogo({
   mode: 'basic' | 'advanced'; 
   height?: number;
 }) {
-  const darkSrc = mode === 'advanced' ? '/Advanced-Light.svg' : '/Basic-Light.svg';
-  const lightSrc = mode === 'advanced' ? '/Advanced-Dark.svg' : '/Basic-Dark.svg';
+  const label = mode === 'advanced' ? 'Breakit Advanced' : 'Breakit Basic';
 
   return (
-    <span className="flex-shrink-0 relative" style={{ height: `${height}px`, width: 'auto' }}>
-      {/* Light mode image */}
-      <img
-        src={lightSrc}
-        alt={mode === 'advanced' ? 'Kortix Advanced' : 'Kortix Basic'}
-        className="block dark:hidden"
-        style={{ height: `${height}px`, width: 'auto' }}
-        suppressHydrationWarning
-      />
-      {/* Dark mode image */}
-      <img
-        src={darkSrc}
-        alt={mode === 'advanced' ? 'Kortix Advanced' : 'Kortix Basic'}
-        className="hidden dark:block"
-        style={{ height: `${height}px`, width: 'auto' }}
-        suppressHydrationWarning
-      />
+    <span 
+      className="flex-shrink-0 font-semibold text-foreground whitespace-nowrap"
+      style={{ fontSize: `${height}px`, lineHeight: `${height + 2}px` }}
+    >
+      {label}
     </span>
   );
 });
@@ -61,20 +47,20 @@ export const ModeIndicator = memo(function ModeIndicator() {
   const showAllModelsOption = !isProductionMode();
 
   const basicModel = useMemo(
-    () => modelOptions.find((m) => m.id === 'kortix/basic' || m.label === 'Kortix Basic'),
+    () => modelOptions.find((m) => m.id === 'otacon/basic' || m.label === 'Otacon Basic'),
     [modelOptions]
   );
   
   const powerModel = useMemo(
-    () => modelOptions.find((m) => m.id === 'kortix/power' || m.label === 'Kortix Advanced Mode'),
+    () => modelOptions.find((m) => m.id === 'otacon/power' || m.label === 'Otacon Advanced Mode'),
     [modelOptions]
   );
 
   // Get other models (not basic or power) for the staging section
   const otherModels = useMemo(() => {
     return modelOptions.filter(
-      (m) => m.id !== 'kortix/basic' && m.id !== 'kortix/power' && 
-             m.label !== 'Kortix Basic' && m.label !== 'Kortix Advanced Mode'
+      (m) => m.id !== 'otacon/basic' && m.id !== 'otacon/power' && 
+             m.label !== 'Otacon Basic' && m.label !== 'Otacon Advanced Mode'
     ).sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
   }, [modelOptions]);
 
@@ -110,7 +96,7 @@ export const ModeIndicator = memo(function ModeIndicator() {
         setIsOpen(false);
         usePricingModalStore.getState().openPricingModal({
           isAlert: true,
-          alertTitle: 'Upgrade to access Kortix Advanced mode',
+          alertTitle: 'Upgrade to access Otacon Advanced mode',
         });
       }
     }

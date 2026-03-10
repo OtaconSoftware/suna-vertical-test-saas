@@ -5,7 +5,7 @@ import { ArrowLeft, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimatedBg } from '@/components/ui/animated-bg';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 
 export default function NotFound() {
   return (
@@ -16,7 +16,7 @@ export default function NotFound() {
 
         <div className="relative z-10 w-full max-w-[456px] flex flex-col items-center gap-5 sm:gap-8">
           {/* Logo - 32px height */}
-          <KortixLogo size={28} className="sm:w-8 sm:h-8" />
+          <OtaconLogo size={28} className="sm:w-8 sm:h-8" />
 
           {/* Title - responsive */}
           <h1 className="text-3xl sm:text-[43px] font-normal tracking-tight text-foreground leading-tight text-center">

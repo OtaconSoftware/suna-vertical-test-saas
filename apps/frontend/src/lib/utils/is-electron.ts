@@ -1,5 +1,5 @@
 // Custom protocol scheme for Electron deep linking
-const ELECTRON_PROTOCOL = 'kortix';
+const ELECTRON_PROTOCOL = 'otacon';
 
 /**
  * Detects if the app is running in Electron (desktop app) vs web browser
@@ -9,7 +9,7 @@ export function isElectron(): boolean {
     return false;
   }
 
-  // Check user agent for Electron (we append "Electron/Kortix-Desktop" in main.js)
+  // Check user agent for Electron (we append "Electron/Otacon-Desktop" in main.js)
   if (typeof navigator !== 'undefined' && navigator.userAgent) {
     return navigator.userAgent.toLowerCase().includes('electron');
   }
@@ -25,8 +25,8 @@ export function isElectron(): boolean {
 
 /**
  * Gets the auth callback URL for the current environment
- * - Web: returns the web URL (https://kortix.com/auth/callback)
- * - Electron: returns the custom protocol URL (kortix://auth/callback)
+ * - Web: returns the web URL (https://otacon.com/auth/callback)
+ * - Electron: returns the custom protocol URL (otacon://auth/callback)
  */
 export function getAuthCallbackUrl(returnUrl?: string, termsAccepted?: boolean): string {
   const params = new URLSearchParams();

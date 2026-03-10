@@ -14,16 +14,16 @@ export const siteConfig = {
   },
   hero: {
     description:
-      'TestAgent – AI-powered platform to automatically test your web apps, catch bugs, and generate QA reports.',
+      'Breakit – AI-powered platform to automatically test your web apps, catch bugs, and generate QA reports.',
   },
   cloudPricingItems: pricingTiers,
   footerLinks: [
     {
-      title: 'TestAgent',
+      title: 'Breakit',
       links: [
         { id: 1, title: 'About', url: '/about' },
         { id: 2, title: 'Support', url: '/support' },
-        { id: 3, title: 'Contact', url: 'mailto:support@testagent.dev' },
+        { id: 3, title: 'Contact', url: 'mailto:support@breakit.dev' },
       ],
     },
     {

@@ -1,9 +1,9 @@
-# Kortix Robots.txt
+# Breakit Robots.txt
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://kortix.com/sitemap.xml
+Sitemap: https://breakit.com/sitemap.xml
 
 # Disallow sensitive routes
 Disallow: /api/

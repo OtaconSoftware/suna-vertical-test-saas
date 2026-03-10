@@ -10,8 +10,8 @@ class EmailService:
     def __init__(self):
         self.api_token = os.getenv('MAILTRAP_API_TOKEN')
         self.sender_email = os.getenv('MAILTRAP_SENDER_EMAIL', 'hey@kortix.com')
-        self.sender_name = os.getenv('MAILTRAP_SENDER_NAME', 'Kortix Team')
-        self.hello_email = 'hello@kortix.com'
+        self.sender_name = os.getenv('MAILTRAP_SENDER_NAME', 'Otacon Team')
+        self.hello_email = 'support@breakit.dev'
         
         if not self.api_token:
             logger.warning("MAILTRAP_API_TOKEN not found in environment variables")
@@ -27,7 +27,7 @@ class EmailService:
         if not user_name:
             user_name = user_email.split('@')[0].title()
         
-        subject = "🎉 Welcome to Kortix — Let's Get Started "
+        subject = "🎉 Welcome to Breakit — Let's Get Started "
         html_content = self._get_welcome_email_template(user_name)
         text_content = self._get_welcome_email_text(user_name)
         
@@ -120,7 +120,7 @@ class EmailService:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Kortix</title>
+  <title>Welcome to Breakit</title>
   <style>
     body {{
       font-family: Arial, sans-serif;
@@ -191,7 +191,7 @@ class EmailService:
 
     <p>Hi {user_name},</p>
 
-    <p><em><strong>Welcome to <a href="https://www.kortix.com/">Kortix.com</a> — we're excited to have you on board!</strong></em></p>
+    <p><em><strong>Welcome to <a href="https://www.kortix.com/">Breakit</a> — we're excited to have you on board!</strong></em></p>
 
     <p>To get started, we'd like to get to know you better: fill out this short <a href="https://docs.google.com/forms/d/e/1FAIpQLSef1EHuqmIh_iQz-kwhjnzSC3Ml-V_5wIySDpMoMU9W_j24JQ/viewform">form</a>!</p>
 
@@ -200,7 +200,7 @@ class EmailService:
 
     <p>Let us know if you need help getting started or have questions — we're always here, and join our <a href="https://discord.com/invite/RvFhXUdZ9H">Discord community</a>.</p>
 
-    <p>Thanks again, and welcome to the Kortix community!</p>
+    <p>Thanks again, and welcome to Breakit!</p>
   </div>
 </body>
 </html>"""
@@ -218,11 +218,11 @@ To celebrate your arrival, here's a 15% discount for your first month:
 
 Let us know if you need help getting started or have questions — we're always here, and join our Discord community: https://discord.com/invite/RvFhXUdZ9H
 
-Thanks again, and welcome to the Kortix community!
+Thanks again, and welcome to Breakit!
 
 ---
 © 2025 Kortix. All rights reserved.
-You received this email because you signed up for a Kortix account."""
+You received this email because you signed up for a Breakit account."""
     
     def _get_referral_email_template(self, recipient_name: str, sender_name: str, referral_url: str) -> str:
         content = f"""<table cellpadding="0" cellspacing="0" border="0" style="padding:30px 15px; font-family:Inter, Arial, sans-serif; color:#000000;">
@@ -232,7 +232,7 @@ You received this email because you signed up for a Kortix account."""
         Hi <strong>{recipient_name}</strong>,  👋
       </p>
       <p style="margin:0 0 20px 0; font-size:15px; line-height:1.6;">
-        <strong>{sender_name}</strong> has invited you to join Kortix using a personal referral code.
+        <strong>{sender_name}</strong> has invited you to join Breakit using a personal referral code.
         When you sign up using this link, both you and {sender_name} will receive 100 in non-expiring credits 🎁
       </p>
       <p style="margin:0 0 10px 0; font-weight:600;">
@@ -280,7 +280,7 @@ You received this email because you signed up for a Kortix account."""
         </div>
         <div style="text-align: center; margin-top: 32px;">
           <p style="font-size: 12px; color: #999; margin: 0;">
-            &copy; Kortix AI Corp. All rights reserved.
+            &copy; Otacon Software. All rights reserved.
           </p>
         </div>
       </td>
@@ -292,7 +292,7 @@ You received this email because you signed up for a Kortix account."""
     def _get_referral_email_text(self, recipient_name: str, sender_name: str, referral_url: str) -> str:
         return f"""Hi {recipient_name},
 
-{sender_name} has invited you to join Kortix using a personal referral code.
+{sender_name} has invited you to join Breakit using a personal referral code.
 
 When you sign up using this link, both you and {sender_name} will receive 100 in non-expiring credits 🎁
 
@@ -302,7 +302,7 @@ What You Both Get:
 Claim your invite: {referral_url}
 
 ---
-© Kortix AI Corp. All rights reserved."""
+© Otacon Software. All rights reserved."""
 
     def send_otp_email(self, user_email: str, otp_code: str) -> bool:
         """Send an OTP-only email (no magic link button) for users with expired links."""
@@ -310,7 +310,7 @@ Claim your invite: {referral_url}
             logger.error("Cannot send email: MAILTRAP_API_TOKEN not configured")
             return False
 
-        subject = "Your Kortix verification code"
+        subject = "Your Breakit verification code"
         html_content = self._get_otp_email_template(otp_code)
         text_content = self._get_otp_email_text(otp_code)
 
@@ -365,7 +365,7 @@ Claim your invite: {referral_url}
         </div>
         <div style="text-align: center; margin-top: 32px;">
           <p style="font-size: 12px; color: #999; margin: 0;">
-            &copy; Kortix AI Corp. All rights reserved.
+            &copy; Otacon Software. All rights reserved.
           </p>
         </div>
       </td>
@@ -375,7 +375,7 @@ Claim your invite: {referral_url}
 </html>"""
 
     def _get_otp_email_text(self, otp_code: str) -> str:
-        return f"""Your Kortix verification code
+        return f"""Your Breakit verification code
 
 Enter this code to sign in to your account:
 
@@ -384,7 +384,7 @@ Enter this code to sign in to your account:
 This code expires in 1 hour. If you didn't request this, you can safely ignore this email.
 
 ---
-© Kortix AI Corp. All rights reserved."""
+© Otacon Software. All rights reserved."""
 
 
 email_service = EmailService() 

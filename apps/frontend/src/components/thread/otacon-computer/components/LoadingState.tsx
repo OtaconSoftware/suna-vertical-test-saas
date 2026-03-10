@@ -3,7 +3,7 @@
 import { memo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DrawerContent } from '@/components/ui/drawer';
-import { useKortixComputerStore } from '@/stores/kortix-computer-store';
+import { useOtaconComputerStore } from '@/stores/otacon-computer-store';
 import { PanelHeader } from './PanelHeader';
 
 interface LoadingStateProps {
@@ -17,14 +17,14 @@ export const LoadingState = memo(function LoadingState({
   onClose, 
   isMobile 
 }: LoadingStateProps) {
-  const { activeView, setActiveView } = useKortixComputerStore();
+  const { activeView, setActiveView } = useOtaconComputerStore();
   
   if (isMobile) {
     return (
       <DrawerContent
         className="h-[85vh]"
         onKeyDown={(e) => {
-          // Prevent Escape / Esc from dismissing the Drawer (Kortix Computer).
+          // Prevent Escape / Esc from dismissing the Drawer (Otacon Computer).
           if (e.key === 'Escape' || e.key === 'Esc') {
             e.preventDefault();
             e.stopPropagation();

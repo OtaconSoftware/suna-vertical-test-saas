@@ -24,6 +24,7 @@ import uuid
 
 from core.versioning.api import router as versioning_router
 from core.agents.api import router as agent_runs_router
+from core.agents.qa_api import router as qa_router
 from core.agents.agent_crud import router as agent_crud_router
 from core.agents.agent_tools import router as agent_tools_router
 from core.agents.agent_json import router as agent_json_router
@@ -364,6 +365,7 @@ api_router = APIRouter()
 # Core routers
 api_router.include_router(versioning_router)
 api_router.include_router(agent_runs_router)
+api_router.include_router(qa_router)
 api_router.include_router(agent_crud_router)
 api_router.include_router(agent_tools_router)
 api_router.include_router(agent_json_router)

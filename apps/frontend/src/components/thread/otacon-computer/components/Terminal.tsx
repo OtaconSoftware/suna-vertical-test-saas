@@ -4,7 +4,7 @@ import { memo, useState, useRef, useEffect, useCallback, KeyboardEvent } from 'r
 import { useQueryClient } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
 import { backendApi } from '@/lib/api-client';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { fileQueryKeys } from '@/hooks/files/use-file-queries';
 
 interface TerminalLine {
@@ -19,12 +19,12 @@ interface TerminalProps {
   className?: string;
 }
 
-const TERMINAL_HISTORY_KEY = 'kortix-terminal-history';
+const TERMINAL_HISTORY_KEY = 'otacon-terminal-history';
 
 export const Terminal = memo(function Terminal({ sandboxId, className }: TerminalProps) {
   const queryClient = useQueryClient();
   const [lines, setLines] = useState<TerminalLine[]>([
-    { id: '0', type: 'output', content: 'Welcome to Kortix Terminal' },
+    { id: '0', type: 'output', content: 'Welcome to Otacon Terminal' },
     { id: '1', type: 'output', content: 'Type commands below and press Enter to execute.' },
     { id: '2', type: 'output', content: '' },
   ]);
@@ -222,7 +222,7 @@ export const Terminal = memo(function Terminal({ sandboxId, className }: Termina
       <div className="flex items-center h-7 px-3 bg-zinc-200/80 dark:bg-[#24283b] border-b border-zinc-300 dark:border-[#414868] gap-2 flex-shrink-0">
         <span className="text-zinc-500 dark:text-[#565f89] text-xs">{getPromptDisplay(cwd)} — bash</span>
         {isExecuting && (
-          <KortixLoader size="small" className="ml-auto" />
+          <OtaconLoader size="small" className="ml-auto" />
         )}
       </div>
 

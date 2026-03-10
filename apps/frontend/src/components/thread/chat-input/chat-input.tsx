@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { X, Image as ImageIcon, Presentation, BarChart3, FileText, Search, Palette, Video, Code2, Sparkles, Brain as BrainIcon, MessageSquare, CornerDownLeft, Plug, Lock } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { VoiceRecorder } from './voice-recorder';
 import { useTheme } from 'next-themes';
 import { useTranslations } from 'next-intl';
@@ -32,7 +32,7 @@ import { ToolCallInput } from './floating-tool-preview';
 import { ChatSnack } from './chat-snack';
 import { Brain, Zap, Database, ArrowDown, ArrowUp, Wrench, Clock, Send } from 'lucide-react';
 import { useMessageQueueStore } from '@/stores/message-queue-store';
-import { useSunaModesStore } from '@/stores/suna-modes-store';
+import { useBreakitModesStore } from '@/stores/breakit-modes-store';
 import { useComposioToolkitIcon } from '@/hooks/composio/use-composio';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ContextUsageIndicator } from '../ContextUsageIndicator';
@@ -413,18 +413,18 @@ function ModeButton({
   isModeDismissing,
   onDeselect,
 }: ModeButtonProps) {
-  const t = useTranslations('suna');
+  const t = useTranslations('breakit');
   
   // Read ALL mode state directly from Zustand store with individual selectors
   // Each selector returns a primitive/stable reference, so no infinite loop
-  const selectedMode = useSunaModesStore((state) => state.selectedMode);
-  const selectedCharts = useSunaModesStore((state) => state.selectedCharts);
-  const selectedOutputFormat = useSunaModesStore((state) => state.selectedOutputFormat);
-  const selectedTemplate = useSunaModesStore((state) => state.selectedTemplate);
-  const selectedDocsType = useSunaModesStore((state) => state.selectedDocsType);
-  const selectedImageStyle = useSunaModesStore((state) => state.selectedImageStyle);
-  const selectedCanvasAction = useSunaModesStore((state) => state.selectedCanvasAction);
-  const selectedVideoStyle = useSunaModesStore((state) => state.selectedVideoStyle);
+  const selectedMode = useBreakitModesStore((state) => state.selectedMode);
+  const selectedCharts = useBreakitModesStore((state) => state.selectedCharts);
+  const selectedOutputFormat = useBreakitModesStore((state) => state.selectedOutputFormat);
+  const selectedTemplate = useBreakitModesStore((state) => state.selectedTemplate);
+  const selectedDocsType = useBreakitModesStore((state) => state.selectedDocsType);
+  const selectedImageStyle = useBreakitModesStore((state) => state.selectedImageStyle);
+  const selectedCanvasAction = useBreakitModesStore((state) => state.selectedCanvasAction);
+  const selectedVideoStyle = useBreakitModesStore((state) => state.selectedVideoStyle);
   
   // Generate mode-specific display text - computed directly (no useMemo to ensure fresh values)
   const getDisplayText = () => {
@@ -549,21 +549,21 @@ function ModeButton({
   );
 }
 
-// Kortix agent modes switcher - isolated from typing state
-interface SunaAgentModeSwitcherProps {
+// Otacon agent modes switcher - isolated from typing state
+interface BreakitAgentModeSwitcherProps {
   enabled: boolean;
-  isSunaAgent: boolean;
-  sunaAgentModes: 'adaptive' | 'autonomous' | 'chat';
+  isBreakitAgent: boolean;
+  breakitAgentModes: 'adaptive' | 'autonomous' | 'chat';
   onModeChange: (mode: 'adaptive' | 'autonomous' | 'chat') => void;
 }
 
-const SunaAgentModeSwitcher = memo(function SunaAgentModeSwitcher({
+const BreakitAgentModeSwitcher = memo(function BreakitAgentModeSwitcher({
   enabled,
-  isSunaAgent,
-  sunaAgentModes,
+  isBreakitAgent,
+  breakitAgentModes,
   onModeChange,
-}: SunaAgentModeSwitcherProps) {
-  if (!enabled || !(isStagingMode() || isLocalMode()) || !isSunaAgent) return null;
+}: BreakitAgentModeSwitcherProps) {
+  if (!enabled || !(isStagingMode() || isLocalMode()) || !isBreakitAgent) return null;
 
   return (
     <div className="flex items-center gap-1 p-0.5 bg-muted/50 rounded-lg">
@@ -573,7 +573,7 @@ const SunaAgentModeSwitcher = memo(function SunaAgentModeSwitcher({
             onClick={() => onModeChange('adaptive')}
             className={cn(
               "p-1.5 rounded-md transition-all duration-200 cursor-pointer",
-              sunaAgentModes === 'adaptive'
+              breakitAgentModes === 'adaptive'
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground hover:bg-background/50"
             )}
@@ -595,7 +595,7 @@ const SunaAgentModeSwitcher = memo(function SunaAgentModeSwitcher({
             onClick={() => onModeChange('autonomous')}
             className={cn(
               "p-1.5 rounded-md transition-all duration-200 cursor-pointer",
-              sunaAgentModes === 'autonomous'
+              breakitAgentModes === 'autonomous'
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground hover:bg-background/50"
             )}
@@ -617,7 +617,7 @@ const SunaAgentModeSwitcher = memo(function SunaAgentModeSwitcher({
             onClick={() => onModeChange('chat')}
             className={cn(
               "p-1.5 rounded-md transition-all duration-200 cursor-pointer",
-              sunaAgentModes === 'chat'
+              breakitAgentModes === 'chat'
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground hover:bg-background/50"
             )}
@@ -690,7 +690,7 @@ const SubmitButton = memo(function SubmitButton({
             disabled={isDisabled}
           >
             {((loading || isUploading) && !isAgentRunning) ? (
-              <KortixLoader size="small" customSize={20} variant={buttonLoaderVariant} />
+              <OtaconLoader size="small" customSize={20} variant={buttonLoaderVariant} />
             ) : showAddToQueue ? (
               <MessageSquare className="h-4 w-4" />
             ) : isAgentRunning ? (
@@ -873,14 +873,14 @@ export const ChatInput = memo(forwardRef<ChatInputHandles, ChatInputProps>(
     const [agentConfigDialog, setAgentConfigDialog] = useState<{ open: boolean; tab: 'instructions' | 'knowledge' | 'triggers' | 'tools' | 'integrations' }>({ open: false, tab: 'instructions' });
     const [mounted, setMounted] = useState(false);
     const [animatedPlaceholder, setAnimatedPlaceholder] = useState('');
-    const [isModeDismissing, setIsModeDismissing] = useState(false);    // Kortix Agent Modes feature flag
-    const ENABLE_SUNA_AGENT_MODES = false;
-    const [sunaAgentModes, setSunaAgentModes] = useState<'adaptive' | 'autonomous' | 'chat'>('adaptive');
+    const [isModeDismissing, setIsModeDismissing] = useState(false);    // Otacon Agent Modes feature flag
+    const ENABLE_BREAKIT_AGENT_MODES = false;
+    const [breakitAgentModes, setBreakitAgentModes] = useState<'adaptive' | 'autonomous' | 'chat'>('adaptive');
 
     // Read mode-specific state directly from Zustand for markdown generation
-    const selectedCharts = useSunaModesStore((state) => state.selectedCharts);
-    const selectedOutputFormat = useSunaModesStore((state) => state.selectedOutputFormat);
-    const selectedTemplate = useSunaModesStore((state) => state.selectedTemplate);
+    const selectedCharts = useBreakitModesStore((state) => state.selectedCharts);
+    const selectedOutputFormat = useBreakitModesStore((state) => state.selectedOutputFormat);
+    const selectedTemplate = useBreakitModesStore((state) => state.selectedTemplate);
 
     // Voice player state for snack visibility
     const voiceState = useVoicePlayerStore((s) => s.state);
@@ -1009,13 +1009,13 @@ export const ChatInput = memo(forwardRef<ChatInputHandles, ChatInputProps>(
     const { data: agentsResponse, isLoading: isLoadingAgents } = useAgents({}, { enabled: isLoggedIn });
     const agents = Array.isArray(agentsResponse?.agents) ? agentsResponse.agents : [];
 
-    // Check if selected agent is Kortix based on agent data
-    // While loading, default to Kortix (assume Kortix is the default agent)
+    // Check if selected agent is Otacon based on agent data
+    // While loading, default to Otacon (assume Otacon is the default agent)
     const selectedAgent = agents.find(agent => agent.agent_id === selectedAgentId);
-    const sunaAgent = agents.find(agent => agent.metadata?.is_suna_default === true);
-    const isSunaAgent = isLoadingAgents 
-        ? true // Show Kortix modes while loading
-        : (selectedAgent?.metadata?.is_suna_default || (!selectedAgentId && sunaAgent !== undefined) || false);
+    const breakitAgent = agents.find(agent => agent.metadata?.is_breakit_default === true);
+    const isBreakitAgent = isLoadingAgents 
+        ? true // Show Otacon modes while loading
+        : (selectedAgent?.metadata?.is_breakit_default || (!selectedAgentId && breakitAgent !== undefined) || false);
 
     const { initializeFromAgents } = useAgentSelection();
     useImperativeHandle(ref, () => ({
@@ -1407,11 +1407,11 @@ export const ChatInput = memo(forwardRef<ChatInputHandles, ChatInputProps>(
         />
 
         <div className="hidden sm:block">
-          <SunaAgentModeSwitcher
-            enabled={ENABLE_SUNA_AGENT_MODES}
-            isSunaAgent={isSunaAgent}
-            sunaAgentModes={sunaAgentModes}
-            onModeChange={setSunaAgentModes}
+          <BreakitAgentModeSwitcher
+            enabled={ENABLE_BREAKIT_AGENT_MODES}
+            isBreakitAgent={isBreakitAgent}
+            breakitAgentModes={breakitAgentModes}
+            onModeChange={setBreakitAgentModes}
           />
         </div>
 
@@ -1424,7 +1424,7 @@ export const ChatInput = memo(forwardRef<ChatInputHandles, ChatInputProps>(
           </div>
         )}
       </div>
-    ), [hideAttachments, loading, disabled, isAgentRunning, isUploading, sandboxId, projectId, messages, isLoggedIn, isFreeTier, quickIntegrations, integrationIcons, handleOpenRegistry, handleOpenPlanModal, threadId, isSunaAgent, sunaAgentModes, onModeDeselect, isModeDismissing, handleModeDeselect]);
+    ), [hideAttachments, loading, disabled, isAgentRunning, isUploading, sandboxId, projectId, messages, isLoggedIn, isFreeTier, quickIntegrations, integrationIcons, handleOpenRegistry, handleOpenPlanModal, threadId, isBreakitAgent, breakitAgentModes, onModeDeselect, isModeDismissing, handleModeDeselect]);
 
     const rightControls = useMemo(() => (
       <div className='flex items-center gap-1.5 sm:gap-2 flex-shrink-0'>

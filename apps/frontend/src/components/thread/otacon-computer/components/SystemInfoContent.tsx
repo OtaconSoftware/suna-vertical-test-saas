@@ -2,8 +2,8 @@
 
 import { memo } from 'react';
 import { Cpu, HardDrive, MemoryStick, MapPin, AlertTriangle, Loader2 } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 import { cn } from '@/lib/utils';
 import type { SandboxDetails, SandboxState, SandboxStatus } from '@/hooks/files/use-sandbox-details';
 import { getSandboxStatusLabel } from '@/hooks/files/use-sandbox-details';
@@ -89,7 +89,7 @@ export const SystemInfoContent = memo(function SystemInfoContent({
   if (isLoading) {
     return (
       <div className="h-full flex items-center justify-center">
-        <KortixLoader size="medium" />
+        <OtaconLoader size="medium" />
       </div>
     );
   }
@@ -112,10 +112,10 @@ export const SystemInfoContent = memo(function SystemInfoContent({
     <div className="h-full overflow-auto p-6">
       <div className="flex flex-col items-center justify-center gap-4 mb-8">
         <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-background to-muted flex items-center justify-center border shadow-lg">
-          <KortixLogo size={40} />
+          <OtaconLogo size={40} />
         </div>
         <div className="flex flex-col items-center justify-center">
-          <h3 className="text-foreground font-semibold text-xl text-center">Kortix Computer</h3>
+          <h3 className="text-foreground font-semibold text-xl text-center">Otacon Computer</h3>
           <div className="flex items-center justify-center gap-2 mt-1">
             <StatusIndicator status={status} />
             <span className={cn("text-sm font-medium", getStatusColor(status))}>

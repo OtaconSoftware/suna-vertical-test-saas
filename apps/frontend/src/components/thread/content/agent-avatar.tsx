@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAgentFromCache } from '@/hooks/agents/use-agents';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -22,7 +22,7 @@ interface AgentAvatarProps {
   iconColor?: string;
   backgroundColor?: string;
   agentName?: string;
-  isSunaDefault?: boolean;
+  isBreakitDefault?: boolean;
 
   // Common props
   size?: number;
@@ -33,14 +33,14 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
   // Agent data props
   agent: propAgent,
   agentId,
-  fallbackName = "Kortix",
+  fallbackName = "Otacon",
 
   // Direct props
   iconName: propIconName,
   iconColor: propIconColor,
   backgroundColor: propBackgroundColor,
   agentName: propAgentName,
-  isSunaDefault: propIsSunaDefault,
+  isBreakitDefault: propIsBreakitDefault,
 
   // Common props
   size = 16,
@@ -54,7 +54,7 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
   const iconName = propIconName ?? agent?.icon_name;
   const iconColor = propIconColor ?? agent?.icon_color ?? '#6B7280';
   const backgroundColor = propBackgroundColor ?? agent?.icon_background ?? '#F3F4F6';
-  const isSuna = propIsSunaDefault ?? agent?.metadata?.is_suna_default;
+  const isBreakit = propIsBreakitDefault ?? agent?.metadata?.is_breakit_default;
 
   // Calculate responsive border radius - proportional to size
   // Use a ratio that prevents full rounding while maintaining nice corners
@@ -71,7 +71,7 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
     .join(' ');
 
   // Show skeleton when no data is available
-  if (!agent && !propIconName && !propIsSunaDefault && agentId) {
+  if (!agent && !propIconName && !propIsBreakitDefault && agentId) {
     return (
       <div
         className={cn("bg-muted animate-pulse", filteredClassName)}
@@ -80,7 +80,7 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
     );
   }
 
-  if (isSuna) {
+  if (isBreakit) {
     return (
       <div
         className={cn(
@@ -90,8 +90,8 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
         style={{ width: size, height: size, ...borderRadiusStyle }}
       >
         <img
-          src="/kortix-symbol.svg"
-          alt="Kortix"
+          src="/otacon-symbol.svg"
+          alt="Otacon"
           className="flex-shrink-0 invert dark:invert-0"
           style={{ width: `${size * 0.5}px`, height: `${size * 0.5}px` }}
         />
@@ -159,7 +159,7 @@ interface AgentNameProps {
 export const AgentName: React.FC<AgentNameProps> = ({
   agent: propAgent,
   agentId,
-  fallback = "Kortix"
+  fallback = "Otacon"
 }) => {
   const cachedAgent = useAgentFromCache(!propAgent && agentId ? agentId : undefined);
   const agent = propAgent || cachedAgent;

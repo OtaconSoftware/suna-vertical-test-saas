@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Bot, Download, Wrench, Plug, Tag, User, Calendar, Share, Cpu, Eye, Zap, MessageSquare, ArrowRight, Sparkles, FileText } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { toast } from '@/lib/toast';
 import type { MarketplaceTemplate, UsageExampleMessage } from '@/components/agents/installation/types';
@@ -110,7 +110,7 @@ export const MarketplaceAgentPreviewDialog: React.FC<MarketplaceAgentPreviewDial
   
   if (!agent) return null;
 
-  const isSunaAgent = agent.is_kortix_team || false;
+  const isBreakitAgent = agent.is_otacon_team || false;
   
   const tools = agent.mcp_requirements || [];
   
@@ -299,7 +299,7 @@ export const MarketplaceAgentPreviewDialog: React.FC<MarketplaceAgentPreviewDial
               >
                 {isInstalling ? (
                   <>
-                    <KortixLoader customSize={20} className="mr-1" />
+                    <OtaconLoader customSize={20} className="mr-1" />
                     Installing...
                   </>
                 ) : (

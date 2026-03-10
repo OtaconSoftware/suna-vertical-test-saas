@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, memo, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { useTranslations } from "next-intl";
 import {
   UnifiedMessage,
@@ -18,7 +18,7 @@ import {
   extractUserMessageTextForDedup,
   extractAttachmentFingerprint,
 } from "@/components/thread/utils";
-import { KortixLogo } from "@/components/sidebar/kortix-logo";
+import { OtaconLogo } from "@/components/sidebar/otacon-logo";
 import { AgentLoader } from "./loader";
 import { ShowToolStream } from "./ShowToolStream";
 import { ComposioUrlDetector } from "./composio-url-detector";
@@ -70,13 +70,13 @@ interface AgentInfo {
   avatar: React.ReactNode;
 }
 
-// Reusable agent header - shows Kortix logo for Kortix, avatar+name for others
+// Reusable agent header - shows Otacon logo for Otacon, avatar+name for others
 const AgentHeader = memo(function AgentHeader({ agentInfo }: { agentInfo: AgentInfo }) {
-  if (agentInfo.name === "Kortix") {
+  if (agentInfo.name === "Otacon") {
     return (
       <img
-        src="/kortix-logomark-white.svg"
-        alt="Kortix"
+        src="/otacon-logomark-white.svg"
+        alt="Otacon"
         className="dark:invert-0 invert flex-shrink-0"
         style={{ height: '12px', width: 'auto' }}
       />
@@ -1059,7 +1059,7 @@ const AssistantGroupRow = memo(function AssistantGroupRow({
               }
               className="inline-flex items-center gap-1.5 h-8 px-2 py-1.5 text-xs text-muted-foreground bg-card hover:bg-card/80 rounded-lg transition-colors cursor-pointer border border-neutral-200 dark:border-neutral-700/50 max-w-full"
             >
-              <KortixLoader size="small" />
+              <OtaconLoader size="small" />
               <span className="font-mono text-xs text-foreground truncate">
                 Using Tool
               </span>
@@ -1213,7 +1213,7 @@ const AssistantGroupRow = memo(function AssistantGroupRow({
   return (
     <div key={group.key} ref={isLastGroup ? latestMessageRef : null}>
       <div className="flex flex-col gap-2">
-        {/* Reasoning section with integrated Kortix icon */}
+        {/* Reasoning section with integrated Otacon icon */}
         {reasoningSection}
         {/* Show AgentHeader only when reasoning section is NOT displayed */}
         {!reasoningSection && (
@@ -1297,8 +1297,8 @@ export const ThreadContent: React.FC<ThreadContentProps> = memo(
     sandboxId,
     project,
     isPreviewMode = false,
-    agentName = "Kortix",
-    agentAvatar = <KortixLogo size={14} />,
+    agentName = "Otacon",
+    agentAvatar = <OtaconLogo size={14} />,
     emptyStateComponent,
     threadMetadata,
     scrollContainerRef,
@@ -1350,19 +1350,19 @@ export const ThreadContent: React.FC<ThreadContentProps> = memo(
       if (recentAssistantWithAgent?.agents?.name) {
         const rawName = recentAssistantWithAgent.agents.name;
         const name =
-          typeof rawName === "string" ? rawName : String(rawName || "Kortix");
+          typeof rawName === "string" ? rawName : String(rawName || "Otacon");
         return {
           name,
           avatar: (
             <div className="h-5 w-5 flex items-center justify-center rounded text-xs">
-              <KortixLogo size={14} />
+              <OtaconLogo size={14} />
             </div>
           ),
         };
       }
-      const fallbackName = typeof agentName === "string" ? agentName : "Kortix";
+      const fallbackName = typeof agentName === "string" ? agentName : "Otacon";
       return {
-        name: fallbackName || "Kortix",
+        name: fallbackName || "Otacon",
         avatar: agentAvatar,
       };
     }, [threadMetadata, displayMessages, agentName, agentAvatar]);
@@ -1818,8 +1818,8 @@ export const ThreadContent: React.FC<ThreadContentProps> = memo(
                       {/* Match ReasoningSection header layout for smooth transition */}
                       <div className="flex items-center gap-3">
                         <img
-                          src="/kortix-logomark-white.svg"
-                          alt="Kortix"
+                          src="/otacon-logomark-white.svg"
+                          alt="Otacon"
                           className="dark:invert-0 invert flex-shrink-0 animate-pulse"
                           style={{ height: '14px', width: 'auto' }}
                         />
@@ -1850,7 +1850,7 @@ export const ThreadContent: React.FC<ThreadContentProps> = memo(
                     <span className="font-mono text-xs text-primary">
                       {currentToolCall.name || "Using Tool"}
                     </span>
-                    <KortixLoader size="small" className="ml-auto" />
+                    <OtaconLoader size="small" className="ml-auto" />
                   </div>
                 </div>
               </div>

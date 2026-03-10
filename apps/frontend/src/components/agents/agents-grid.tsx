@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Settings, Trash2, Star, MessageCircle, Wrench, Globe, GlobeLock, Download, Shield, AlertTriangle, GitBranch } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { Button } from '@/components/ui/button';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription } from '@/components/ui/dialog';
@@ -34,7 +34,7 @@ interface Agent {
     version_number: number;
   };
   metadata?: {
-    is_suna_default?: boolean;
+    is_breakit_default?: boolean;
     centrally_managed?: boolean;
     restrictions?: {
       system_prompt_editable?: boolean;
@@ -85,7 +85,7 @@ const AgentModal: React.FC<AgentModalProps> = ({
 }) => {
   if (!agent) return null;
 
-  const isSunaAgent = agent.metadata?.is_suna_default || false;
+  const isBreakitAgent = agent.metadata?.is_breakit_default || false;
   
   const truncateDescription = (text?: string, maxLength = 120) => {
     if (!text || text.length <= maxLength) return text || 'Try out this agent';
@@ -103,7 +103,7 @@ const AgentModal: React.FC<AgentModalProps> = ({
               iconColor={agent.icon_color}
               backgroundColor={agent.icon_background}
               agentName={agent.name}
-              isSunaDefault={isSunaAgent}
+              isBreakitDefault={isBreakitAgent}
               size={64}
             />
           </div>
@@ -114,7 +114,7 @@ const AgentModal: React.FC<AgentModalProps> = ({
                 <h2 className="text-xl font-semibold text-foreground">
                   {agent.name}
                 </h2>
-                {!isSunaAgent && agent.current_version && (
+                {!isBreakitAgent && agent.current_version && (
                   <Badge variant="outline" className="text-xs">
                     <GitBranch className="h-3 w-3" />
                     {agent.current_version.version_name}
@@ -146,7 +146,7 @@ const AgentModal: React.FC<AgentModalProps> = ({
                 Chat
               </Button>
             </div>
-            {!isSunaAgent && isStagingMode && (
+            {!isBreakitAgent && isStagingMode && (
               <div className="pt-2">
                 {agent.is_public ? (
                   <div className="space-y-2">
@@ -165,7 +165,7 @@ const AgentModal: React.FC<AgentModalProps> = ({
                     >
                       {isUnpublishing ? (
                         <>
-                          <KortixLoader customSize={16} />
+                          <OtaconLoader customSize={16} />
                           Making Private...
                         </>
                       ) : (
@@ -185,7 +185,7 @@ const AgentModal: React.FC<AgentModalProps> = ({
                   >
                     {isPublishing ? (
                       <>
-                        <KortixLoader customSize={16} />
+                        <OtaconLoader customSize={16} />
                         Publishing...
                       </>
                     ) : (
@@ -277,7 +277,7 @@ export const AgentsGrid: React.FC<AgentsGridProps> = ({
               {isDeleting && (
                 <div className="absolute inset-0 bg-destructive/10 backdrop-blur-sm rounded-lg z-20 flex items-center justify-center">
                   <div className="bg-background/95 backdrop-blur-sm rounded-lg px-4 py-3 flex items-center gap-2 shadow-lg border">
-                    <KortixLoader customSize={16} />
+                    <OtaconLoader customSize={16} />
                     <span className="text-sm font-medium text-destructive">Deleting...</span>
                   </div>
                 </div>
@@ -320,7 +320,7 @@ export const AgentsGrid: React.FC<AgentsGridProps> = ({
                         onClick={(e) => e.stopPropagation()}
                       >
                         {isDeleting ? (
-                          <KortixLoader customSize={14} />
+                          <OtaconLoader customSize={14} />
                         ) : (
                           <Trash2 className="h-3.5 w-3.5" />
                         )}
@@ -352,7 +352,7 @@ export const AgentsGrid: React.FC<AgentsGridProps> = ({
                         >
                           {isDeleting ? (
                             <>
-                              <KortixLoader customSize={16} className="mr-2" />
+                              <OtaconLoader customSize={16} className="mr-2" />
                               Deleting...
                             </>
                           ) : (

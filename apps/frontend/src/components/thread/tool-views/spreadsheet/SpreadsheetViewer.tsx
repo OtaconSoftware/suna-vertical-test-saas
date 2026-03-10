@@ -23,7 +23,7 @@ import '../../../../../node_modules/@syncfusion/ej2-popups/styles/material.css';
 import '../../../../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
 import '../../../../../node_modules/@syncfusion/ej2-grids/styles/material.css';
 import '../../../../../node_modules/@syncfusion/ej2-react-spreadsheet/styles/material.css';
-import './kortix-spreadsheet-styles.css';
+import './otacon-spreadsheet-styles.css';
 
 
 const SYNCFUSION_LICENSE = "Ngo9BigBOggjHTQxAR8/V1JGaF1cXmhKYVFxWmFZfVhgdVdMZFtbR3JPIiBoS35RcEVhW3pfcnBdRWFeU0J0VEFf";

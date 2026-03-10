@@ -15,7 +15,7 @@ import {
   Info,
   Download,
 } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 
 interface VideoRendererProps {
   url: string;
@@ -191,7 +191,7 @@ export function VideoRenderer({
       <div className={cn('relative rounded-2xl overflow-hidden bg-black/5 dark:bg-black/20', className)}>
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-muted/50">
-            <KortixLoader size="medium" />
+            <OtaconLoader size="medium" />
           </div>
         )}
         {hasError ? (
@@ -255,7 +255,7 @@ export function VideoRenderer({
       {/* Loading state */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
-          <KortixLoader size="large" variant="white" />
+          <OtaconLoader size="large" variant="white" />
         </div>
       )}
 

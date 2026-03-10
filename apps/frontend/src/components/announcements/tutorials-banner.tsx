@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useAuth } from '@/components/AuthProvider';
 
-const STORAGE_KEY = 'kortix-tutorials-banner-dismissed';
+const STORAGE_KEY = 'otacon-tutorials-banner-dismissed';
 
 export function TutorialsBanner() {
   const [isVisible, setIsVisible] = useState(false);
@@ -105,7 +105,7 @@ export function TutorialsBanner() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-foreground dark:text-white text-sm font-semibold mb-1">
-                    New to Kortix? Start here
+                    New to Otacon? Start here
                   </h3>
                   <p className="text-muted-foreground dark:text-white/60 text-xs leading-relaxed">
                     7 interactive tutorials to help you master every feature

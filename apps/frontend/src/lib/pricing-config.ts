@@ -36,7 +36,7 @@ export const pricingTiers: PricingTier[] = [
     yearlyPrice: '$0',
     originalYearlyPrice: '$0',
     discountPercentage: 0,
-    description: 'Perfect for trying out TestAgent',
+    description: 'Perfect for trying out Breakit',
     buttonText: 'Get started',
     buttonColor: 'bg-secondary text-white',
     isPopular: false,
@@ -104,7 +104,7 @@ export const pricingTiers: PricingTier[] = [
       'Slack/Discord notifications',
       'Custom test templates',
     ],
-    tierKey: config.SUBSCRIPTION_TIERS.TIER_3_200.tierKey,
+    tierKey: config.SUBSCRIPTION_TIERS.TIER_25_200.tierKey,
     upgradePlans: [],
   },
 ];

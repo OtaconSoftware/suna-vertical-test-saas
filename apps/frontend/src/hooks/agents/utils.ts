@@ -33,9 +33,9 @@ export type Agent = {
   current_version?: AgentVersion | null;
   metadata?: {
     template_name?: string;
-    kortix_template_id?: string;
-    is_kortix_team?: boolean;
-    is_suna_default?: boolean;
+    otacon_template_id?: string;
+    is_otacon_team?: boolean;
+    is_breakit_default?: boolean;
     centrally_managed?: boolean;
     management_version?: string;
     restrictions?: {

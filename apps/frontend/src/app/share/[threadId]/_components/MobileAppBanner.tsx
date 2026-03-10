@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 
 // Detect if user is on mobile device
 function isMobileDevice(): boolean {
@@ -79,7 +79,7 @@ export function MobileAppBanner({ threadId }: MobileAppBannerProps) {
 
   const handleOpenInApp = () => {
     // Use custom URL scheme to open the app
-    const appUrl = `kortix://share/${threadId}`;
+    const appUrl = `otacon://share/${threadId}`;
 
     // Try to open the app
     window.location.href = appUrl;
@@ -87,9 +87,9 @@ export function MobileAppBanner({ threadId }: MobileAppBannerProps) {
     // Fallback: If app doesn't open within 2 seconds, show app store
     setTimeout(() => {
       if (platform === 'ios') {
-        window.location.href = 'https://apps.apple.com/app/kortix/id6739583417';
+        window.location.href = 'https://apps.apple.com/app/otacon/id6739583417';
       } else if (platform === 'android') {
-        window.location.href = 'https://play.google.com/store/apps/details?id=com.kortix.app';
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.otacon.app';
       }
     }, 2000);
   };
@@ -108,13 +108,13 @@ export function MobileAppBanner({ threadId }: MobileAppBannerProps) {
         <div className="flex items-center gap-3">
           {/* App icon */}
           <div className="shrink-0 w-10 h-10 rounded-xl bg-foreground flex items-center justify-center">
-            <KortixLogo size={20} className="invert dark:invert-0" />
+            <OtaconLogo size={20} className="invert dark:invert-0" />
           </div>
 
           {/* Content */}
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-foreground text-sm leading-tight">
-              Kortix
+              Otacon
             </h3>
             <p className="text-xs text-muted-foreground leading-tight">
               Open this content in app

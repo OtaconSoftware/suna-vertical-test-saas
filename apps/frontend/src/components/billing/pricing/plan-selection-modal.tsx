@@ -10,7 +10,7 @@ import {
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PricingSection } from './pricing-section';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 import { cn } from '@/lib/utils';
 import { usePricingModalStore } from '@/stores/pricing-modal-store';
 import { trackRouteChangeForModal } from '@/lib/analytics/gtm';
@@ -73,13 +73,13 @@ export function PlanSelectionModal({
                     {displayReason || (creditsExhausted ? 'You\'re out of credits' : 'Select a Plan')}
                 </DialogTitle>
                 <DialogDescription className="sr-only">
-                    {displayReason || (creditsExhausted ? 'Choose a plan to continue using Kortix' : 'Choose the plan that best fits your needs')}
+                    {displayReason || (creditsExhausted ? 'Choose a plan to continue using Otacon' : 'Choose the plan that best fits your needs')}
                 </DialogDescription>
                 <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 lg:py-3 pointer-events-none bg-background/80 backdrop-blur-md">
                     <div className="flex-1" />
                     
                     <div className="absolute -translate-y-1/2 top-1/2 left-1/2 -translate-x-1/2 pointer-events-none">
-                        <KortixLogo size={18} className="sm:w-5 sm:h-5" variant="logomark" />
+                        <OtaconLogo size={18} className="sm:w-5 sm:h-5" variant="logomark" />
                     </div>
                     
                     <div className="flex-1 flex justify-end pointer-events-auto">

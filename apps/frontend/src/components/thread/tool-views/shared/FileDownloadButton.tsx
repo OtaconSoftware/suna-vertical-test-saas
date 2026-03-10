@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { Download, FileType, FileText, FileCode } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -216,7 +216,7 @@ export function FileDownloadButton({
             title="Export file"
           >
             {isExporting ? (
-              <KortixLoader customSize={16} />
+              <OtaconLoader customSize={16} />
             ) : (
               <Download className="h-4 w-4" />
             )}
@@ -257,7 +257,7 @@ export function FileDownloadButton({
             title="Export file"
           >
             {isExporting ? (
-              <KortixLoader customSize={16} />
+              <OtaconLoader customSize={16} />
             ) : (
               <Download className="h-4 w-4" />
             )}
@@ -288,7 +288,7 @@ export function FileDownloadButton({
       title="Download file"
     >
       {isExporting ? (
-        <KortixLoader customSize={16} />
+        <OtaconLoader customSize={16} />
       ) : (
         <Download className="h-4 w-4" />
       )}

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
 import { Search, Zap, X, Settings, ChevronDown, ChevronUp, Server, Lock } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { useComposioCategories, useComposioToolkitsInfinite } from '@/hooks/composio/use-composio';
 import { useComposioProfiles } from '@/hooks/composio/use-composio-profiles';
 import { useAgent } from '@/hooks/agents/use-agents';
@@ -557,7 +557,7 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
                     <AgentSelector
                       selectedAgentId={currentAgentId}
                       onAgentSelect={handleAgentSelect}
-                      isSunaAgent={agent?.metadata?.is_suna_default}
+                      isBreakitAgent={agent?.metadata?.is_breakit_default}
                     />
                   )} */}
                 </div>
@@ -710,7 +710,7 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
                           >
                             {isFetchingNextPage ? (
                               <>
-                                <KortixLoader customSize={16} className="mr-1" />
+                                <OtaconLoader customSize={16} className="mr-1" />
                                 Loading more...
                               </>
                             ) : (

@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Ripple } from '../ui/ripple';
-import { useKortixTeamTemplates, useInstallTemplate } from '@/hooks/secure-mcp/use-secure-mcp';
+import { useOtaconTeamTemplates, useInstallTemplate } from '@/hooks/secure-mcp/use-secure-mcp';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useRouter } from 'next/navigation';
 import { MarketplaceAgentPreviewDialog } from '@/components/agents/marketplace-agent-preview-dialog';
@@ -231,7 +231,7 @@ const CategorySection = ({
 
 export function CustomAgentsSection({ onAgentSelect }: CustomAgentsSectionProps) {
   const router = useRouter();
-  const { data: templates, isLoading, error } = useKortixTeamTemplates();
+  const { data: templates, isLoading, error } = useOtaconTeamTemplates();
   const installTemplate = useInstallTemplate();
 
   const [selectedTemplate, setSelectedTemplate] = React.useState<MarketplaceTemplate | null>(null);
@@ -289,7 +289,7 @@ export function CustomAgentsSection({ onAgentSelect }: CustomAgentsSectionProps)
       system_prompt: template.system_prompt,
       tags: template.tags || [],
       download_count: template.download_count || 0,
-      is_kortix_team: template.is_kortix_team || false,
+      is_otacon_team: template.is_otacon_team || false,
       creator_name: template.creator_name,
       created_at: template.created_at,
       icon_name: template.icon_name,
@@ -318,7 +318,7 @@ export function CustomAgentsSection({ onAgentSelect }: CustomAgentsSectionProps)
     icon_background: template.icon_background,
     creator_id: template.creator_id,
     creator_name: template.creator_name,
-    is_kortix_team: template.is_kortix_team || false,
+    is_otacon_team: template.is_otacon_team || false,
     download_count: template.download_count || 0,
     marketplace_published_at: template.marketplace_published_at,
     mcp_requirements: template.mcp_requirements || [],

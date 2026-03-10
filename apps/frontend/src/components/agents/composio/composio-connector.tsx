@@ -59,7 +59,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { backendApi } from '@/lib/api-client';
 import { composioApi } from '@/hooks/composio/utils';
 import { ComposioToolsSelector } from './composio-tools-selector';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 
 interface ComposioConnectorProps {
   app: ComposioToolkit;
@@ -780,7 +780,7 @@ export const ComposioConnector: React.FC<ComposioConnectorProps> = ({
         {isSavingTools ? (
           <div className="flex flex-col items-center justify-center py-16 px-6">
             <div className="mb-4">
-              <KortixLoader size="large" />
+              <OtaconLoader size="large" />
             </div>
             <h3 className="font-semibold text-lg mb-2">Adding Tools...</h3>
             <p className="text-sm text-muted-foreground text-center">
@@ -1104,7 +1104,7 @@ export const ComposioConnector: React.FC<ComposioConnectorProps> = ({
                         >
                           {isSavingTools ? (
                             <>
-                              <KortixLoader customSize={16} />
+                              <OtaconLoader customSize={16} />
                               Adding Tools...
                             </>
                           ) : selectedConnectionType === 'new' ? (
@@ -1159,7 +1159,7 @@ export const ComposioConnector: React.FC<ComposioConnectorProps> = ({
                           />
                           <div className="absolute right-2 top-1/2 -translate-y-1/2">
                             {isCheckingName && profileName.length > 0 && (
-                              <KortixLoader customSize={14} />
+                              <OtaconLoader customSize={14} />
                             )}
                             {!isCheckingName &&
                               nameAvailability &&
@@ -1487,7 +1487,7 @@ export const ComposioConnector: React.FC<ComposioConnectorProps> = ({
                       >
                         {isCreating ? (
                           <>
-                            <KortixLoader customSize={14} className="mr-1" />
+                            <OtaconLoader customSize={14} className="mr-1" />
                             Creating...
                           </>
                         ) : (
@@ -1539,7 +1539,7 @@ export const ComposioConnector: React.FC<ComposioConnectorProps> = ({
                   >
                     {isSavingTools ? (
                       <>
-                        <KortixLoader customSize={16}/>
+                        <OtaconLoader customSize={16}/>
                         Adding Tools...
                       </>
                     ) : (

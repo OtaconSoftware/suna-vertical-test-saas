@@ -20,17 +20,17 @@ export async function signIn(prevState: any, formData: FormData) {
   const normalizedEmail = email.trim().toLowerCase();
 
   // Use magic link (passwordless) authentication
-  // For desktop app, use custom protocol (kortix://auth/callback) - same as mobile
-  // For web, use standard origin (https://kortix.com/auth/callback)
+  // For desktop app, use custom protocol (otacon://auth/callback) - same as mobile
+  // For web, use standard origin (https://otacon.com/auth/callback)
   // Include email in redirect URL so it's available if the link expires
   let emailRedirectTo: string;
-  if (isDesktopApp && origin.startsWith('kortix://')) {
+  if (isDesktopApp && origin.startsWith('otacon://')) {
     // Match mobile implementation - simple protocol URL with optional terms_accepted
     const params = new URLSearchParams();
     if (acceptedTerms) {
       params.set('terms_accepted', 'true');
     }
-    emailRedirectTo = `kortix://auth/callback${params.toString() ? `?${params.toString()}` : ''}`;
+    emailRedirectTo = `otacon://auth/callback${params.toString() ? `?${params.toString()}` : ''}`;
   } else {
     emailRedirectTo = `${origin}/auth/callback?returnUrl=${encodeURIComponent(returnUrl || '/dashboard')}&email=${encodeURIComponent(normalizedEmail)}${acceptedTerms ? '&terms_accepted=true' : ''}`;
   }
@@ -75,17 +75,17 @@ export async function signUp(prevState: any, formData: FormData) {
   const normalizedEmail = email.trim().toLowerCase();
 
   // Use magic link (passwordless) authentication - auto-creates account
-  // For desktop app, use custom protocol (kortix://auth/callback) - same as mobile
-  // For web, use standard origin (https://kortix.com/auth/callback)
+  // For desktop app, use custom protocol (otacon://auth/callback) - same as mobile
+  // For web, use standard origin (https://otacon.com/auth/callback)
   // Include email in redirect URL so it's available if the link expires
   let emailRedirectTo: string;
-  if (isDesktopApp && origin.startsWith('kortix://')) {
+  if (isDesktopApp && origin.startsWith('otacon://')) {
     // Match mobile implementation - simple protocol URL with optional terms_accepted
     const params = new URLSearchParams();
     if (acceptedTerms) {
       params.set('terms_accepted', 'true');
     }
-    emailRedirectTo = `kortix://auth/callback${params.toString() ? `?${params.toString()}` : ''}`;
+    emailRedirectTo = `otacon://auth/callback${params.toString() ? `?${params.toString()}` : ''}`;
   } else {
     emailRedirectTo = `${origin}/auth/callback?returnUrl=${encodeURIComponent(returnUrl || '/dashboard')}&email=${encodeURIComponent(normalizedEmail)}${acceptedTerms ? '&terms_accepted=true' : ''}`;
   }
@@ -180,17 +180,17 @@ export async function resendMagicLink(prevState: any, formData: FormData) {
   const normalizedEmail = email.trim().toLowerCase();
 
   // Use magic link (passwordless) authentication
-  // For desktop app, use custom protocol (kortix://auth/callback) - same as mobile
-  // For web, use standard origin (https://kortix.com/auth/callback)
+  // For desktop app, use custom protocol (otacon://auth/callback) - same as mobile
+  // For web, use standard origin (https://otacon.com/auth/callback)
   // Include email in redirect URL so it's available if the link expires
   let emailRedirectTo: string;
-  if (isDesktopApp && origin.startsWith('kortix://')) {
+  if (isDesktopApp && origin.startsWith('otacon://')) {
     // Match mobile implementation - simple protocol URL with optional terms_accepted
     const params = new URLSearchParams();
     if (acceptedTerms) {
       params.set('terms_accepted', 'true');
     }
-    emailRedirectTo = `kortix://auth/callback${params.toString() ? `?${params.toString()}` : ''}`;
+    emailRedirectTo = `otacon://auth/callback${params.toString() ? `?${params.toString()}` : ''}`;
   } else {
     emailRedirectTo = `${origin}/auth/callback?returnUrl=${encodeURIComponent(returnUrl || '/dashboard')}&email=${encodeURIComponent(normalizedEmail)}${acceptedTerms ? '&terms_accepted=true' : ''}`;
   }

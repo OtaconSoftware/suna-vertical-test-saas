@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle, CheckCircle2, Zap, ChevronRight, Sparkles, Server } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
@@ -421,7 +421,7 @@ export const CustomMCPDialog: React.FC<CustomMCPDialogProps> = ({
               >
                 {isSaving ? (
                   <>
-                    <KortixLoader customSize={16} className="mr-1" />
+                    <OtaconLoader customSize={16} className="mr-1" />
                     Adding MCP Server...
                   </>
                 ) : (
@@ -441,7 +441,7 @@ export const CustomMCPDialog: React.FC<CustomMCPDialogProps> = ({
               >
                 {isValidating ? (
                   <>
-                    <KortixLoader customSize={20} className="mr-1" />
+                    <OtaconLoader customSize={20} className="mr-1" />
                     Connecting to MCP server...
                   </>
                 ) : (

@@ -9,13 +9,13 @@ import { useAuth } from '@/components/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { useOptimisticAgentStart } from '@/hooks/threads';
 import { useAgentSelection } from '@/stores/agent-selection-store';
-import { useSunaModePersistence } from '@/stores/suna-modes-store';
+import { useBreakitModePersistence } from '@/stores/breakit-modes-store';
 import { useQuery } from '@tanstack/react-query';
 import { agentKeys } from '@/hooks/agents/keys';
 import { getAgents } from '@/hooks/agents/utils';
 
-const SunaModesPanel = lazy(() => 
-  import('@/components/dashboard/suna-modes-panel').then(mod => ({ default: mod.SunaModesPanel }))
+const BreakitModesPanel = lazy(() => 
+  import('@/components/dashboard/breakit-modes-panel').then(mod => ({ default: mod.BreakitModesPanel }))
 );
 
 // Mobile users are redirected at the edge by middleware (hyper-fast)
@@ -41,7 +41,7 @@ export default function BerlinPage() {
     setSelectedCharts,
     setSelectedOutputFormat,
     setSelectedTemplate,
-  } = useSunaModePersistence();
+  } = useBreakitModePersistence();
 
   const { data: agentsResponse } = useQuery({
     queryKey: agentKeys.list({
@@ -70,7 +70,7 @@ export default function BerlinPage() {
   const selectedAgent = selectedAgentId
     ? agents.find(agent => agent.agent_id === selectedAgentId)
     : null;
-  const isSunaAgent = !user || selectedAgent?.metadata?.is_suna_default || false;
+  const isBreakitAgent = !user || selectedAgent?.metadata?.is_breakit_default || false;
 
   const handleChatInputSubmit = useLeadingDebouncedCallback(async (
     message: string,
@@ -125,7 +125,7 @@ export default function BerlinPage() {
               </div>
               
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-tighter text-balance text-center px-4 sm:px-2">
-                Kortix.
+                Otacon.
               </h1>
               
               <div className="text-center space-y-2 max-w-3xl px-4">
@@ -160,10 +160,10 @@ export default function BerlinPage() {
                 </div>
               </div>
 
-              {isSunaAgent && (
+              {isBreakitAgent && (
                 <div className="w-full max-w-3xl mx-auto mt-4 px-4 sm:px-0">
                   <Suspense fallback={<div className="h-24 animate-pulse bg-muted/10 rounded-lg" />}>
-                    <SunaModesPanel
+                    <BreakitModesPanel
                       selectedMode={selectedMode}
                       onModeSelect={setSelectedMode}
                       onSelectPrompt={setInputValue}

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 
 import {
   AlertDialog,
@@ -57,7 +57,7 @@ export function KBDeleteConfirmDialog({
           >
             {isDeleting ? (
               <>
-                <KortixLoader size="small" className="mr-2" />
+                <OtaconLoader size="small" className="mr-2" />
                 Deleting...
               </>
             ) : (

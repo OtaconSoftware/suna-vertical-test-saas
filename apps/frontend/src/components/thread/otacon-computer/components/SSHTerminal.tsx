@@ -10,7 +10,7 @@ import { WebLinksAddon } from '@xterm/addon-web-links';
 import '@xterm/xterm/css/xterm.css';
 import { useAuth } from '@/components/AuthProvider';
 import { RefreshCw, Copy, Check, TerminalSquare } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { toast } from '@/lib/toast';
 import { backendApi } from '@/lib/api-client';
 import { fileQueryKeys } from '@/hooks/files/use-file-queries';
@@ -267,7 +267,7 @@ export const SSHTerminal = memo(function SSHTerminal({ sandboxId, className }: S
     fitAddonRef.current = fitAddon;
 
     term.writeln('\x1b[38;5;141m┌──────────────────────────────────────────┐\x1b[0m');
-    term.writeln('\x1b[38;5;141m│\x1b[0m   \x1b[1;38;5;183m◉\x1b[0m \x1b[1;37mKortix\x1b[0m \x1b[38;5;245m• Terminal\x1b[0m               \x1b[38;5;141m│\x1b[0m');
+    term.writeln('\x1b[38;5;141m│\x1b[0m   \x1b[1;38;5;183m◉\x1b[0m \x1b[1;37mOtacon\x1b[0m \x1b[38;5;245m• Terminal\x1b[0m               \x1b[38;5;141m│\x1b[0m');
     term.writeln('\x1b[38;5;141m└──────────────────────────────────────────┘\x1b[0m');
     term.writeln('');
 

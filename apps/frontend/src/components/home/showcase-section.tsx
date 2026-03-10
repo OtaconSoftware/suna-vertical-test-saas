@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { Computer } from 'lucide-react';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 import { trackCtaSignup } from '@/lib/analytics/gtm';
 
 // Hook for scroll-triggered visibility
@@ -234,10 +234,10 @@ export function ShowCaseSection() {
                                         {/* Computer header */}
                                         <div className="bg-background text-foreground px-3 sm:px-4 flex items-center justify-between flex-shrink-0 h-[50px] sm:h-[65px]">
                                             <div className="flex items-center gap-2">
-                                                <KortixLogo size={14} className="sm:hidden opacity-50" />
-                                                <KortixLogo size={14} className="hidden sm:block opacity-50" />
+                                                <OtaconLogo size={14} className="sm:hidden opacity-50" />
+                                                <OtaconLogo size={14} className="hidden sm:block opacity-50" />
                                                 <span className="text-base sm:text-xl font-medium" suppressHydrationWarning>
-                                                    {t('kortixComputer')}
+                                                    {t('otaconComputer')}
                                                 </span>
                                             </div>
                                             <Badge variant="outline" className="flex items-center gap-1.5 px-2 py-0.5 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400" suppressHydrationWarning>

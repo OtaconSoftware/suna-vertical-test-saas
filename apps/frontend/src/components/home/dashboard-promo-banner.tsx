@@ -25,8 +25,8 @@ export function DashboardPromoBanner() {
   const isFreeTier = !tierKey || tierKey === 'free' || tierKey === 'none';
   const isDashboardPage = pathname === '/dashboard';
   
-  // Show Welcome Bonus promo or KORTIX26 for free tier users
-  const shouldShowPromo = promo?.isActive && (promo.promoId === 'welcome-bonus' || promo.promoCode === 'KORTIX26');
+  // Show Welcome Bonus promo or OTACON26 for free tier users
+  const shouldShowPromo = promo?.isActive && (promo.promoId === 'welcome-bonus' || promo.promoCode === 'OTACON26');
 
   // Compute whether banner should be visible
   const shouldShow = mounted && !isDismissed && isDashboardPage && !isLoading && isFreeTier && shouldShowPromo;

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Globe, Plus, Trash2, User, Bot, Wrench } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -224,7 +224,7 @@ export const PublishDialog = ({
           >
             {templatesActioningId ? (
               <>
-                <KortixLoader customSize={16} className="mr-1" />
+                <OtaconLoader customSize={16} className="mr-1" />
                 Publishing...
               </>
             ) : (

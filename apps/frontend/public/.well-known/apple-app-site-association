@@ -3,7 +3,7 @@
         "apps": [],
         "details": [
             {
-                "appID": "T8G9J33433.com.kortix.app",
+                "appID": "T8G9J33433.com.breakit.app",
                 "paths": [
                     "/share/*",
                     "/auth/callback"

@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Check, Plus, Download, CheckCircle, Globe, GlobeLock, GitBranch, Trash2, MoreVertical, User, ArrowRight } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 import { AgentAvatar } from '@/components/thread/content/agent-avatar';
 import { useComposioToolkitIcon } from '@/hooks/composio/use-composio';
 
@@ -58,7 +58,7 @@ export interface BaseAgentData {
   // Marketplace specific
   creator_id?: string;
   creator_name?: string;
-  is_kortix_team?: boolean;
+  is_otacon_team?: boolean;
   download_count?: number;
   marketplace_published_at?: string;
   
@@ -75,7 +75,7 @@ export interface BaseAgentData {
     version_number: number;
   };
   metadata?: {
-    is_suna_default?: boolean;
+    is_breakit_default?: boolean;
     centrally_managed?: boolean;
     restrictions?: Record<string, boolean>;
   };
@@ -131,7 +131,7 @@ const CardAvatar: React.FC<{
   size?: number;
   variant: AgentCardVariant;
 }> = ({ data, size = 48, variant }) => {
-  const isSunaAgent = data.metadata?.is_suna_default === true;
+  const isBreakitAgent = data.metadata?.is_breakit_default === true;
   
   if (variant === 'showcase') {
     return (
@@ -145,10 +145,10 @@ const CardAvatar: React.FC<{
     );
   }
   
-  if (isSunaAgent) {
+  if (isBreakitAgent) {
     return (
       <AgentAvatar
-        isSunaDefault={true}
+        isBreakitDefault={true}
         size={size}
         className="border"
       />
@@ -179,14 +179,14 @@ const CardAvatar: React.FC<{
 
 // Badge components
 const MarketplaceBadge: React.FC<{ 
-  isKortixTeam?: boolean; 
+  isOtaconTeam?: boolean; 
   isOwner?: boolean;
-}> = ({ isKortixTeam, isOwner }) => (
+}> = ({ isOtaconTeam, isOwner }) => (
   <div className="flex gap-1 flex-wrap">
-    {isKortixTeam && (
+    {isOtaconTeam && (
       <Badge variant="secondary" className="bg-blue-100 text-blue-700 border-0 dark:bg-blue-950 dark:text-blue-300">
         <CheckCircle className="h-3 w-3 mr-1" />
-        Kortix
+        Otacon
       </Badge>
     )}
     {isOwner && (
@@ -214,15 +214,15 @@ const TemplateBadge: React.FC<{ isPublic?: boolean }> = ({ isPublic }) => {
   );
 };
 
-const AgentBadges: React.FC<{ data: BaseAgentData, isSunaAgent: boolean }> = ({ data, isSunaAgent }) => (
+const AgentBadges: React.FC<{ data: BaseAgentData, isBreakitAgent: boolean }> = ({ data, isBreakitAgent }) => (
   <div className="flex gap-1">
-    {!isSunaAgent && data.current_version && (
+    {!isBreakitAgent && data.current_version && (
       <Badge variant="outline" className="text-xs">
         <GitBranch className="h-3 w-3 mr-1" />
         {data.current_version.version_name}
       </Badge>
     )}
-    {!isSunaAgent && data.is_public && (
+    {!isBreakitAgent && data.is_public && (
       <Badge variant="default" className="bg-green-100 text-green-700 border-0 dark:bg-green-950 dark:text-green-300 text-xs">
         <Globe className="h-3 w-3 mr-1" />
         Published
@@ -399,7 +399,7 @@ export const UnifiedAgentCard: React.FC<UnifiedAgentCardProps> = ({
     isDeleting = false
   } = state;
   
-  const isSunaAgent = data.metadata?.is_suna_default === true;
+  const isBreakitAgent = data.metadata?.is_breakit_default === true;
   const isOwner = currentUserId && data.creator_id === currentUserId;
   
   // Handle delete confirmation
@@ -547,11 +547,11 @@ export const UnifiedAgentCard: React.FC<UnifiedAgentCardProps> = ({
     const renderBadge = () => {
       switch (variant) {
         case 'marketplace':
-          return <MarketplaceBadge isKortixTeam={data.is_kortix_team} isOwner={isOwner} />;
+          return <MarketplaceBadge isOtaconTeam={data.is_otacon_team} isOwner={isOwner} />;
         case 'template':
           return <TemplateBadge isPublic={data.is_public} />;
         case 'agent':
-          return <AgentBadges data={data} isSunaAgent={isSunaAgent} />;
+          return <AgentBadges data={data} isBreakitAgent={isBreakitAgent} />;
         default:
           return null;
       }
@@ -600,7 +600,7 @@ export const UnifiedAgentCard: React.FC<UnifiedAgentCardProps> = ({
             >
               {isActioning ? (
                 <>
-                  <KortixLoader size="small" className="mr-2" />
+                  <OtaconLoader size="small" className="mr-2" />
                   Installing...
                 </>
               ) : (
@@ -648,7 +648,7 @@ export const UnifiedAgentCard: React.FC<UnifiedAgentCardProps> = ({
             >
               {isActioning ? (
                 <>
-                  <KortixLoader size="small" />
+                  <OtaconLoader size="small" />
                   {data.is_public ? 'Unpublishing...' : 'Publishing...'}
                 </>
               ) : (
@@ -725,7 +725,7 @@ export const UnifiedAgentCard: React.FC<UnifiedAgentCardProps> = ({
               >
                 {isActioning ? (
                   <>
-                    <KortixLoader size="small" />
+                    <OtaconLoader size="small" />
                     Deleting...
                   </>
                 ) : (

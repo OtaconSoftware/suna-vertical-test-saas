@@ -20,8 +20,8 @@ import { ChatInput } from '@/components/thread/chat-input/chat-input';
 import { DynamicGreeting } from '@/components/ui/dynamic-greeting';
 
 // Lazy load heavy components
-const SunaModesPanel = lazy(() => 
-  import('@/components/dashboard/suna-modes-panel').then(mod => ({ default: mod.SunaModesPanel }))
+const BreakitModesPanel = lazy(() => 
+  import('@/components/dashboard/breakit-modes-panel').then(mod => ({ default: mod.BreakitModesPanel }))
 );
 const GoogleSignIn = lazy(() => import('@/components/GoogleSignIn'));
 
@@ -86,7 +86,7 @@ export function HeroSection() {
           aria-hidden="true"
         >
           <img
-            src="/kortix-brandmark-bg.svg"
+            src="/otacon-brandmark-bg.svg"
             alt=""
             className="absolute left-1/2 -translate-x-1/2 top-[-10%] sm:top-1/2 sm:-translate-y-1/2 w-[140vw] min-w-[700px] h-auto sm:w-[160vw] sm:min-w-[1000px] md:min-w-[1200px] lg:w-[162vw] lg:min-w-[1620px] object-contain select-none invert dark:invert-0"
             draggable={false}
@@ -199,11 +199,11 @@ export function HeroSection() {
 
           <div className="mt-8 text-center text-[13px] text-muted-foreground leading-relaxed">
             {tAuth('byContinuingYouAgreeSimple')}{' '}
-            <a href="https://www.kortix.com/legal?tab=terms" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-foreground underline underline-offset-2 transition-colors">
+            <a href="https://www.otacon.com/legal?tab=terms" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-foreground underline underline-offset-2 transition-colors">
               {tAuth('termsOfService')}
             </a>{' '}
             and{' '}
-            <a href="https://www.kortix.com/legal?tab=privacy" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-foreground underline underline-offset-2 transition-colors">
+            <a href="https://www.otacon.com/legal?tab=privacy" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-foreground underline underline-offset-2 transition-colors">
               {tAuth('privacyPolicy')}
             </a>
           </div>

@@ -22,7 +22,7 @@ import {
   RefreshCw,
   Save
 } from 'lucide-react';
-import { KortixLoader } from '@/components/ui/kortix-loader';
+import { OtaconLoader } from '@/components/ui/otacon-loader';
 import { cn } from '@/lib/utils';
 
 import { useCustomMCPToolsData } from '@/hooks/agents/use-custom-mcp-tools';
@@ -323,7 +323,7 @@ export const ToolsManager: React.FC<ToolsManagerProps> = (props) => {
                 >
                   {isUpdating ? (
                     <>
-                      <KortixLoader customSize={16} className="mr-2" />
+                      <OtaconLoader customSize={16} className="mr-2" />
                       Saving...
                     </>
                   ) : saveMode === 'callback' ? (

@@ -27,7 +27,7 @@ function normalizeWorkspacePath(path: string): string {
   return `/workspace/${path.replace(/^\//, '')}`;
 }
 
-interface KortixComputerState {
+interface OtaconComputerState {
   // === SANDBOX CONTEXT ===
   // Track which sandbox the current file state belongs to
   // This is the KEY to preventing stale state across thread switches
@@ -86,7 +86,7 @@ interface KortixComputerState {
   // Navigate to a specific tool call (clicking tool in ThreadContent)
   navigateToToolCall: (toolIndex: number) => void;
   
-  // Clear pending tool nav after KortixComputer processes it
+  // Clear pending tool nav after OtaconComputer processes it
   clearPendingToolNav: () => void;
   
   // Panel control
@@ -133,7 +133,7 @@ const initialState = {
   unsavedFileState: {} as Record<string, boolean>,
 };
 
-export const useKortixComputerStore = create<KortixComputerState>()(
+export const useOtaconComputerStore = create<OtaconComputerState>()(
   devtools(
     (set, get) => ({
       ...initialState,
@@ -145,7 +145,7 @@ export const useKortixComputerStore = create<KortixComputerState>()(
         
         // If sandbox changed, clear all file-related state
         if (currentSandboxId !== sandboxId) {
-          console.log('[KortixComputerStore] Sandbox context changed:', currentSandboxId, '->', sandboxId);
+          console.log('[OtaconComputerStore] Sandbox context changed:', currentSandboxId, '->', sandboxId);
           set({
             currentSandboxId: sandboxId,
             // Reset all file state when sandbox changes
@@ -156,7 +156,7 @@ export const useKortixComputerStore = create<KortixComputerState>()(
       },
       
       clearFileState: () => {
-        console.log('[KortixComputerStore] Clearing file state');
+        console.log('[OtaconComputerStore] Clearing file state');
         set({
           ...initialFileState,
         });
@@ -389,12 +389,12 @@ export const useKortixComputerStore = create<KortixComputerState>()(
       },
       
       reset: () => {
-        console.log('[KortixComputerStore] Full reset');
+        console.log('[OtaconComputerStore] Full reset');
         set(initialState);
       },
     }),
     {
-      name: 'kortix-computer-store',
+      name: 'otacon-computer-store',
     }
   )
 );
@@ -402,44 +402,44 @@ export const useKortixComputerStore = create<KortixComputerState>()(
 // === SELECTOR HOOKS ===
 
 // Sandbox context
-export const useKortixComputerSandboxId = () =>
-  useKortixComputerStore((state) => state.currentSandboxId);
+export const useOtaconComputerSandboxId = () =>
+  useOtaconComputerStore((state) => state.currentSandboxId);
 
 export const useSetSandboxContext = () =>
-  useKortixComputerStore((state) => state.setSandboxContext);
+  useOtaconComputerStore((state) => state.setSandboxContext);
 
 // Main view state
-export const useKortixComputerActiveView = () => 
-  useKortixComputerStore((state) => state.activeView);
+export const useOtaconComputerActiveView = () => 
+  useOtaconComputerStore((state) => state.activeView);
 
 // Individual selectors for files state (stable, primitive values)
-export const useKortixComputerFilesSubView = () =>
-  useKortixComputerStore((state) => state.filesSubView);
+export const useOtaconComputerFilesSubView = () =>
+  useOtaconComputerStore((state) => state.filesSubView);
 
-export const useKortixComputerCurrentPath = () =>
-  useKortixComputerStore((state) => state.currentPath);
+export const useOtaconComputerCurrentPath = () =>
+  useOtaconComputerStore((state) => state.currentPath);
 
-export const useKortixComputerSelectedFilePath = () =>
-  useKortixComputerStore((state) => state.selectedFilePath);
+export const useOtaconComputerSelectedFilePath = () =>
+  useOtaconComputerStore((state) => state.selectedFilePath);
 
-export const useKortixComputerFilePathList = () =>
-  useKortixComputerStore((state) => state.filePathList);
+export const useOtaconComputerFilePathList = () =>
+  useOtaconComputerStore((state) => state.filePathList);
 
-export const useKortixComputerCurrentFileIndex = () =>
-  useKortixComputerStore((state) => state.currentFileIndex);
+export const useOtaconComputerCurrentFileIndex = () =>
+  useOtaconComputerStore((state) => state.currentFileIndex);
 
 // Legacy combined selector (for backward compatibility) - use individual selectors in components
-export const useKortixComputerFilesState = () => ({
-  filesSubView: useKortixComputerStore((state) => state.filesSubView),
-  currentPath: useKortixComputerStore((state) => state.currentPath),
-  selectedFilePath: useKortixComputerStore((state) => state.selectedFilePath),
-  filePathList: useKortixComputerStore((state) => state.filePathList),
-  currentFileIndex: useKortixComputerStore((state) => state.currentFileIndex),
+export const useOtaconComputerFilesState = () => ({
+  filesSubView: useOtaconComputerStore((state) => state.filesSubView),
+  currentPath: useOtaconComputerStore((state) => state.currentPath),
+  selectedFilePath: useOtaconComputerStore((state) => state.selectedFilePath),
+  filePathList: useOtaconComputerStore((state) => state.filePathList),
+  currentFileIndex: useOtaconComputerStore((state) => state.currentFileIndex),
 });
 
 // Actions are stable references (functions don't change)
-export const useKortixComputerActions = () =>
-  useKortixComputerStore((state) => ({
+export const useOtaconComputerActions = () =>
+  useOtaconComputerStore((state) => ({
     setActiveView: state.setActiveView,
     openFile: state.openFile,
     goBackToBrowser: state.goBackToBrowser,
@@ -456,15 +456,15 @@ export const useKortixComputerActions = () =>
   }));
 
 // Individual selectors for pending tool navigation (stable primitives)
-export const useKortixComputerPendingToolNavIndex = () =>
-  useKortixComputerStore((state) => state.pendingToolNavIndex);
+export const useOtaconComputerPendingToolNavIndex = () =>
+  useOtaconComputerStore((state) => state.pendingToolNavIndex);
 
-export const useKortixComputerClearPendingToolNav = () =>
-  useKortixComputerStore((state) => state.clearPendingToolNav);
+export const useOtaconComputerClearPendingToolNav = () =>
+  useOtaconComputerStore((state) => state.clearPendingToolNav);
 
 // Side panel state selectors
 export const useIsSidePanelOpen = () =>
-  useKortixComputerStore((state) => state.isSidePanelOpen);
+  useOtaconComputerStore((state) => state.isSidePanelOpen);
 
 export const useSetIsSidePanelOpen = () =>
-  useKortixComputerStore((state) => state.setIsSidePanelOpen);
+  useOtaconComputerStore((state) => state.setIsSidePanelOpen);

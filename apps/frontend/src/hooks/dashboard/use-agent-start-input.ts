@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useLeadingDebouncedCallback } from '@/hooks/utils';
 import { useOptimisticAgentStart, AgentLimitInfo } from '@/hooks/threads';
 import { useAgentSelection } from '@/stores/agent-selection-store';
-import { useSunaModePersistence } from '@/stores/suna-modes-store';
+import { useBreakitModePersistence } from '@/stores/breakit-modes-store';
 import { useAgents } from '@/hooks/agents/use-agents';
 import { useAuth } from '@/components/AuthProvider';
 import type { ChatInputHandles } from '@/components/thread/chat-input/chat-input';
@@ -46,9 +46,9 @@ export interface UseAgentStartInputReturn {
   agents: any[];
   isLoadingAgents: boolean;
   selectedAgent: any | null;
-  isSunaAgent: boolean;
+  isBreakitAgent: boolean;
   
-  // Suna modes
+  // Breakit modes
   selectedMode: any;
   selectedCharts: any;
   selectedOutputFormat: any;
@@ -113,7 +113,7 @@ export function useAgentStartInput(options: UseAgentStartInputOptions = {}): Use
     initializeFromAgents,
   } = useAgentSelection();
   
-  // Suna modes persistence
+  // Breakit modes persistence
   const {
     selectedMode,
     selectedCharts,
@@ -131,7 +131,7 @@ export function useAgentStartInput(options: UseAgentStartInputOptions = {}): Use
     setSelectedImageStyle,
     setSelectedCanvasAction,
     setSelectedVideoStyle,
-  } = useSunaModePersistence();
+  } = useBreakitModePersistence();
   
   // Callback to reset loading states when a background error occurs
   const handleBackgroundError = useCallback(() => {
@@ -162,18 +162,18 @@ export function useAgentStartInput(options: UseAgentStartInputOptions = {}): Use
   });
   
   const agents = Array.isArray(agentsResponse?.agents) ? agentsResponse.agents : [];
-  const sunaAgent = agents.find(agent => agent.metadata?.is_suna_default === true);
+  const breakitAgent = agents.find(agent => agent.metadata?.is_breakit_default === true);
   const selectedAgent = selectedAgentId
     ? agents.find(agent => agent.agent_id === selectedAgentId)
     : null;
   
-  // Determine if Suna agent is selected (for modes panel)
-  // For unauthenticated users, always show as Suna agent (for landing page modes panel)
-  const isSunaAgent = !user 
-    ? true // Unauthenticated users always see Suna modes
+  // Determine if Breakit agent is selected (for modes panel)
+  // For unauthenticated users, always show as Breakit agent (for landing page modes panel)
+  const isBreakitAgent = !user 
+    ? true // Unauthenticated users always see Breakit modes
     : isLoadingAgents 
-      ? true // Show Kortix modes while loading
-      : (selectedAgent?.metadata?.is_suna_default || (!selectedAgentId && sunaAgent !== undefined) || false);
+      ? true // Show Otacon modes while loading
+      : (selectedAgent?.metadata?.is_breakit_default || (!selectedAgentId && breakitAgent !== undefined) || false);
   
   // Initialize agent selection when agents are loaded
   useEffect(() => {
@@ -324,9 +324,9 @@ export function useAgentStartInput(options: UseAgentStartInputOptions = {}): Use
     agents,
     isLoadingAgents,
     selectedAgent,
-    isSunaAgent,
+    isBreakitAgent,
     
-    // Suna modes
+    // Breakit modes
     selectedMode,
     selectedCharts,
     selectedOutputFormat,

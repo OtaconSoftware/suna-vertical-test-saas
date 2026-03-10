@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Key, Plus, Trash2, Copy, Shield, ExternalLink } from 'lucide-react';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { OtaconLogo } from '@/components/sidebar/otacon-logo';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/lib/toast';
 
@@ -211,7 +211,7 @@ export default function APIKeysPage() {
             <h1 className="text-xl sm:text-2xl font-medium">API Keys</h1>
           </div>
           <p className="text-sm sm:text-base text-muted-foreground">
-            Manage your API keys for programmatic access to Kortix
+            Manage your API keys for programmatic access to Otacon
           </p>
         </div>
 
@@ -220,12 +220,12 @@ export default function APIKeysPage() {
           <CardContent className="p-3 sm:p-6">
             <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
               <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-600/10 border border-blue-500/20 flex-shrink-0">
-                <KortixLogo size={18} variant="symbol" className="sm:[width:22px] sm:[height:22px] [filter:invert(37%)_sepia(93%)_saturate(1352%)_hue-rotate(207deg)_brightness(97%)_contrast(95%)] dark:[filter:invert(68%)_sepia(44%)_saturate(913%)_hue-rotate(186deg)_brightness(101%)_contrast(96%)]" />
+                <OtaconLogo size={18} variant="symbol" className="sm:[width:22px] sm:[height:22px] [filter:invert(37%)_sepia(93%)_saturate(1352%)_hue-rotate(207deg)_brightness(97%)_contrast(95%)] dark:[filter:invert(68%)_sepia(44%)_saturate(913%)_hue-rotate(186deg)_brightness(101%)_contrast(96%)]" />
               </div>
               <div className="flex-1 space-y-2 sm:space-y-3">
                 <div>
                   <h3 className="text-sm sm:text-base font-semibold text-blue-900 dark:text-blue-100 mb-1 flex items-center gap-2">
-                    Kortix API
+                    Otacon API
                     <Badge variant="secondary" className="h-5 px-1.5 text-xs bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700">
                       Beta
                     </Badge>
@@ -237,7 +237,7 @@ export default function APIKeysPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <a
-                    href="https://api.kortix.com/docs"
+                    href="https://api.otacon.com/docs"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
@@ -389,7 +389,7 @@ export default function APIKeysPage() {
               <Key className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-medium mb-2">No API keys yet</h3>
               <p className="text-muted-foreground mb-4">
-                Create your first API key pair to start using the Kortix API
+                Create your first API key pair to start using the Otacon API
                 programmatically. Each key includes a public identifier and
                 secret for secure authentication.
               </p>

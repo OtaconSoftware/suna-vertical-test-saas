@@ -21,15 +21,15 @@ export function ToolsScreen({ agentId }: ToolsScreenProps) {
         }
     }, [agent?.agentpress_tools]);
 
-    const isSunaAgent = agent?.metadata?.is_suna_default || false;
+    const isBreakitAgent = agent?.metadata?.is_breakit_default || false;
     const restrictions = agent?.metadata?.restrictions || {};
-    const areToolsEditable = (restrictions.tools_editable !== false) && !isSunaAgent;
+    const areToolsEditable = (restrictions.tools_editable !== false) && !isBreakitAgent;
 
     const handleToolsChange = async (newTools: Record<string, boolean | { enabled: boolean; description: string }>) => {
         if (!areToolsEditable) {
-            if (isSunaAgent) {
+            if (isBreakitAgent) {
                 toast.error("Tools cannot be edited", {
-                    description: "Kortix's tools are managed centrally.",
+                    description: "Otacon's tools are managed centrally.",
                 });
             }
             return;
@@ -68,7 +68,7 @@ export function ToolsScreen({ agentId }: ToolsScreenProps) {
                     tools={tools}
                     onToolsChange={handleToolsChange}
                     disabled={!areToolsEditable}
-                    isSunaAgent={isSunaAgent}
+                    isBreakitAgent={isBreakitAgent}
                     isLoading={updateAgentMutation.isPending}
                 />
             </div>
