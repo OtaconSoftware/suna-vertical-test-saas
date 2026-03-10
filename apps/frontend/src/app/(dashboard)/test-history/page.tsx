@@ -1,158 +1,165 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { OtaconLoader } from '@/components/ui/otacon-loader';
-import { useThreads } from '@/hooks/threads/use-threads';
+import { useAuth } from '@/components/AuthProvider';
+import { createClient } from '@/lib/supabase/client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ClipboardCheck, ExternalLink, ArrowRight, Plus } from 'lucide-react';
-import Link from 'next/link';
+import { 
+  ClipboardCheck, 
+  ExternalLink, 
+  Clock, 
+  Loader2,
+  Plus,
+  RefreshCw
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-  
-  if (diffMins < 1) return 'Just now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return date.toLocaleDateString();
+interface TestThread {
+  thread_id: string;
+  project_id: string;
+  created_at: string;
+  name: string;
+  metadata: Record<string, any>;
 }
 
-function getTestTypeLabel(metadata: any): string {
-  const testType = metadata?.test_type;
-  const labels: Record<string, string> = {
-    'full-audit': 'Full Audit',
-    'signup-flow': 'Signup Flow',
-    'checkout-flow': 'Checkout Flow',
-    'form-validation': 'Form Validation',
-    'responsive-check': 'Responsive',
-    'custom': 'Custom',
+function getTestInfo(thread: TestThread) {
+  const meta = thread.metadata || {};
+  return {
+    url: meta.test_url || 'Unknown URL',
+    testType: meta.test_type || 'unknown',
+    viewport: meta.viewport || 'desktop',
   };
-  return labels[testType] || 'QA Test';
 }
 
-function getTestUrl(metadata: any): string | null {
-  return metadata?.test_url || null;
+function timeAgo(dateStr: string): string {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const diffMs = now.getTime() - date.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 1) return 'just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffH = Math.floor(diffMin / 60);
+  if (diffH < 24) return `${diffH}h ago`;
+  const diffD = Math.floor(diffH / 24);
+  return `${diffD}d ago`;
 }
+
+const testTypeLabels: Record<string, string> = {
+  'full-audit': 'Full Audit',
+  'signup-flow': 'Signup Flow',
+  'checkout-flow': 'Checkout Flow',
+  'form-validation': 'Form Validation',
+  'responsive-check': 'Responsive',
+  'custom': 'Custom',
+};
 
 export default function TestHistoryPage() {
+  const { user } = useAuth();
   const router = useRouter();
+  const [threads, setThreads] = useState<TestThread[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const { data: threadsResponse, isLoading } = useThreads({
-    page: 1,
-    limit: 200,
-  });
+  const fetchTests = async () => {
+    if (!user) return;
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const supabase = createClient();
+      const { data, error: fetchError } = await supabase
+        .from('threads')
+        .select('thread_id, project_id, created_at, name, metadata')
+        .eq('account_id', user.id)
+        .not('metadata->qa_test', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      
+      if (fetchError) throw fetchError;
+      setThreads(data || []);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to load test history';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // Filter QA test threads
-  const qaThreads = useMemo(() => {
-    if (!threadsResponse?.threads) return [];
-    return threadsResponse.threads
-      .filter(t => t.metadata?.qa_test === true)
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }, [threadsResponse]);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <OtaconLoader size="md" />
-      </div>
-    );
-  }
+  useEffect(() => {
+    fetchTests();
+  }, [user]);
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="px-6 py-4 border-b border-border/50">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <ClipboardCheck className="h-5 w-5 text-muted-foreground" />
-            <h1 className="text-lg font-semibold">Test History</h1>
-            {qaThreads.length > 0 && (
-              <Badge variant="secondary" className="text-xs">
-                {qaThreads.length} tests
-              </Badge>
-            )}
+      <div className="flex items-center justify-between px-6 py-4 border-b">
+        <div className="flex items-center gap-3">
+          <ClipboardCheck className="h-6 w-6 text-foreground" />
+          <div>
+            <h1 className="text-xl font-semibold">Test History</h1>
+            <p className="text-sm text-muted-foreground">All your QA test runs</p>
           </div>
-          <Button size="sm" asChild>
-            <Link href="/dashboard">
-              <Plus className="h-4 w-4 mr-1" />
-              New Test
-            </Link>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={fetchTests} disabled={loading}>
+            <RefreshCw className={cn("h-4 w-4 mr-1", loading && "animate-spin")} />
+            Refresh
+          </Button>
+          <Button size="sm" onClick={() => router.push('/')}>
+            <Plus className="h-4 w-4 mr-1" />
+            New Test
           </Button>
         </div>
       </div>
 
-      {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
-        {qaThreads.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <ClipboardCheck className="h-12 w-12 text-muted-foreground/30 mb-4" />
-            <h2 className="text-lg font-medium mb-2">No tests yet</h2>
-            <p className="text-sm text-muted-foreground mb-4">
-              Run your first QA test to see results here.
-            </p>
-            <Button asChild>
-              <Link href="/dashboard">Run a Test 🧪</Link>
-            </Button>
+        {loading && threads.length === 0 ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <p className="text-destructive">{error}</p>
+            <Button variant="outline" className="mt-4" onClick={fetchTests}>Try again</Button>
+          </div>
+        ) : threads.length === 0 ? (
+          <div className="text-center py-20">
+            <ClipboardCheck className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+            <h3 className="text-lg font-medium mb-1">No tests yet</h3>
+            <p className="text-sm text-muted-foreground mb-4">Run your first QA test to see results here</p>
+            <Button onClick={() => router.push('/')}>Run a Test 🧪</Button>
           </div>
         ) : (
-          <div className="space-y-3 max-w-3xl">
-            {qaThreads.map((thread) => {
-              const testUrl = getTestUrl(thread.metadata);
-              const testType = getTestTypeLabel(thread.metadata);
-              const isRunning = thread.metadata?.status === 'running';
-
+          <div className="space-y-3 max-w-4xl">
+            {threads.map((thread) => {
+              const info = getTestInfo(thread);
               return (
                 <Card
                   key={thread.thread_id}
-                  className={cn(
-                    'cursor-pointer transition-colors hover:bg-accent/50 border-border/50',
-                    isRunning && 'border-blue-500/30'
-                  )}
+                  className="cursor-pointer transition-colors hover:bg-accent/30"
                   onClick={() => router.push(`/projects/${thread.project_id}/thread/${thread.thread_id}`)}
                 >
                   <CardContent className="flex items-center gap-4 py-4 px-5">
-                    {/* Status indicator */}
-                    <div className={cn(
-                      'h-2.5 w-2.5 rounded-full flex-shrink-0',
-                      isRunning ? 'bg-blue-500 animate-pulse' : 'bg-green-500'
-                    )} />
-
-                    {/* Main info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        {testUrl && (
-                          <span className="text-sm font-medium truncate">
-                            {testUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-                          </span>
-                        )}
-                        <Badge variant="outline" className="text-xs flex-shrink-0">
-                          {testType}
-                        </Badge>
-                        {isRunning && (
-                          <Badge className="text-xs bg-blue-500/20 text-blue-600 dark:text-blue-400 flex-shrink-0">
-                            Running
-                          </Badge>
-                        )}
+                        <span className="text-sm font-medium truncate">{info.url}</span>
+                        <ExternalLink className="h-3 w-3 text-muted-foreground flex-shrink-0" />
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        {formatDate(thread.created_at)}
-                        {thread.metadata?.viewport && (
-                          <span> · {thread.metadata.viewport}</span>
-                        )}
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-xs">
+                          {testTypeLabels[info.testType] || info.testType}
+                        </Badge>
+                        <Badge variant="outline" className="text-xs capitalize">
+                          {info.viewport}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {timeAgo(thread.created_at)}
+                        </span>
                       </div>
                     </div>
-
-                    {/* Arrow */}
-                    <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   </CardContent>
                 </Card>
               );

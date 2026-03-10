@@ -138,6 +138,7 @@ export function SidebarLeft({
     
     return { isOnLibrary: false, isOnThread: false };
   }, [pathname]);
+  const isOnTestHistory = pathname === '/test-history';
 
   // Update active view based on pathname (Files is independent, not a view)
   useEffect(() => {
@@ -450,6 +451,33 @@ export function SidebarLeft({
                   <div className="flex items-center gap-2">
                     <FolderOpen className="h-4 w-4" />
                     Files
+                  </div>
+                </Link>
+              </Button>
+            </div>
+
+            {/* Test History link */}
+            <div className="w-full">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "w-full shadow-none justify-start h-10 px-3 hover:text-foreground",
+                  isOnTestHistory 
+                    ? "bg-card border-[1.5px] border-border text-foreground" 
+                    : "text-muted-foreground"
+                )}
+                asChild
+              >
+                <Link
+                  href="/test-history"
+                  onClick={() => {
+                    if (isMobile) setOpenMobile(false);
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <ClipboardCheck className="h-4 w-4" />
+                    Test History
                   </div>
                 </Link>
               </Button>
