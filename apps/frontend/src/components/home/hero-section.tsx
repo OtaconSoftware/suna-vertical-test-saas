@@ -100,35 +100,17 @@ export function HeroSection() {
               - Desktop: true center with no offset */}
           <div className="absolute inset-0 flex items-center justify-center px-4 pb-28 sm:pb-0 pointer-events-none">
             <div className="w-full max-w-3xl mx-auto flex flex-col items-center text-center pointer-events-auto">
-              {/* Greeting */}
+              {/* Headline */}
               <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500 fill-mode-both">
-                <DynamicGreeting className="text-2xl sm:text-3xl md:text-4xl font-medium text-foreground tracking-tight" />
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tight">
+                  Test Your Web App with AI
+                </h1>
               </div>
-              
+
               {/* Subtitle */}
-              <p className="mt-2 sm:mt-3 text-sm sm:text-base text-muted-foreground/70 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-75 fill-mode-both">
-                {t('modeSubtitle')}
+              <p className="mt-3 sm:mt-4 text-base sm:text-lg text-muted-foreground/80 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-75 fill-mode-both max-w-2xl">
+                Describe what to test, get a detailed QA report. No scripts to write, no tests to maintain.
               </p>
-              
-              {/* Modes Panel */}
-              <div className="mt-6 sm:mt-8 w-full animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150 fill-mode-both">
-                <Suspense fallback={<div className="h-12 bg-muted/10 rounded-lg animate-pulse" />}>
-                  <SunaModesPanel
-                    selectedMode={selectedMode}
-                    onModeSelect={setSelectedMode}
-                    onSelectPrompt={setInputValue}
-                    isMobile={isMobile}
-                    selectedCharts={selectedCharts}
-                    onChartsChange={setSelectedCharts}
-                    selectedOutputFormat={selectedOutputFormat}
-                    onOutputFormatChange={setSelectedOutputFormat}
-                    selectedTemplate={selectedTemplate}
-                    onTemplateChange={setSelectedTemplate}
-                    isFreeTier={true}
-                    onUpgradeClick={() => {}}
-                  />
-                </Suspense>
-              </div>
             </div>
           </div>
 

@@ -2,12 +2,12 @@
  * Site metadata configuration - SIMPLE AND WORKING
  */
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.kortix.com';
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.testagent.dev';
 
 export const siteMetadata = {
-  name: 'Kortix',
-  title: 'Kortix: Your Autonomous AI Worker',
-  description: 'Built for complex tasks, designed for everything. The ultimate AI assistant that handles it all—from simple requests to mega-complex projects.',
+  name: 'TestAgent',
+  title: 'TestAgent: AI-Powered QA Testing',
+  description: 'Automated web application testing powered by AI. Provide a URL and testing specs — our AI agent navigates your site, tests user flows, and delivers a detailed QA report with screenshots.',
   url: baseUrl,
-  keywords: 'Kortix, AI Worker, Agentic AI, Autonomous AI Worker, AI Automation, AI Workflow Automation, AI Assistant, Task Automation',
+  keywords: 'QA, testing, automation, web testing, UI testing, E2E, bug detection, automated testing, AI testing, quality assurance',
 };
