@@ -492,9 +492,7 @@ export function DashboardContent() {
                 </div>
               </div>
 
-              {/* Chat Input - fixed at bottom
-                  - Mobile: safe area padding for iOS home indicator */}
-              <div className="absolute bottom-0 left-0 right-0 px-3 sm:px-4 pb-3 sm:pb-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-4 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-100 fill-mode-both">
+              <div className="hidden">
                 <div className="w-full max-w-3xl mx-auto">
                   <ChatInput
                     ref={chatInputRef}
