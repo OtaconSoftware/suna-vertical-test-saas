@@ -374,7 +374,7 @@ export function DashboardContent() {
           {viewMode === 'super-worker' && (
             <>
               {/* Scrollable content area */}
-              <div className="flex-1 overflow-y-auto px-4 py-8">
+              <div className="flex-1 overflow-y-auto px-4 py-8 pb-32">
                 <div className="w-full max-w-4xl mx-auto space-y-12">
                   {/* Greeting section */}
                   <div className="flex flex-col items-center text-center">
