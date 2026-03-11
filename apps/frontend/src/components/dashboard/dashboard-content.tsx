@@ -370,7 +370,7 @@ export function DashboardContent() {
         </div>
 
         {/* Main content area - greeting and modes centered */}
-        <div className="flex-1 flex flex-col relative z-[1]">
+        <div className="flex-1 flex flex-col relative z-[1] min-h-0">
           {viewMode === 'super-worker' && (
             <>
               {/* Scrollable content area */}
