@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown, Loader2 } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { startTest } from '@/lib/api/qa';
 
 const TEST_TYPES = [
   { value: 'full-audit', label: 'Full Site Audit', placeholder: 'Test all pages, links, forms, and functionality' },
@@ -32,7 +32,12 @@ const VIEWPORTS = [
   { value: 'both', label: 'Both' },
 ] as const;
 
-export function TestInputForm() {
+interface TestInputFormProps {
+  projectId?: string;
+  onTestStarted?: (reportId: string, threadId: string) => void;
+}
+
+export function TestInputForm({ projectId, onTestStarted }: TestInputFormProps = {}) {
   const router = useRouter();
   const [url, setUrl] = useState('');
   const [testType, setTestType] = useState('full-audit');
@@ -49,7 +54,7 @@ export function TestInputForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    
+
     if (!url.trim()) {
       setError('Please enter a URL to test');
       return;
@@ -63,44 +68,25 @@ export function TestInputForm() {
     setLoading(true);
 
     try {
-      const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        setError('Please sign in to run tests');
-        setLoading(false);
-        return;
-      }
-
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000/v1';
-      
-      const response = await fetch(`${backendUrl}/qa/start-test`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({
-          url: url.trim(),
-          test_type: testType,
-          specs: specs.trim() || undefined,
-          viewport,
-          credentials: (credEmail || credPassword) ? {
-            email: credEmail || undefined,
-            password: credPassword || undefined,
-          } : undefined,
-        }),
+      const result = await startTest({
+        url: url.trim(),
+        test_type: testType as any,
+        specs: specs.trim() || undefined,
+        viewport: viewport as any,
+        credentials: (credEmail || credPassword) ? {
+          email: credEmail || undefined,
+          password: credPassword || undefined,
+        } : undefined,
+        project_id: projectId,
       });
 
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.detail || `Test failed to start (${response.status})`);
+      // Call callback if provided
+      if (onTestStarted) {
+        onTestStarted(result.report_id, result.thread_id);
+      } else {
+        // Default: navigate to the thread
+        router.push(`/projects/${result.project_id}/thread/${result.thread_id}`);
       }
-
-      const data = await response.json();
-      
-      // Navigate to the thread
-      router.push(`/projects/${data.project_id}/thread/${data.thread_id}`);
     } catch (err: any) {
       setError(err.message || 'Failed to start test');
       setLoading(false);

@@ -1052,3 +1052,68 @@ async def delete_thread(
     except Exception as e:
         logger.error(f"Error deleting thread {thread_id}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to delete thread: {str(e)}")
+
+
+@router.get("/projects/{project_id}/reports", summary="Get Project Test Reports", operation_id="get_project_reports")
+async def get_project_test_reports(
+    project_id: str,
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    user_id: str = Depends(verify_and_get_user_id_from_jwt),
+):
+    """Get all test reports for a specific project."""
+    from core.services.db import execute
+
+    try:
+        # Verify project belongs to user
+        project_check = await db.execute_one(
+            "SELECT project_id FROM projects WHERE project_id = :project_id AND account_id = :account_id",
+            {"project_id": project_id, "account_id": user_id}
+        )
+
+        if not project_check:
+            raise HTTPException(status_code=404, detail="Project not found")
+
+        # Fetch test reports for project
+        query = """
+            SELECT
+                report_id, thread_id, project_id, test_url, test_type,
+                viewport, status, score, total_tests, passed, failed,
+                warnings, created_at, updated_at
+            FROM test_reports
+            WHERE project_id = :project_id AND account_id = :account_id
+            ORDER BY created_at DESC
+            LIMIT :limit OFFSET :offset
+        """
+
+        rows = await execute(query, {
+            "project_id": project_id,
+            "account_id": user_id,
+            "limit": limit,
+            "offset": offset
+        })
+
+        return [
+            {
+                "report_id": str(row["report_id"]),
+                "thread_id": str(row["thread_id"]) if row["thread_id"] else None,
+                "project_id": str(row["project_id"]),
+                "test_url": row["test_url"],
+                "test_type": row["test_type"],
+                "viewport": row["viewport"],
+                "status": row["status"],
+                "score": row["score"],
+                "total_tests": row["total_tests"],
+                "passed": row["passed"],
+                "failed": row["failed"],
+                "warnings": row["warnings"],
+                "created_at": row["created_at"],
+                "updated_at": row["updated_at"],
+            }
+            for row in rows
+        ]
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching project reports: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch project reports: {str(e)}")

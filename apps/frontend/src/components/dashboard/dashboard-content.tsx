@@ -20,6 +20,12 @@ import { useAgentStartInput } from '@/hooks/dashboard';
 import { ChatInput } from '@/components/thread/chat-input/chat-input';
 import { DynamicGreeting } from '@/components/ui/dynamic-greeting';
 import { Menu } from 'lucide-react';
+import { TestInputForm } from '@/components/custom/test-input-form';
+import { getReports } from '@/lib/api/qa';
+import type { TestReportListItem } from '@/lib/api/qa';
+import { useQuery } from '@tanstack/react-query';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 // Lazy load heavy components that aren't immediately visible
 const UpgradeCelebration = lazy(() => 
@@ -283,6 +289,33 @@ export function DashboardContent() {
     !accountState.subscription.tier_key
   );
 
+  // Fetch recent test reports for Breakit
+  const { data: recentReports = [], isLoading: isLoadingReports } = useQuery({
+    queryKey: ['qa-reports', 'recent'],
+    queryFn: () => getReports({ limit: 5 }),
+    enabled: !!user,
+  });
+
+  const getScoreBadgeVariant = (score: number | null) => {
+    if (score === null) return 'secondary';
+    if (score >= 80) return 'default';
+    if (score >= 60) return 'outline';
+    return 'destructive';
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'running':
+        return <Badge variant="secondary">Running</Badge>;
+      case 'completed':
+        return <Badge variant="default">Completed</Badge>;
+      case 'failed':
+        return <Badge variant="destructive">Failed</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  };
+
   return (
     <>
       {/* PlanSelectionModal is rendered globally in layout.tsx - no duplicate needed here */}
@@ -339,39 +372,121 @@ export function DashboardContent() {
         <div className="flex-1 flex flex-col relative z-[1]">
           {viewMode === 'super-worker' && (
             <>
-              {/* Centered content: Greeting + Subtitle + Modes
-                  - Mobile: shifted up with pb-28 to account for chat input and feel more balanced
-                  - Desktop: true center with no offset */}
-              <div className="absolute inset-0 flex items-center justify-center px-4 pb-28 sm:pb-0 pointer-events-none">
-                <div className="w-full max-w-3xl mx-auto flex flex-col items-center text-center pointer-events-auto">
-                  {/* Greeting */}
-                  <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500 fill-mode-both">
-                    <DynamicGreeting className="text-2xl sm:text-3xl md:text-4xl font-medium text-foreground tracking-tight" />
+              {/* Scrollable content area */}
+              <div className="flex-1 overflow-y-auto px-4 py-8">
+                <div className="w-full max-w-4xl mx-auto space-y-12">
+                  {/* Greeting section */}
+                  <div className="flex flex-col items-center text-center">
+                    <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500 fill-mode-both">
+                      <DynamicGreeting className="text-2xl sm:text-3xl md:text-4xl font-medium text-foreground tracking-tight" />
+                    </div>
+
+                    <p className="mt-2 sm:mt-3 text-sm sm:text-base text-muted-foreground/70 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-75 fill-mode-both">
+                      {t('modeSubtitle')}
+                    </p>
+
+                    <div className="mt-6 sm:mt-8 w-full animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150 fill-mode-both">
+                      <Suspense fallback={<div className="h-12 bg-muted/10 rounded-lg animate-pulse" />}>
+                        <BreakitModesPanel
+                          selectedMode={selectedMode}
+                          onModeSelect={setSelectedMode}
+                          onSelectPrompt={setInputValue}
+                          isMobile={isMobile}
+                          selectedCharts={selectedCharts}
+                          onChartsChange={setSelectedCharts}
+                          selectedOutputFormat={selectedOutputFormat}
+                          onOutputFormatChange={setSelectedOutputFormat}
+                          selectedTemplate={selectedTemplate}
+                          onTemplateChange={setSelectedTemplate}
+                          isFreeTier={isFreeTier || false}
+                          onUpgradeClick={() => pricingModalStore.openPricingModal()}
+                        />
+                      </Suspense>
+                    </div>
                   </div>
-                  
-                  {/* Subtitle */}
-                  <p className="mt-2 sm:mt-3 text-sm sm:text-base text-muted-foreground/70 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-75 fill-mode-both">
-                    {t('modeSubtitle')}
-                  </p>
-                  
-                  {/* Modes Panel - always render regardless of agent API state */}
-                  <div className="mt-6 sm:mt-8 w-full animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150 fill-mode-both">
-                    <Suspense fallback={<div className="h-12 bg-muted/10 rounded-lg animate-pulse" />}>
-                      <BreakitModesPanel
-                        selectedMode={selectedMode}
-                        onModeSelect={setSelectedMode}
-                        onSelectPrompt={setInputValue}
-                        isMobile={isMobile}
-                        selectedCharts={selectedCharts}
-                        onChartsChange={setSelectedCharts}
-                        selectedOutputFormat={selectedOutputFormat}
-                        onOutputFormatChange={setSelectedOutputFormat}
-                        selectedTemplate={selectedTemplate}
-                        onTemplateChange={setSelectedTemplate}
-                        isFreeTier={isFreeTier || false}
-                        onUpgradeClick={() => pricingModalStore.openPricingModal()}
-                      />
-                    </Suspense>
+
+                  {/* QA Testing Section */}
+                  <div className="space-y-6">
+                    <div className="flex flex-col items-center">
+                      <h2 className="text-xl font-semibold">Run a QA Test</h2>
+                      <p className="text-sm text-muted-foreground mt-1">Test your website for bugs and issues</p>
+                    </div>
+
+                    <div className="flex justify-center">
+                      <TestInputForm />
+                    </div>
+
+                    {/* Recent Tests Table */}
+                    {recentReports.length > 0 && (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-lg font-medium">Recent Tests</h3>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => router.push('/test-history')}
+                          >
+                            View all
+                          </Button>
+                        </div>
+
+                        <div className="border rounded-lg">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>URL</TableHead>
+                                <TableHead>Type</TableHead>
+                                <TableHead>Score</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Actions</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {recentReports.map((report) => (
+                                <TableRow
+                                  key={report.report_id}
+                                  className="cursor-pointer hover:bg-muted/50"
+                                  onClick={() => router.push(`/reports/${report.report_id}`)}
+                                >
+                                  <TableCell className="font-medium">
+                                    {new URL(report.test_url).hostname}
+                                  </TableCell>
+                                  <TableCell className="capitalize">
+                                    {report.test_type.replace('-', ' ')}
+                                  </TableCell>
+                                  <TableCell>
+                                    {report.score !== null ? (
+                                      <Badge variant={getScoreBadgeVariant(report.score)}>
+                                        {report.score}%
+                                      </Badge>
+                                    ) : (
+                                      <span className="text-muted-foreground">—</span>
+                                    )}
+                                  </TableCell>
+                                  <TableCell>{getStatusBadge(report.status)}</TableCell>
+                                  <TableCell className="text-muted-foreground">
+                                    {new Date(report.created_at).toLocaleDateString()}
+                                  </TableCell>
+                                  <TableCell>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        router.push(`/reports/${report.report_id}`);
+                                      }}
+                                    >
+                                      View
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

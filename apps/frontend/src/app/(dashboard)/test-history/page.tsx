@@ -1,38 +1,31 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/AuthProvider';
-import { createClient } from '@/lib/supabase/client';
+import { useQuery } from '@tanstack/react-query';
+import { getReports } from '@/lib/api/qa';
+import type { TestReportListItem } from '@/lib/api/qa';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { 
-  ClipboardCheck, 
-  ExternalLink, 
-  Clock, 
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  ClipboardCheck,
+  ExternalLink,
+  Clock,
   Loader2,
   Plus,
-  RefreshCw
+  RefreshCw,
+  Filter
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-interface TestThread {
-  thread_id: string;
-  project_id: string;
-  created_at: string;
-  name: string;
-  metadata: Record<string, any>;
-}
-
-function getTestInfo(thread: TestThread) {
-  const meta = thread.metadata || {};
-  return {
-    url: meta.test_url || 'Unknown URL',
-    testType: meta.test_type || 'unknown',
-    viewport: meta.viewport || 'desktop',
-  };
-}
 
 function timeAgo(dateStr: string): string {
   const now = new Date();
@@ -57,40 +50,41 @@ const testTypeLabels: Record<string, string> = {
 };
 
 export default function TestHistoryPage() {
-  const { user } = useAuth();
   const router = useRouter();
-  const [threads, setThreads] = useState<TestThread[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [typeFilter, setTypeFilter] = useState<string>('all');
 
-  const fetchTests = async () => {
-    if (!user) return;
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const supabase = createClient();
-      const { data, error: fetchError } = await supabase
-        .from('threads')
-        .select('thread_id, project_id, created_at, name, metadata')
-        .eq('account_id', user.id)
-        .not('metadata->qa_test', 'is', null)
-        .order('created_at', { ascending: false })
-        .limit(50);
-      
-      if (fetchError) throw fetchError;
-      setThreads(data || []);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to load test history';
-      setError(message);
-    } finally {
-      setLoading(false);
+  const { data: reports = [], isLoading, error, refetch } = useQuery({
+    queryKey: ['qa-reports', 'all'],
+    queryFn: () => getReports({ limit: 100 }),
+  });
+
+  const getScoreBadgeVariant = (score: number | null) => {
+    if (score === null) return 'secondary';
+    if (score >= 80) return 'default';
+    if (score >= 60) return 'outline';
+    return 'destructive';
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'running':
+        return <Badge variant="secondary">Running</Badge>;
+      case 'completed':
+        return <Badge variant="default">Completed</Badge>;
+      case 'failed':
+        return <Badge variant="destructive">Failed</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
     }
   };
 
-  useEffect(() => {
-    fetchTests();
-  }, [user]);
+  // Apply filters
+  const filteredReports = reports.filter((report) => {
+    if (statusFilter !== 'all' && report.status !== statusFilter) return false;
+    if (typeFilter !== 'all' && report.test_type !== typeFilter) return false;
+    return true;
+  });
 
   return (
     <div className="flex flex-col h-full">
@@ -103,67 +97,175 @@ export default function TestHistoryPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={fetchTests} disabled={loading}>
-            <RefreshCw className={cn("h-4 w-4 mr-1", loading && "animate-spin")} />
+          <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}>
+            <RefreshCw className={cn("h-4 w-4 mr-1", isLoading && "animate-spin")} />
             Refresh
           </Button>
-          <Button size="sm" onClick={() => router.push('/')}>
+          <Button size="sm" onClick={() => router.push('/dashboard')}>
             <Plus className="h-4 w-4 mr-1" />
             New Test
           </Button>
         </div>
       </div>
 
+      {/* Filters */}
+      <div className="px-6 py-4 border-b bg-muted/30">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Filter className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-medium">Filters:</span>
+          </div>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[150px]">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="running">Running</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="failed">Failed</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Test Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="full-audit">Full Audit</SelectItem>
+              <SelectItem value="signup-flow">Signup Flow</SelectItem>
+              <SelectItem value="checkout-flow">Checkout Flow</SelectItem>
+              <SelectItem value="form-validation">Form Validation</SelectItem>
+              <SelectItem value="responsive-check">Responsive</SelectItem>
+              <SelectItem value="custom">Custom</SelectItem>
+            </SelectContent>
+          </Select>
+          {(statusFilter !== 'all' || typeFilter !== 'all') && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setStatusFilter('all');
+                setTypeFilter('all');
+              }}
+            >
+              Clear Filters
+            </Button>
+          )}
+        </div>
+      </div>
+
       <div className="flex-1 overflow-y-auto p-6">
-        {loading && threads.length === 0 ? (
+        {isLoading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
           </div>
         ) : error ? (
           <div className="text-center py-20">
-            <p className="text-destructive">{error}</p>
-            <Button variant="outline" className="mt-4" onClick={fetchTests}>Try again</Button>
+            <p className="text-destructive">Failed to load test history</p>
+            <Button variant="outline" className="mt-4" onClick={() => refetch()}>Try again</Button>
           </div>
-        ) : threads.length === 0 ? (
+        ) : filteredReports.length === 0 ? (
           <div className="text-center py-20">
             <ClipboardCheck className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-1">No tests yet</h3>
-            <p className="text-sm text-muted-foreground mb-4">Run your first QA test to see results here</p>
-            <Button onClick={() => router.push('/')}>Run a Test 🧪</Button>
+            <h3 className="text-lg font-medium mb-1">
+              {reports.length === 0 ? 'No tests yet' : 'No tests match filters'}
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              {reports.length === 0
+                ? 'Run your first QA test to see results here'
+                : 'Try adjusting your filters'
+              }
+            </p>
+            {reports.length === 0 && (
+              <Button onClick={() => router.push('/dashboard')}>Run a Test 🧪</Button>
+            )}
           </div>
         ) : (
-          <div className="space-y-3 max-w-4xl">
-            {threads.map((thread) => {
-              const info = getTestInfo(thread);
-              return (
-                <Card
-                  key={thread.thread_id}
-                  className="cursor-pointer transition-colors hover:bg-accent/30"
-                  onClick={() => router.push(`/projects/${thread.project_id}/thread/${thread.thread_id}`)}
-                >
-                  <CardContent className="flex items-center gap-4 py-4 px-5">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium truncate">{info.url}</span>
-                        <ExternalLink className="h-3 w-3 text-muted-foreground flex-shrink-0" />
-                      </div>
-                      <div className="flex items-center gap-2">
+          <div className="max-w-6xl">
+            <Card>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>URL</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Viewport</TableHead>
+                    <TableHead>Score</TableHead>
+                    <TableHead>Pass/Fail/Warn</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredReports.map((report: TestReportListItem) => (
+                    <TableRow
+                      key={report.report_id}
+                      className="cursor-pointer hover:bg-muted/50"
+                      onClick={() => router.push(`/reports/${report.report_id}`)}
+                    >
+                      <TableCell className="font-medium max-w-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="truncate">{new URL(report.test_url).hostname}</span>
+                          <a
+                            href={report.test_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex-shrink-0"
+                          >
+                            <ExternalLink className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                          </a>
+                        </div>
+                      </TableCell>
+                      <TableCell>
                         <Badge variant="outline" className="text-xs">
-                          {testTypeLabels[info.testType] || info.testType}
+                          {testTypeLabels[report.test_type] || report.test_type}
                         </Badge>
-                        <Badge variant="outline" className="text-xs capitalize">
-                          {info.viewport}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      </TableCell>
+                      <TableCell className="capitalize">
+                        {report.viewport}
+                      </TableCell>
+                      <TableCell>
+                        {report.score !== null ? (
+                          <Badge variant={getScoreBadgeVariant(report.score)}>
+                            {report.score}%
+                          </Badge>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        <span className="text-green-600 font-medium">{report.passed}</span>
+                        {' / '}
+                        <span className="text-red-600 font-medium">{report.failed}</span>
+                        {' / '}
+                        <span className="text-yellow-600 font-medium">{report.warnings}</span>
+                      </TableCell>
+                      <TableCell>{getStatusBadge(report.status)}</TableCell>
+                      <TableCell className="text-muted-foreground">
+                        <div className="flex items-center gap-1 text-xs">
                           <Clock className="h-3 w-3" />
-                          {timeAgo(thread.created_at)}
-                        </span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+                          {timeAgo(report.created_at)}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/reports/${report.report_id}`);
+                          }}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Card>
           </div>
         )}
       </div>
