@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, HttpUrl
 
 from core.agents.api import start_agent_run
-from core.auth import verify_and_get_user_id_from_jwt
+from core.utils.auth_utils import verify_and_get_user_id_from_jwt
 from core.prompts.qa_testing_prompt import QA_TESTING_SYSTEM_PROMPT
 from core.prompts.test_templates import (
     FULL_AUDIT, SIGNUP_FLOW, CHECKOUT_FLOW, FORM_VALIDATION, RESPONSIVE_CHECK
