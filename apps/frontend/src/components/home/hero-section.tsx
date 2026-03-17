@@ -80,18 +80,7 @@ export function HeroSection() {
   return (
     <section id="hero" className="w-full h-dvh relative overflow-hidden">
       <div className="flex flex-col h-full w-full overflow-hidden relative">
-        {/* Brandmark Background - responsive sizing for all devices */}
-        <div 
-          className="absolute inset-0 pointer-events-none overflow-hidden"
-          aria-hidden="true"
-        >
-          <img
-            src="/otacon-brandmark-bg.svg"
-            alt=""
-            className="absolute left-1/2 -translate-x-1/2 top-[-10%] sm:top-1/2 sm:-translate-y-1/2 w-[140vw] min-w-[700px] h-auto sm:w-[160vw] sm:min-w-[1000px] md:min-w-[1200px] lg:w-[162vw] lg:min-w-[1620px] object-contain select-none invert dark:invert-0"
-            draggable={false}
-          />
-        </div>
+        {/* Brandmark Background removed - was causing orange overlay */}
 
         {/* Main content area - greeting and modes centered */}
         <div className="flex-1 flex flex-col relative z-[1]">
