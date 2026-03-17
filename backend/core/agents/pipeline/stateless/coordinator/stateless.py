@@ -29,6 +29,11 @@ class StatelessCoordinator(BaseCoordinator):
         start = time.time()
         self._thread_run_id = str(uuid.uuid4())
 
+        # Allow agent_config to override max_steps (e.g. QA tests need more)
+        if ctx.agent_config and ctx.agent_config.get('max_steps'):
+            max_steps = int(ctx.agent_config['max_steps'])
+            logger.info(f"[Coordinator] max_steps overridden to {max_steps} from agent_config")
+
         if lifecycle.is_shutting_down:
             yield {"type": "error", "error": "Server shutting down", "error_code": "SHUTDOWN"}
             return

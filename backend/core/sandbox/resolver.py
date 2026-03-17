@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import asyncio
 import time
 
-from daytona_sdk import AsyncSandbox
+from core.sandbox.docker_sandbox import LocalDockerSandbox as AsyncSandbox
 
 from core.utils.logger import logger
 from core.sandbox.sandbox import get_or_start_sandbox, create_sandbox

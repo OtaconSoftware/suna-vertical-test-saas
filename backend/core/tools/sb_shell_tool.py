@@ -179,7 +179,8 @@ Usage notes:
                     logger.warning(f"Error processing PTY output: {e}")
             
             try:
-                from daytona_sdk.common.pty import PtySize
+                class PtySize:
+                    def __init__(self, rows=24, cols=80): self.rows = rows; self.cols = cols
                 
                 pty_session_id = f"cmd-{str(uuid4())[:8]}"
                 
@@ -293,7 +294,7 @@ Usage notes:
     async def _fallback_execute(self, command: str, cwd: str, timeout: int) -> ToolResult:
         """Fallback execution method using direct session commands."""
         try:
-            from daytona_sdk import SessionExecuteRequest
+            from core.sandbox.docker_compat import SessionExecuteRequest
             
             session_id = f"cmd_{str(uuid4())[:8]}"
             await self.sandbox.process.create_session(session_id)
@@ -343,7 +344,7 @@ Usage notes:
         """
         session_id = f"cmd_{str(uuid4())[:8]}"
         
-        from daytona_sdk import SessionExecuteRequest
+        from core.sandbox.docker_compat import SessionExecuteRequest
         
         try:
             await self._ensure_sandbox()

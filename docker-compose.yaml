@@ -49,6 +49,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend/.env:/app/.env:ro
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -86,3 +87,10 @@ services:
 
 volumes:
   redis_data:
+
+networks:
+  default:
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: fd01::/80

@@ -133,6 +133,49 @@ class ManagerInitializer:
         if prompt:
             state.system_prompt = prompt.system_prompt
 
+        # Inject project context for QA projects (chat + tests)
+        try:
+            project_context = await ManagerInitializer._get_project_context(ctx)
+            if project_context and state.system_prompt:
+                if isinstance(state.system_prompt, dict) and 'content' in state.system_prompt:
+                    state.system_prompt['content'] += f"\n\n{project_context}"
+                elif isinstance(state.system_prompt, str):
+                    state.system_prompt += f"\n\n{project_context}"
+                elif isinstance(state.system_prompt, list):
+                    # System prompt is a list of content blocks
+                    state.system_prompt.append({"type": "text", "text": project_context})
+                logger.info(f"[INIT] Injected project context ({len(project_context)} chars)")
+        except Exception as e:
+            logger.debug(f"[INIT] No project context to inject: {e}")
+
         tools = await prep_tasks.prep_tools(tool_registry)
         if tools:
             state.tool_schemas = tools.schemas
+
+    @staticmethod
+    async def _get_project_context(ctx: PipelineContext) -> str:
+        """
+        Get project context for QA projects.
+        Looks up the project for this thread and builds context prompt.
+        Returns empty string if not a QA project.
+        """
+        from core.services.db import execute_one
+
+        # Find project for this thread
+        thread_project = await execute_one(
+            "SELECT p.project_id, p.project_type, p.account_id FROM threads t JOIN projects p ON t.project_id = p.project_id WHERE t.thread_id = :tid",
+            {"tid": ctx.thread_id}
+        )
+
+        if not thread_project:
+            return ""
+
+        # Only inject context for QA projects
+        if thread_project.get("project_type") != "qa":
+            return ""
+
+        from core.agents.qa_api import build_project_context_prompt
+        return await build_project_context_prompt(
+            str(thread_project["project_id"]),
+            str(thread_project["account_id"])
+        )

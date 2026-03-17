@@ -4,7 +4,7 @@ from core.agentpress.tool import Tool
 
 if TYPE_CHECKING:
     from core.agentpress.thread_manager import ThreadManager
-from daytona_sdk import AsyncSandbox
+from core.sandbox.docker_sandbox import LocalDockerSandbox as AsyncSandbox
 from core.sandbox.resolver import resolve_sandbox, SandboxInfo
 from core.utils.logger import logger
 from core.utils.files_utils import clean_path

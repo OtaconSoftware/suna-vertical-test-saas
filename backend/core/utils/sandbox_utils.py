@@ -3,7 +3,7 @@
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
-from daytona_sdk import AsyncSandbox
+from core.sandbox.docker_sandbox import LocalDockerSandbox as AsyncSandbox
 from core.utils.logger import logger
 from core.utils.files_utils import normalize_filename
 

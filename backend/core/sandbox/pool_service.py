@@ -5,7 +5,8 @@ from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, field
 
-from daytona_sdk import SessionExecuteRequest, SandboxState
+from core.sandbox.docker_compat import SessionExecuteRequest
+from core.sandbox.docker_sandbox import SandboxState
 
 from core.utils.logger import logger
 from core.sandbox.pool_config import get_pool_config, SandboxPoolConfig

@@ -341,7 +341,7 @@ async def start_agent_run(
     elif agent_config and agent_config.get('model'):
         effective_model = agent_config['model']
     else:
-        effective_model = "kortix/basic"
+        effective_model = "otacon/basic"
     
     if not is_new_thread and not project_id:
         from core.threads import repo as threads_repo
@@ -658,6 +658,14 @@ async def _background_setup_and_execute(
         log_run_start(agent_run_id, thread_id)
         
         db_task = asyncio.create_task(do_db_writes())
+
+        # Merge QA metadata into agent_config so the coordinator can read it
+        if metadata:
+            if not agent_config:
+                agent_config = {}
+            if metadata.get('max_steps'):
+                agent_config['max_steps'] = metadata['max_steps']
+
         logger.info(f"✅ [BG] Starting agent execution")
         
         cleanup_reason = None
@@ -774,7 +782,7 @@ async def unified_agent_start(
     elif model_name != "mock-ai":
         model_name = model_manager.resolve_model_id(model_name)
 
-    if model_name in ("kortix/basic", "kortix-basic") and config.ENV_MODE != EnvMode.LOCAL:
+    if model_name in ("otacon/basic", "otacon-basic") and config.ENV_MODE != EnvMode.LOCAL:
         from core.billing.subscriptions import subscription_service
         from core.cache.runtime_cache import get_cached_tier_info
         tier_info = await get_cached_tier_info(account_id) or await subscription_service.get_user_subscription_tier(account_id)

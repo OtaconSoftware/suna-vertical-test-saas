@@ -343,6 +343,7 @@ allow_origin_regex = r"https://([a-z0-9-]+\.)?kortix\.com|https://.*-kortixai\.v
 if config.ENV_MODE == EnvMode.LOCAL:
     allowed_origins.append("http://localhost:3000")
     allowed_origins.append("http://127.0.0.1:3000")
+    allowed_origins.append("http://46.225.104.202:3000")
 
 # Add staging-specific origins
 if config.ENV_MODE == EnvMode.STAGING:

@@ -69,7 +69,8 @@ class BrowserAutomation {
                             "--no-sandbox",
                             "--disable-setuid-sandbox",
                             "--disable-dev-shm-usage",
-                            "--disable-gpu"
+                            "--disable-gpu",
+                            "--ignore-certificate-errors"
                         ]
                     }
                 });

@@ -12,7 +12,8 @@ import httpx
 from fastapi import FastAPI, UploadFile, File, HTTPException, APIRouter, Form, Depends, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import Response
 from pydantic import BaseModel
-from daytona_sdk import AsyncSandbox, SessionExecuteRequest
+from core.sandbox.docker_sandbox import LocalDockerSandbox as AsyncSandbox
+from core.sandbox.docker_compat import SessionExecuteRequest, PtySize
 
 from core.sandbox.sandbox import get_or_start_sandbox, delete_sandbox, create_sandbox, daytona
 from core.utils.logger import logger
@@ -2416,7 +2417,6 @@ async def websocket_pty_terminal(
         
         sandbox = await get_sandbox_by_id_safely(client, sandbox_id)
         
-        from daytona_sdk.common.pty import PtySize
         import uuid
         
         session_id = f"terminal-{uuid.uuid4().hex[:8]}"

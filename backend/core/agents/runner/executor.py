@@ -198,6 +198,14 @@ async def execute_agent_run(
 
         logger.info(f"✅ Agent run completed: {agent_run_id} | status={final_status}")
 
+        # Process QA report if this was a QA test run
+        if final_status in ("completed", "stopped"):
+            try:
+                from core.agents.qa_report_parser import process_completed_agent_run
+                await process_completed_agent_run(agent_run_id, thread_id)
+            except Exception as qa_err:
+                logger.warning(f"QA report processing failed for {agent_run_id}: {qa_err}")
+
     except Exception as e:
         logger.error(f"Error in agent run {agent_run_id}: {e}", exc_info=True)
         await update_agent_run_status(agent_run_id, "failed", error=str(e), account_id=account_id)
