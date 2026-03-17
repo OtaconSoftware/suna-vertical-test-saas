@@ -665,7 +665,7 @@ async def list_projects(
                    COUNT(tr.report_id) as total_tests
             FROM projects p
             LEFT JOIN test_reports tr ON tr.project_id = p.project_id
-            WHERE p.account_id = :uid AND p.project_type = qa
+            WHERE p.account_id = :uid AND p.project_type = 'qa'
             GROUP BY p.project_id, p.name, p.site_url, p.context, p.test_summary,
                      p.created_at, p.updated_at
             ORDER BY p.updated_at DESC
