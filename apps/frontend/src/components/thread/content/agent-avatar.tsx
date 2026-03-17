@@ -89,14 +89,7 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
         )}
         style={{ width: size, height: size, ...borderRadiusStyle }}
       >
-        <span
-          role="img"
-          aria-label="Breakit"
-          className="flex-shrink-0 leading-none"
-          style={{ fontSize: `${size * 0.55}px` }}
-        >
-          🧪
-        </span>
+        <img src="/otacon-logo.svg" alt="Otacon" style={{ width: size * 0.7, height: size * 0.7 }} className="flex-shrink-0" />
       </div>
     );
   }
