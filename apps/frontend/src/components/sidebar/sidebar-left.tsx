@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Library, Menu, Plus, Zap, MessageCircle, PanelLeftOpen, PanelLeftClose, Search, Users, FolderOpen, ClipboardCheck } from 'lucide-react';
+import { Library, Menu, Plus, Zap, MessageCircle, PanelLeftOpen, PanelLeftClose, Search, Users, FolderOpen, ClipboardCheck, FolderKanban } from 'lucide-react';
 
 import { NavAgents } from '@/components/sidebar/nav-agents';
 import { NavWorkers } from '@/components/sidebar/nav-workers';
@@ -139,6 +139,7 @@ export function SidebarLeft({
     return { isOnLibrary: false, isOnThread: false };
   }, [pathname]);
   const isOnTestHistory = pathname === '/test-history';
+  const isOnProjects = pathname?.startsWith('/qa-projects') ?? false;
 
   // Update active view based on pathname (Files is independent, not a view)
   useEffect(() => {
@@ -456,28 +457,28 @@ export function SidebarLeft({
               </Button>
             </div>
 
-            {/* Test History link */}
+            {/* Projects link */}
             <div className="w-full">
               <Button
                 variant="ghost"
                 size="sm"
                 className={cn(
                   "w-full shadow-none justify-start h-10 px-3 hover:text-foreground",
-                  isOnTestHistory 
+                  isOnProjects 
                     ? "bg-card border-[1.5px] border-border text-foreground" 
                     : "text-muted-foreground"
                 )}
                 asChild
               >
                 <Link
-                  href="/test-history"
+                  href="/qa-projects"
                   onClick={() => {
                     if (isMobile) setOpenMobile(false);
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <ClipboardCheck className="h-4 w-4" />
-                    Test History
+                    <FolderKanban className="h-4 w-4" />
+                    Projects
                   </div>
                 </Link>
               </Button>
@@ -490,7 +491,9 @@ export function SidebarLeft({
                 size="sm"
                 className={cn(
                   "w-full shadow-none justify-start h-10 px-3 hover:text-foreground",
-                  "text-muted-foreground"
+                  isOnTestHistory 
+                    ? "bg-card border-[1.5px] border-border text-foreground" 
+                    : "text-muted-foreground"
                 )}
                 asChild
               >

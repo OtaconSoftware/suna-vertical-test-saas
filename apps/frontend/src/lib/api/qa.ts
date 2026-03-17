@@ -206,3 +206,79 @@ export async function getProjectReports(
 
   return response.data || [];
 }
+
+
+// ═══════════════════════════════════════════════════════
+// PROJECTS
+// ═══════════════════════════════════════════════════════
+
+export interface ProjectListItem {
+  project_id: string;
+  name: string;
+  site_url: string | null;
+  total_tests: number;
+  last_score: number | null;
+  scores: number[];
+  known_issues: string[];
+  recurring_issues: string[];
+  notes_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProjectDetailResponse {
+  project_id: string;
+  name: string;
+  site_url: string | null;
+  description: string | null;
+  context: {
+    site_url?: string;
+    domain?: string;
+    site_description?: string;
+    tech_stack?: string;
+    notes?: string[];
+    known_issues?: string[];
+  };
+  test_summary: {
+    total_runs?: number;
+    scores?: number[];
+    recurring_issues?: string[];
+  };
+  total_tests: number;
+  reports: TestReportListItem[];
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * List all QA projects
+ */
+export async function getProjects(options?: {
+  limit?: number;
+  offset?: number;
+}): Promise<ProjectListItem[]> {
+  const params = new URLSearchParams();
+  if (options?.limit) params.append('limit', options.limit.toString());
+  if (options?.offset) params.append('offset', options.offset.toString());
+  const qs = params.toString();
+  const url = `/qa/projects${qs ? `?${qs}` : ''}`;
+  const response = await backendApi.get<ProjectListItem[]>(url, { showErrors: true });
+  if (response.error) {
+    handleApiError(response.error, { operation: 'fetch projects' });
+    throw new Error(response.error.message || 'Failed to fetch projects');
+  }
+  return response.data || [];
+}
+
+/**
+ * Get project detail with reports and knowledge
+ */
+export async function getProjectDetail(projectId: string): Promise<ProjectDetailResponse> {
+  const response = await backendApi.get<ProjectDetailResponse>(`/qa/projects/${projectId}`, { showErrors: true });
+  if (response.error) {
+    handleApiError(response.error, { operation: 'fetch project detail', resource: projectId });
+    throw new Error(response.error.message || 'Failed to fetch project detail');
+  }
+  if (!response.data) throw new Error('Project not found');
+  return response.data;
+}

@@ -617,3 +617,170 @@ async def get_project_context(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ═══════════════════════════════════════════════════════
+# PROJECTS LIST & DETAIL
+# ═══════════════════════════════════════════════════════
+
+class ProjectListItem(BaseModel):
+    project_id: str
+    name: str
+    site_url: Optional[str]
+    total_tests: int
+    last_score: Optional[int]
+    scores: List[int]
+    known_issues: List[str]
+    recurring_issues: List[str]
+    notes_count: int
+    created_at: datetime
+    updated_at: datetime
+
+
+class ProjectDetailResponse(BaseModel):
+    project_id: str
+    name: str
+    site_url: Optional[str]
+    description: Optional[str]
+    context: dict
+    test_summary: dict
+    total_tests: int
+    reports: List[TestReportListItem]
+    created_at: datetime
+    updated_at: datetime
+
+
+@router.get("/projects", response_model=List[ProjectListItem], summary="List all QA Projects")
+async def list_projects(
+    user_id: str = Depends(verify_and_get_user_id_from_jwt),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+):
+    """List all QA projects for the authenticated user."""
+    try:
+        projects = await execute(
+            """
+            SELECT p.project_id, p.name, p.site_url, p.context, p.test_summary,
+                   p.created_at, p.updated_at,
+                   COUNT(tr.report_id) as total_tests
+            FROM projects p
+            LEFT JOIN test_reports tr ON tr.project_id = p.project_id
+            WHERE p.account_id = :uid AND p.project_type = qa
+            GROUP BY p.project_id, p.name, p.site_url, p.context, p.test_summary,
+                     p.created_at, p.updated_at
+            ORDER BY p.updated_at DESC
+            LIMIT :lim OFFSET :off
+            """,
+            {"uid": user_id, "lim": limit, "off": offset}
+        )
+
+        result = []
+        for p in projects:
+            context = p.get("context") or {}
+            summary = p.get("test_summary") or {}
+            if isinstance(context, str):
+                try: context = json.loads(context)
+                except: context = {}
+            if isinstance(summary, str):
+                try: summary = json.loads(summary)
+                except: summary = {}
+
+            scores = summary.get("scores", [])
+            known_issues = context.get("known_issues", [])
+            recurring_issues = summary.get("recurring_issues", [])
+            notes = context.get("notes", [])
+
+            result.append(ProjectListItem(
+                project_id=str(p["project_id"]),
+                name=p["name"],
+                site_url=p.get("site_url"),
+                total_tests=p.get("total_tests", 0),
+                last_score=scores[-1] if scores else None,
+                scores=scores[-10:],
+                known_issues=known_issues[:10],
+                recurring_issues=recurring_issues[:10],
+                notes_count=len(notes),
+                created_at=p["created_at"],
+                updated_at=p["updated_at"],
+            ))
+
+        return result
+    except Exception as e:
+        logger.error(f"Error listing projects: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/projects/{project_id}", response_model=ProjectDetailResponse, summary="Get Project Detail")
+async def get_project_detail(
+    project_id: str,
+    user_id: str = Depends(verify_and_get_user_id_from_jwt),
+    report_limit: int = Query(50, ge=1, le=200),
+):
+    """Get full project detail with all test reports and accumulated knowledge."""
+    try:
+        project = await execute_one(
+            """SELECT project_id, name, site_url, description, context, test_summary,
+                      created_at, updated_at
+               FROM projects WHERE project_id = :pid AND account_id = :uid""",
+            {"pid": project_id, "uid": user_id}
+        )
+        if not project:
+            raise HTTPException(status_code=404, detail="Project not found")
+
+        context = project.get("context") or {}
+        summary = project.get("test_summary") or {}
+        if isinstance(context, str):
+            try: context = json.loads(context)
+            except: context = {}
+        if isinstance(summary, str):
+            try: summary = json.loads(summary)
+            except: summary = {}
+
+        # Get all reports for this project
+        reports = await execute(
+            """SELECT report_id, thread_id, project_id, test_url, test_type, viewport,
+                      status, score, total_tests, passed, failed, warnings, created_at, updated_at
+               FROM test_reports
+               WHERE project_id = :pid AND account_id = :uid
+               ORDER BY created_at DESC
+               LIMIT :lim""",
+            {"pid": project_id, "uid": user_id, "lim": report_limit}
+        )
+
+        report_list = [
+            TestReportListItem(
+                report_id=str(r["report_id"]),
+                thread_id=str(r["thread_id"]) if r.get("thread_id") else None,
+                project_id=str(r["project_id"]) if r.get("project_id") else None,
+                test_url=r["test_url"],
+                test_type=r["test_type"],
+                viewport=r.get("viewport", "desktop"),
+                status=r["status"],
+                score=r.get("score"),
+                total_tests=r.get("total_tests", 0),
+                passed=r.get("passed", 0),
+                failed=r.get("failed", 0),
+                warnings=r.get("warnings", 0),
+                created_at=r["created_at"],
+                updated_at=r["updated_at"],
+            )
+            for r in reports
+        ]
+
+        return ProjectDetailResponse(
+            project_id=str(project["project_id"]),
+            name=project["name"],
+            site_url=project.get("site_url"),
+            description=project.get("description"),
+            context=context,
+            test_summary=summary,
+            total_tests=len(report_list),
+            reports=report_list,
+            created_at=project["created_at"],
+            updated_at=project["updated_at"],
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting project detail: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
