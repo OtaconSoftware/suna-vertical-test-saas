@@ -59,7 +59,7 @@ async def get_or_create_project(user_id: str, url: str, project_id: Optional[str
                 )
             return dict(existing)
 
-    # Look for existing project by site_url
+    # Look for existing project by exact site_url
     existing = await execute_one(
         """
         SELECT project_id, name, context, test_summary
@@ -71,6 +71,26 @@ async def get_or_create_project(user_id: str, url: str, project_id: Optional[str
     )
     if existing:
         return dict(existing)
+
+    # Fallback: match by root domain (e.g. docs.example.com -> example.com)
+    parts = domain.split('.')
+    if len(parts) > 2:
+        # Try progressively shorter domain suffixes
+        for i in range(1, len(parts) - 1):
+            root = '.'.join(parts[i:])
+            root_url = f"{parsed.scheme}://{root}" if parsed.scheme else f"https://{root}"
+            existing = await execute_one(
+                """
+                SELECT project_id, name, context, test_summary
+                FROM projects
+                WHERE account_id = :uid AND site_url = :url AND project_type = 'qa'
+                ORDER BY created_at DESC LIMIT 1
+                """,
+                {"uid": user_id, "url": root_url}
+            )
+            if existing:
+                logger.info(f"Subdomain match: {domain} -> {root} (project {existing['project_id']})")
+                return dict(existing)
 
     # Create new project
     new_id = str(uuid.uuid4())
