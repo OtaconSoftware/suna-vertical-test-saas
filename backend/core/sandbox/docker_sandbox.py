@@ -138,6 +138,92 @@ def _demux_docker_output(data: bytes) -> str:
     return ''.join(output)
 
 
+
+class FileSystemProxy:
+    """Mimics AsyncSandbox.fs using Docker Engine API for file operations."""
+    
+    def __init__(self, container_name: str):
+        self.container_name = container_name
+    
+    async def list_files(self, path: str = "/") -> list:
+        """List files in the sandbox container."""
+        async with _docker_client() as client:
+            cmd = f"find {path} -maxdepth 1 -not -path {path} -printf '%T@ %s %y %p\n' 2>/dev/null | sort -rn"
+            create_resp = await client.post(
+                f"/containers/{self.container_name}/exec",
+                json={"Cmd": ["bash", "-c", cmd], "AttachStdout": True, "AttachStderr": True}
+            )
+            if create_resp.status_code != 201:
+                return []
+            exec_id = create_resp.json()["Id"]
+            start_resp = await client.post(
+                f"/exec/{exec_id}/start",
+                json={"Detach": False, "Tty": False},
+                timeout=15,
+            )
+            output = _demux_docker_output(start_resp.content)
+            
+            files = []
+            for line in output.strip().split("\n"):
+                if not line.strip():
+                    continue
+                parts = line.split(None, 3)
+                if len(parts) >= 4:
+                    timestamp, size, ftype, fpath = parts
+                    files.append(type("FileInfo", (), {
+                        "name": fpath.split("/")[-1],
+                        "path": fpath,
+                        "is_dir": ftype == "d",
+                        "size": int(size) if size.isdigit() else 0,
+                    })())
+            return files
+    
+    async def upload_file(self, content: bytes, path: str):
+        """Upload file content to sandbox container."""
+        import base64 as b64
+        if isinstance(content, str):
+            content = content.encode("utf-8")
+        encoded = b64.b64encode(content).decode("ascii")
+        
+        async with _docker_client() as client:
+            cmd = f"mkdir -p $(dirname '{path}') && echo '{encoded}' | base64 -d > '{path}'"
+            create_resp = await client.post(
+                f"/containers/{self.container_name}/exec",
+                json={"Cmd": ["bash", "-c", cmd], "AttachStdout": True, "AttachStderr": True}
+            )
+            if create_resp.status_code != 201:
+                raise Exception(f"Failed to upload file: {create_resp.text}")
+            exec_id = create_resp.json()["Id"]
+            await client.post(f"/exec/{exec_id}/start", json={"Detach": False, "Tty": False}, timeout=15)
+    
+    async def download_file(self, path: str) -> bytes:
+        """Download file content from sandbox container."""
+        async with _docker_client() as client:
+            cmd = f"cat '{path}'"
+            create_resp = await client.post(
+                f"/containers/{self.container_name}/exec",
+                json={"Cmd": ["bash", "-c", cmd], "AttachStdout": True, "AttachStderr": True}
+            )
+            if create_resp.status_code != 201:
+                raise Exception(f"Failed to download file: {create_resp.text}")
+            exec_id = create_resp.json()["Id"]
+            start_resp = await client.post(f"/exec/{exec_id}/start", json={"Detach": False, "Tty": False}, timeout=30)
+            output = _demux_docker_output(start_resp.content)
+            return output.encode("utf-8")
+    
+    async def delete_file(self, path: str):
+        """Delete a file in the sandbox container."""
+        async with _docker_client() as client:
+            cmd = f"rm -rf '{path}'"
+            create_resp = await client.post(
+                f"/containers/{self.container_name}/exec",
+                json={"Cmd": ["bash", "-c", cmd], "AttachStdout": True, "AttachStderr": True}
+            )
+            if create_resp.status_code != 201:
+                return
+            exec_id = create_resp.json()["Id"]
+            await client.post(f"/exec/{exec_id}/start", json={"Detach": False, "Tty": False}, timeout=10)
+
 class LocalDockerSandbox:
     """Local Docker sandbox mimicking Daytona AsyncSandbox interface."""
     
@@ -146,6 +232,7 @@ class LocalDockerSandbox:
         self._id = sandbox_id
         self.base_port = base_port
         self.process = ProcessProxy(container_name)
+        self.fs = FileSystemProxy(container_name)
         self.state = SandboxState(SandboxState.STARTED)
         self._port_map = {
             8004: base_port,
