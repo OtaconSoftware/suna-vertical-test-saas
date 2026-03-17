@@ -21,8 +21,8 @@ export const EmptyState = memo(function EmptyState({ t }: EmptyStateProps) {
           <Image
             src="/otacon-computer-white.svg"
             alt="Otacon Computer"
-            width={240}
-            height={27}
+            width={180}
+            height={22}
             className="hidden dark:block relative z-10 "
             priority
           />
@@ -31,8 +31,8 @@ export const EmptyState = memo(function EmptyState({ t }: EmptyStateProps) {
           <Image
             src="/otacon-computer-black.svg"
             alt="Otacon Computer"
-            width={240}
-            height={27}
+            width={180}
+            height={22}
             className="block dark:hidden relative z-10"
             priority
           />
