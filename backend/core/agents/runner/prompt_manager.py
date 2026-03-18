@@ -805,9 +805,8 @@ Multiple parallel tool calls:
                 return result.data if result.data else None
 
             async def fetch_summaries():
-                from core.threads.summary_service import get_summary_service
-                summary_service = get_summary_service()
-                summaries = await summary_service.get_project_summaries(project_id, limit=5)
+                from core.threads.summary_service import get_project_summaries
+                summaries = await get_project_summaries(project_id, limit=5)
                 return summaries
 
             project, summaries = await asyncio.gather(fetch_project(), fetch_summaries())

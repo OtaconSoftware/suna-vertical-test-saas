@@ -473,7 +473,7 @@ async def get_project_summaries(
 
     try:
         from core.threads import repo as threads_repo
-        from core.threads.summary_service import get_summary_service
+        from core.threads import summary_service
 
         project = await threads_repo.get_project_by_id(project_id)
         if not project:
@@ -486,7 +486,7 @@ async def get_project_summaries(
             if not has_access:
                 raise HTTPException(status_code=403, detail="Not authorized to access this project")
 
-        summary_service = get_summary_service()
+        # summary_service imported above
         summaries = await summary_service.get_project_summaries(project_id, limit=limit)
 
         logger.debug(f"Found {len(summaries)} summaries for project {project_id}")
@@ -509,7 +509,7 @@ async def generate_thread_summary(
 
     try:
         from core.threads import repo as threads_repo
-        from core.threads.summary_service import get_summary_service
+        from core.threads import summary_service
 
         thread = await threads_repo.get_thread_by_id(thread_id)
         if not thread:
@@ -528,7 +528,7 @@ async def generate_thread_summary(
 
         agent_id = thread.get('agent_id')
 
-        summary_service = get_summary_service()
+        # summary_service imported above
         summary = await summary_service.generate_thread_summary(
             thread_id=thread_id,
             project_id=project_id,
