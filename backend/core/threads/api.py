@@ -253,7 +253,8 @@ async def get_project_threads(
 @router.post("/projects/{project_id}/threads", response_model=CreateThreadResponse, summary="Create Thread in Project", operation_id="create_thread_in_project")
 async def create_thread_in_project(
     project_id: str,
-    user_id: str = Depends(verify_and_get_user_id_from_jwt)
+    user_id: str = Depends(verify_and_get_user_id_from_jwt),
+    agent_id: Optional[str] = Body(None, embed=True)
 ):
     from core.threads.repo import get_project_access, create_thread as repo_create_thread
     
@@ -292,7 +293,8 @@ async def create_thread_in_project(
             thread_id=thread_id,
             project_id=project_id,
             account_id=account_id,
-            name="New Chat"
+            name="New Chat",
+            agent_id=agent_id
         )
         
         if not thread_result:
@@ -401,12 +403,148 @@ async def delete_project(
         
         logger.debug(f"Successfully deleted project {project_id} and all associated data")
         return {"message": "Project deleted successfully", "project_id": project_id, "threads_deleted": threads_deleted_count}
-        
+
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Error deleting project {project_id}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to delete project: {str(e)}")
+
+
+@router.patch("/projects/{project_id}", summary="Update Project", operation_id="update_project")
+async def update_project(
+    project_id: str,
+    description: Optional[str] = Body(None),
+    context_notes: Optional[str] = Body(None),
+    user_id: str = Depends(verify_and_get_user_id_from_jwt)
+):
+    """Update project description and context notes."""
+    logger.debug(f"Updating project: {project_id}")
+    client = await db.client
+
+    try:
+        from core.threads import repo as threads_repo
+
+        project = await threads_repo.get_project_by_id(project_id)
+        if not project:
+            raise HTTPException(status_code=404, detail="Project not found")
+
+        project_account_id = project.get('account_id')
+
+        if project_account_id != user_id:
+            has_access = await threads_repo.check_account_user_access(user_id, project_account_id)
+            if not has_access:
+                raise HTTPException(status_code=403, detail="Not authorized to update this project")
+
+        # Build update dict with only provided fields
+        update_data = {}
+        if description is not None:
+            update_data['description'] = description
+        if context_notes is not None:
+            update_data['context_notes'] = context_notes
+
+        if not update_data:
+            raise HTTPException(status_code=400, detail="No fields to update")
+
+        # Update project
+        result = await client.table('projects').update(update_data).eq('project_id', project_id).execute()
+
+        if not result.data:
+            raise HTTPException(status_code=500, detail="Failed to update project")
+
+        logger.debug(f"Successfully updated project {project_id}")
+        return result.data[0]
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating project {project_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to update project: {str(e)}")
+
+
+@router.get("/projects/{project_id}/summaries", summary="Get Project Thread Summaries", operation_id="get_project_summaries")
+async def get_project_summaries(
+    project_id: str,
+    limit: int = Query(5, ge=1, le=20),
+    user_id: str = Depends(verify_and_get_user_id_from_jwt)
+):
+    """Get recent thread summaries for a project."""
+    logger.debug(f"Fetching summaries for project: {project_id}")
+
+    try:
+        from core.threads import repo as threads_repo
+        from core.threads.summary_service import get_summary_service
+
+        project = await threads_repo.get_project_by_id(project_id)
+        if not project:
+            raise HTTPException(status_code=404, detail="Project not found")
+
+        project_account_id = project.get('account_id')
+
+        if project_account_id != user_id:
+            has_access = await threads_repo.check_account_user_access(user_id, project_account_id)
+            if not has_access:
+                raise HTTPException(status_code=403, detail="Not authorized to access this project")
+
+        summary_service = get_summary_service()
+        summaries = await summary_service.get_project_summaries(project_id, limit=limit)
+
+        logger.debug(f"Found {len(summaries)} summaries for project {project_id}")
+        return {"summaries": summaries, "total": len(summaries)}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching summaries for project {project_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch summaries: {str(e)}")
+
+
+@router.post("/threads/{thread_id}/summary", summary="Generate Thread Summary", operation_id="generate_thread_summary")
+async def generate_thread_summary(
+    thread_id: str,
+    user_id: str = Depends(verify_and_get_user_id_from_jwt)
+):
+    """Manually trigger summary generation for a thread."""
+    logger.debug(f"Generating summary for thread: {thread_id}")
+
+    try:
+        from core.threads import repo as threads_repo
+        from core.threads.summary_service import get_summary_service
+
+        thread = await threads_repo.get_thread_by_id(thread_id)
+        if not thread:
+            raise HTTPException(status_code=404, detail="Thread not found")
+
+        # Check access
+        thread_account_id = thread.get('account_id')
+        if thread_account_id != user_id:
+            has_access = await threads_repo.check_account_user_access(user_id, thread_account_id)
+            if not has_access:
+                raise HTTPException(status_code=403, detail="Not authorized to access this thread")
+
+        project_id = thread.get('project_id')
+        if not project_id:
+            raise HTTPException(status_code=400, detail="Thread has no associated project")
+
+        agent_id = thread.get('agent_id')
+
+        summary_service = get_summary_service()
+        summary = await summary_service.generate_thread_summary(
+            thread_id=thread_id,
+            project_id=project_id,
+            agent_id=agent_id,
+            is_auto=False
+        )
+
+        logger.debug(f"Successfully generated summary for thread {thread_id}")
+        return summary
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating summary for thread {thread_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to generate summary: {str(e)}")
+
 
 @router.get("/threads/{thread_id}", summary="Get Thread", operation_id="get_thread")
 async def get_thread(

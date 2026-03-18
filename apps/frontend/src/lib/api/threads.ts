@@ -194,7 +194,7 @@ export const getProjectThreads = async (projectId: string, page: number = 1, lim
 };
 
 // Create a thread in an existing project
-export const createThreadInProject = async (projectId: string): Promise<{ thread_id: string; project_id: string }> => {
+export const createThreadInProject = async (projectId: string, agentId?: string): Promise<{ thread_id: string; project_id: string }> => {
   const supabase = createClient();
 
   // If user is not logged in, redirect to login
@@ -205,12 +205,15 @@ export const createThreadInProject = async (projectId: string): Promise<{ thread
 
   const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+  const body = agentId ? { agent_id: agentId } : {};
+
   const response = await fetch(`${API_URL}/projects/${projectId}/threads`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${session.access_token}`,
     },
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {

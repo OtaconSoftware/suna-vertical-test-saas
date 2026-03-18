@@ -42,6 +42,7 @@ class PromptManager:
         user_context_task = PromptManager._with_timeout(PromptManager._fetch_user_context_data(user_id, client), 2.0, "User context")
         memory_task = PromptManager._fetch_user_memories(user_id, thread_id, client)
         file_task = PromptManager._fetch_file_context(thread_id)
+        project_context_task = PromptManager._fetch_project_context(thread_id, client)
         
         agent_id = agent_config.get('agent_id') if agent_config else None
         
@@ -69,16 +70,19 @@ class PromptManager:
         system_content = PromptManager._append_datetime_info(system_content)
         
         t5 = time.time()
-        kb_data, user_context_data, memory_data, file_data = await asyncio.gather(kb_task, user_context_task, memory_task, file_task)
-        logger.debug(f"⏱️ [PROMPT TIMING] parallel fetches (kb/user_context/memory/file): {(time.time() - t5) * 1000:.1f}ms")
+        kb_data, user_context_data, memory_data, file_data, project_context_data = await asyncio.gather(kb_task, user_context_task, memory_task, file_task, project_context_task)
+        logger.debug(f"⏱️ [PROMPT TIMING] parallel fetches (kb/user_context/memory/file/project_context): {(time.time() - t5) * 1000:.1f}ms")
         
         logger.info(f"⏱️ [PROMPT TIMING] Total build_system_prompt: {(time.time() - build_start) * 1000:.1f}ms")
         
         if kb_data:
             system_content += kb_data
-        
+
         if user_context_data:
             system_content += user_context_data
+
+        if project_context_data:
+            system_content += project_context_data
 
         # Add promotional messaging for free tier users using MiMo
         promo_content = await PromptManager._get_free_tier_promo(user_id)
@@ -754,10 +758,10 @@ Multiple parallel tool calls:
     async def _fetch_file_context(thread_id: Optional[str]) -> Optional[str]:
         if not thread_id:
             return None
-        
+
         try:
             from core.files import get_cached_file_context, format_file_context_for_agent
-            
+
             files = await get_cached_file_context(thread_id)
             if files:
                 formatted = format_file_context_for_agent(files)
@@ -765,9 +769,129 @@ Multiple parallel tool calls:
                 return formatted
         except Exception as e:
             logger.warning(f"Failed to fetch file context for {thread_id}: {e}")
-        
+
         return None
-    
+
+    @staticmethod
+    async def _fetch_project_context(thread_id: Optional[str], client) -> Optional[str]:
+        """
+        Fetch project context including description, context notes, and thread summaries.
+
+        Args:
+            thread_id: UUID of the current thread
+            client: Supabase client
+
+        Returns:
+            Formatted project context string or None
+        """
+        if not (thread_id and client):
+            return None
+
+        fetch_start = time.time()
+
+        try:
+            # Get thread to find project_id
+            thread_result = await client.table('threads').select('project_id').eq('thread_id', thread_id).single().execute()
+
+            if not thread_result.data or not thread_result.data.get('project_id'):
+                logger.debug(f"No project_id found for thread {thread_id}")
+                return None
+
+            project_id = thread_result.data['project_id']
+
+            # Fetch project details and summaries in parallel
+            async def fetch_project():
+                result = await client.table('projects').select('name, description, context_notes').eq('project_id', project_id).single().execute()
+                return result.data if result.data else None
+
+            async def fetch_summaries():
+                from core.threads.summary_service import get_summary_service
+                summary_service = get_summary_service()
+                summaries = await summary_service.get_project_summaries(project_id, limit=5)
+                return summaries
+
+            project, summaries = await asyncio.gather(fetch_project(), fetch_summaries())
+
+            if not project:
+                logger.debug(f"Project {project_id} not found")
+                return None
+
+            # Build project context section
+            context_parts = []
+            context_parts.append("\n\n=== PROJECT CONTEXT ===")
+            context_parts.append(f"Project: {project.get('name', 'Untitled')}")
+
+            if project.get('description'):
+                context_parts.append(f"\nDescription:\n{project['description']}")
+
+            if project.get('context_notes'):
+                context_parts.append(f"\nContext Notes:\n{project['context_notes']}")
+
+            # Add thread summaries
+            if summaries:
+                context_parts.append("\n\nRecent Activity (other threads):")
+
+                # Calculate approximate token count and limit
+                MAX_SUMMARY_TOKENS = 2000
+                total_chars = 0
+                included_summaries = []
+
+                for summary in summaries:
+                    # Skip current thread
+                    if summary.get('thread_id') == thread_id:
+                        continue
+
+                    summary_text = summary.get('summary_text', '')
+                    # Rough estimate: 4 chars per token
+                    estimated_tokens = len(summary_text) // 4
+
+                    if total_chars + estimated_tokens > MAX_SUMMARY_TOKENS:
+                        break
+
+                    included_summaries.append(summary)
+                    total_chars += estimated_tokens
+
+                for summary in included_summaries:
+                    thread_info = summary.get('threads', {})
+                    agent_info = summary.get('agents', {})
+                    created_at = summary.get('created_at', '')
+
+                    # Format timestamp
+                    import datetime as dt
+                    try:
+                        created = dt.datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                        now = dt.datetime.now(dt.timezone.utc)
+                        delta = now - created
+
+                        if delta.days > 0:
+                            time_ago = f"{delta.days}d ago"
+                        elif delta.seconds > 3600:
+                            time_ago = f"{delta.seconds // 3600}h ago"
+                        else:
+                            time_ago = f"{delta.seconds // 60}m ago"
+                    except:
+                        time_ago = "recently"
+
+                    agent_name = agent_info.get('name', 'Unknown Agent') if agent_info else 'Unknown Agent'
+                    summary_text = summary.get('summary_text', '')
+
+                    context_parts.append(f"\n- [{agent_name}, {time_ago}]: {summary_text}")
+
+            context_parts.append("\n=== END PROJECT CONTEXT ===\n")
+
+            context_str = '\n'.join(context_parts)
+
+            elapsed = (time.time() - fetch_start) * 1000
+            logger.info(f"⏱️ [TIMING] Project context: {elapsed:.1f}ms (project={project.get('name')}, summaries={len(summaries) if summaries else 0})")
+
+            return context_str
+
+        except Exception as e:
+            elapsed = (time.time() - fetch_start) * 1000
+            logger.warning(f"⏱️ [TIMING] Project context: {elapsed:.1f}ms (error: {e})")
+            logger.warning(f"Failed to fetch project context for thread {thread_id}: {e}")
+            return None
+
     @staticmethod
     def _log_prompt_stats(system_content: str):
         final_prompt_size = len(system_content)

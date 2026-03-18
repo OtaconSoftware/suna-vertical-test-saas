@@ -175,25 +175,27 @@ async def create_thread(
     thread_id: str,
     project_id: str,
     account_id: str,
-    name: str = "New Chat"
+    name: str = "New Chat",
+    agent_id: Optional[str] = None
 ) -> Dict[str, Any]:
     from core.services.db import execute_one
     from datetime import datetime, timezone
-    
+
     sql = """
-    INSERT INTO threads (thread_id, project_id, account_id, name, created_at)
-    VALUES (:thread_id, :project_id, :account_id, :name, :created_at)
-    RETURNING thread_id, project_id, account_id, name, created_at, updated_at
+    INSERT INTO threads (thread_id, project_id, account_id, name, agent_id, created_at)
+    VALUES (:thread_id, :project_id, :account_id, :name, :agent_id, :created_at)
+    RETURNING thread_id, project_id, account_id, name, agent_id, created_at, updated_at
     """
-    
+
     result = await execute_one(sql, {
         "thread_id": thread_id,
         "project_id": project_id,
         "account_id": account_id,
         "name": name,
+        "agent_id": agent_id,
         "created_at": datetime.now(timezone.utc)
     }, commit=True)
-    
+
     return dict(result) if result else None
 
 
