@@ -282,3 +282,33 @@ export async function getProjectDetail(projectId: string): Promise<ProjectDetail
   if (!response.data) throw new Error('Project not found');
   return response.data;
 }
+
+/**
+ * Get project context (description and context_notes)
+ */
+export async function getProjectContext(projectId: string): Promise<{ description: string | null; context_notes: string | null }> {
+  const response = await backendApi.get<{ description: string | null; context_notes: string | null }>(`/projects/${projectId}`, { showErrors: true });
+  if (response.error) {
+    handleApiError(response.error, { operation: 'fetch project context', resource: projectId });
+    throw new Error(response.error.message || 'Failed to fetch project context');
+  }
+  if (!response.data) throw new Error('Project not found');
+  return response.data;
+}
+
+/**
+ * Update project context (description and/or context_notes)
+ */
+export async function updateProjectContext(projectId: string, data: { description?: string; context_notes?: string }): Promise<{ message: string }> {
+  const response = await backendApi.patch<{ message: string }>(
+    `/projects/${projectId}`,
+    data,
+    { showErrors: true }
+  );
+  if (response.error) {
+    handleApiError(response.error, { operation: 'update project context', resource: projectId });
+    throw new Error(response.error.message || 'Failed to update project context');
+  }
+  if (!response.data) throw new Error('No response from update');
+  return response.data;
+}

@@ -19,6 +19,8 @@ export type ThreadWithProject = {
   updatedAt: string;
   // Icon system field for thread categorization
   iconName?: string | null;
+  // Agent ID for multi-agent support
+  agentId?: string | null;
 };
 
 export const processThreadsWithProjects = (

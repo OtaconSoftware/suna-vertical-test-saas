@@ -60,6 +60,26 @@ import { useDeleteOperation } from '@/stores/delete-operation-store';
 import { useStartNavigation } from '@/stores/thread-navigation-store';
 import { useUpdateProject } from '@/hooks/threads/use-project';
 import { RenameProjectDialog } from '@/components/sidebar/rename-project-dialog';
+import { useAgents } from '@/hooks/agents/use-agents';
+
+// Helper function to generate a color from a string
+function stringToColor(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const colors = [
+    'bg-blue-500',
+    'bg-green-500',
+    'bg-purple-500',
+    'bg-orange-500',
+    'bg-pink-500',
+    'bg-teal-500',
+    'bg-indigo-500',
+    'bg-yellow-500',
+  ];
+  return colors[Math.abs(hash) % colors.length];
+}
 
 // Date group header component - shared across tabs
 const DateGroupHeader: React.FC<{ dateGroup: string }> = ({ dateGroup }) => {
@@ -85,6 +105,7 @@ interface ThreadItemCardProps {
   onCreateNewChat?: (projectId: string) => Promise<void>;
   isCreatingChat?: boolean;
   mode: 'chats' | 'library';
+  agentName?: string;
 }
 
 // Unified thread item card - used by both tabs
@@ -100,6 +121,7 @@ const ThreadItemCard: React.FC<ThreadItemCardProps> = ({
   onCreateNewChat,
   isCreatingChat = false,
   mode,
+  agentName,
 }) => {
   const [isHoveringCard, setIsHoveringCard] = useState(false);
 
@@ -108,11 +130,16 @@ const ThreadItemCard: React.FC<ThreadItemCardProps> = ({
   };
 
   const CardWrapper = mode === 'chats' ? Link : 'div';
-  const cardProps = mode === 'chats' 
+  const cardProps = mode === 'chats'
     ? { href: thread.url, prefetch: true, onClick: handleCardClick }
     : { onClick: handleCardClick };
 
   const threadUrl = thread.url;
+
+  // Show agent badge if agent name is available and not the default Breakit agent
+  const showAgentBadge = agentName && agentName.toLowerCase() !== 'breakit';
+  const agentInitial = agentName ? agentName.charAt(0).toUpperCase() : '';
+  const agentColor = agentName ? stringToColor(agentName) : 'bg-gray-500';
 
   return (
     <SpotlightCard
@@ -143,6 +170,15 @@ const ThreadItemCard: React.FC<ThreadItemCardProps> = ({
             )}
             {isAgentRunning && (
               <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border border-background animate-pulse" />
+            )}
+            {/* Agent badge */}
+            {showAgentBadge && (
+              <div className={cn(
+                "absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border border-background flex items-center justify-center text-[8px] font-bold text-white",
+                agentColor
+              )}>
+                {agentInitial}
+              </div>
             )}
           </div>
           
@@ -285,6 +321,20 @@ export function SidebarThreadList({ mode }: SidebarThreadListProps) {
     limit: mode === 'library' ? 50 : pageLimit,
   });
 
+  // Fetch agents for agent badges
+  const { data: agentsData } = useAgents();
+
+  // Create a map of agent IDs to agent names
+  const agentMap = useMemo(() => {
+    const map = new Map<string, string>();
+    if (agentsData?.agents) {
+      agentsData.agents.forEach(agent => {
+        map.set(agent.agent_id, agent.name);
+      });
+    }
+    return map;
+  }, [agentsData]);
+
   const { mutate: deleteThreadMutation, isPending: isDeletingSingle } = useDeleteThread();
   const {
     mutate: deleteMultipleThreadsMutation,
@@ -339,6 +389,7 @@ export function SidebarThreadList({ mode }: SidebarThreadListProps) {
         url: `/projects/${projectId}/thread/${thread.thread_id}`,
         updatedAt: updatedAt,
         iconName: iconName,
+        agentId: thread.agent_id,
       });
     }
 
@@ -797,6 +848,7 @@ export function SidebarThreadList({ mode }: SidebarThreadListProps) {
                             const isThreadLoading = loadingThreadId === singleThread.threadId;
                             const isAgentRunning =
                               agentStatusMap.get(singleThread.threadId) || false;
+                            const agentName = singleThread.agentId ? agentMap.get(singleThread.agentId) : undefined;
 
                             return (
                               <ThreadItemCard
@@ -812,6 +864,7 @@ export function SidebarThreadList({ mode }: SidebarThreadListProps) {
                                 onCreateNewChat={mode === 'chats' ? handleCreateNewChat : undefined}
                                 isCreatingChat={isCreatingChat}
                                 mode={mode}
+                                agentName={agentName}
                               />
                             );
                           }

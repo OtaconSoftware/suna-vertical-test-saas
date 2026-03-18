@@ -1,15 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
-import { getProjectDetail, getReport } from '@/lib/api/qa';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getProjectDetail, getReport, getProjectContext, updateProjectContext } from '@/lib/api/qa';
 import type { ProjectDetailResponse, TestReportListItem, TestReportDetail, TestBug } from '@/lib/api/qa';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
 import {
   ArrowLeft,
   ExternalLink,
@@ -29,6 +30,8 @@ import {
   XCircle,
   AlertCircle,
   Lightbulb,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -94,6 +97,108 @@ function ScoreChart({ scores }: { scores: number[] }) {
         </g>
       ))}
     </svg>
+  );
+}
+
+function ProjectContextSection({ projectId }: { projectId: string }) {
+  const queryClient = useQueryClient();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [description, setDescription] = useState('');
+  const [contextNotes, setContextNotes] = useState('');
+
+  // Fetch project context
+  const { data: projectContext, isLoading } = useQuery({
+    queryKey: ['project-context', projectId],
+    queryFn: () => getProjectContext(projectId),
+  });
+
+  // Update local state when data is fetched
+  React.useEffect(() => {
+    if (projectContext) {
+      setDescription(projectContext.description || '');
+      setContextNotes(projectContext.context_notes || '');
+      // Auto-expand if either field has content
+      if (projectContext.description || projectContext.context_notes) {
+        setIsExpanded(true);
+      }
+    }
+  }, [projectContext]);
+
+  // Update mutation
+  const updateMutation = useMutation({
+    mutationFn: (data: { description?: string; context_notes?: string }) =>
+      updateProjectContext(projectId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['project-context', projectId] });
+      queryClient.invalidateQueries({ queryKey: ['qa-project', projectId] });
+    },
+  });
+
+  const handleDescriptionBlur = () => {
+    if (description !== (projectContext?.description || '')) {
+      updateMutation.mutate({ description });
+    }
+  };
+
+  const handleContextNotesBlur = () => {
+    if (contextNotes !== (projectContext?.context_notes || '')) {
+      updateMutation.mutate({ context_notes: contextNotes });
+    }
+  };
+
+  if (isLoading) {
+    return null;
+  }
+
+  return (
+    <Card className="mb-6">
+      <CardHeader
+        className="cursor-pointer hover:bg-muted/30 transition-colors pb-3"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            Project Context
+          </CardTitle>
+          {isExpanded ? (
+            <ChevronUp className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          )}
+        </div>
+      </CardHeader>
+      {isExpanded && (
+        <CardContent className="space-y-4">
+          <div>
+            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+              Description
+            </label>
+            <Textarea
+              placeholder="Brief project description..."
+              rows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              onBlur={handleDescriptionBlur}
+              className="text-sm"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+              Context Notes
+            </label>
+            <Textarea
+              placeholder="Stack, conventions, important decisions..."
+              rows={4}
+              value={contextNotes}
+              onChange={(e) => setContextNotes(e.target.value)}
+              onBlur={handleContextNotesBlur}
+              className="text-sm"
+            />
+          </div>
+        </CardContent>
+      )}
+    </Card>
   );
 }
 
@@ -336,6 +441,9 @@ export default function ProjectDetailPage() {
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-5xl">
+          {/* Project Context Section */}
+          <ProjectContextSection projectId={projectId} />
+
           <Tabs defaultValue="knowledge">
             <TabsList>
               <TabsTrigger value="knowledge">
